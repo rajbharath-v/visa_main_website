@@ -1,0 +1,69 @@
+{% extends 'visa_main/base.html' %}
+
+{% block content %}
+
+<div class="bg-navy-800 py-12">
+  <div class="max-w-7xl mx-auto px-4">
+    <nav class="flex items-center gap-2 text-xs text-navy-100/60 mb-4">
+      <a href="/" class="hover:text-white">Home</a>
+      <i class="ti ti-chevron-right text-[10px]"></i>
+      <a href="/products/" class="hover:text-white">Products</a>
+      <i class="ti ti-chevron-right text-[10px]"></i>
+      <a href="/products/?division={{ category.division.slug }}" class="hover:text-white">{{ category.division.name }}</a>
+      <i class="ti ti-chevron-right text-[10px]"></i>
+      <span class="text-white">{{ category.name }}</span>
+    </nav>
+    <h1 class="text-3xl font-bold text-white mb-2">{{ category.name }}</h1>
+    {% if category.description %}
+    <p class="text-navy-100/70 max-w-2xl">{{ category.description }}</p>
+    {% endif %}
+    <p class="text-navy-400 text-sm mt-2">{{ products.count }} product{{ products.count|pluralize }}</p>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 py-12">
+  {% if products %}
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+    {% for product in products %}
+    <div class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-navy-200 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+      <a href="/products/{{ product.slug }}/" class="block">
+        <div class="aspect-[4/3] bg-gray-50 overflow-hidden relative">
+          {% if product.primary_image %}
+          <img src="{{ product.primary_image.image.url }}" alt="{{ product.primary_image.alt_text }}"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+          {% else %}
+          <div class="w-full h-full flex items-center justify-center">
+            <i class="ti ti-package text-gray-200 text-4xl"></i>
+          </div>
+          {% endif %}
+        </div>
+      </a>
+      <div class="p-4">
+        <a href="/products/{{ product.slug }}/">
+          <h3 class="font-semibold text-sm text-gray-900 mb-1.5 line-clamp-2 group-hover:text-navy-700 transition-colors">{{ product.name }}</h3>
+        </a>
+        <p class="text-xs text-gray-500 line-clamp-2 mb-3">{{ product.short_desc }}</p>
+        <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+          <span class="text-[10px] font-semibold px-2 py-1 rounded-full
+            {% if product.stock_status == 'available' %}bg-green-100 text-green-700
+            {% else %}bg-yellow-100 text-yellow-700{% endif %}">
+            {{ product.get_stock_status_display }}
+          </span>
+          <button onclick="openEnquiryModal('{{ product.name }}')"
+                  class="text-xs font-medium text-navy-600 hover:text-navy-800 bg-navy-50 px-3 py-1.5 rounded-lg transition-colors">
+            Get Quote
+          </button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center py-20 text-gray-400">
+    <i class="ti ti-packages text-6xl block mb-3"></i>
+    <p>No products in this category yet.</p>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

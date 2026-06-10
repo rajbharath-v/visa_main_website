@@ -1,0 +1,53 @@
+{% load static %}
+<form method="POST" action="/enquiry/submit/" class="enquiry-form space-y-4">
+  {% csrf_token %}
+  {% if product_slug %}<input type="hidden" name="product_slug" value="{{ product_slug }}">{% endif %}
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div>
+      <label class="block text-xs font-medium text-gray-600 mb-1">Full Name *</label>
+      {{ form.name }}
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-gray-600 mb-1">Company</label>
+      {{ form.company }}
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-gray-600 mb-1">Phone *</label>
+      {{ form.phone }}
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-gray-600 mb-1">Email *</label>
+      {{ form.email }}
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-gray-600 mb-1">City</label>
+      {{ form.city }}
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-gray-600 mb-1">Product Required</label>
+      {{ form.product_name }}
+    </div>
+  </div>
+
+  <div>
+    <label class="block text-xs font-medium text-gray-600 mb-1">Quantity</label>
+    {{ form.quantity }}
+  </div>
+
+  <div>
+    <label class="block text-xs font-medium text-gray-600 mb-1">Message *</label>
+    {{ form.message }}
+  </div>
+
+  <button type="submit"
+          class="w-full bg-navy-600 hover:bg-navy-500 text-white font-semibold py-3.5 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm">
+    <i class="ti ti-send"></i>
+    Send Enquiry
+  </button>
+
+  <p class="text-center text-xs text-gray-400">
+    <i class="ti ti-lock text-xs mr-1"></i>
+    Your information is secure and will not be shared.
+  </p>
+</form>

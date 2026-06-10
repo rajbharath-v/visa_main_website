@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+{% load static custom_tags %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  {# ── SEO HEAD ── #}
+  <title>{% block title %}{{ meta_title|default:"VISA Pvt. Ltd — Process Control Instruments, Chennai" }}{% endblock %}</title>
+  <meta name="description" content="{{ meta_desc|default:'Manufacturer of peristaltic pumps, flow meters, pressure transmitters & IoT modules. Chennai, India. 35+ years experience.' }}">
+  {% if meta_keywords %}<meta name="keywords" content="{{ meta_keywords }}">{% endif %}
+  <link rel="canonical" href="https://www.visapvtltd.net{{ request.path }}">
+  <meta name="robots" content="index, follow">
+
+  {# Open Graph #}
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="{{ meta_title|default:'VISA Pvt. Ltd' }}">
+  <meta property="og:description" content="{{ meta_desc|default:'Process Control Instruments, Chennai' }}">
+  <meta property="og:url"         content="https://www.visapvtltd.net{{ request.path }}">
+  <meta property="og:image"       content="https://www.visapvtltd.net/static/visa/img/og-image.jpg">
+  <meta property="og:site_name"   content="VISA Pvt. Ltd">
+
+  {# Twitter Card #}
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="{{ meta_title|default:'VISA Pvt. Ltd' }}">
+  <meta name="twitter:description" content="{{ meta_desc|default:'Process Control Instruments, Chennai' }}">
+
+  {# Tailwind CSS #}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy:  { 900:'#021D38', 800:'#042C53', 700:'#0B3D6B', 600:'#185FA5', 500:'#378ADD', 100:'#E6F1FB' },
+            brand: '#185FA5',
+          },
+          fontFamily: { sans: ['Inter','system-ui','sans-serif'] },
+          animation: {
+            'fade-up':    'fadeUp 0.6s ease forwards',
+            'count-up':   'countUp 2s ease forwards',
+            'pulse-slow': 'pulse 3s ease-in-out infinite',
+          },
+          keyframes: {
+            fadeUp: { '0%':{ opacity:'0', transform:'translateY(24px)' }, '100%':{ opacity:'1', transform:'translateY(0)' } },
+          }
+        }
+      }
+    }
+  </script>
+
+  {# Tabler Icons #}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+  {# Inter font #}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *{box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
+    .mega-menu{display:none}.mega-trigger:hover .mega-menu{display:flex}
+    .simple-dd{display:none}.simple-trigger:hover .simple-dd{display:block}
+    .animate-on-scroll{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+    .animate-on-scroll.visible{opacity:1;transform:translateY(0)}
+    .grid-bg{background-image:linear-gradient(rgba(24,95,165,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(24,95,165,.06) 1px,transparent 1px);background-size:40px 40px}
+    ::-webkit-scrollbar{width:6px;height:6px}
+    ::-webkit-scrollbar-track{background:#f1f1f1}
+    ::-webkit-scrollbar-thumb{background:#185FA5;border-radius:3px}
+    .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .line-clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  </style>
+
+  {# JSON-LD Schema #}
+  {% if org_schema %}
+  <script type="application/ld+json">{{ org_schema|safe }}</script>
+  {% endif %}
+  {% if web_schema %}
+  <script type="application/ld+json">{{ web_schema|safe }}</script>
+  {% endif %}
+  {% if prod_schema %}
+  <script type="application/ld+json">{{ prod_schema|safe }}</script>
+  {% endif %}
+  {% if bc_schema %}
+  <script type="application/ld+json">{{ bc_schema|safe }}</script>
+  {% endif %}
+
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body class="bg-white text-gray-900">
+
+{# ── TOP BAR ── #}
+<div class="bg-navy-900 text-navy-100 text-xs py-1.5 px-4 hidden md:flex items-center justify-between">
+  <div class="flex items-center gap-6">
+    <span class="flex items-center gap-1.5">
+      <i class="ti ti-phone text-navy-500 text-sm"></i>
+      <a href="tel:+917949093762" class="hover:text-white transition-colors">+91 79490 93762</a>
+    </span>
+    <span class="flex items-center gap-1.5">
+      <i class="ti ti-mail text-navy-500 text-sm"></i>
+      <a href="mailto:sales@visapvtltd.net" class="hover:text-white transition-colors">sales@visapvtltd.net</a>
+    </span>
+    <span class="flex items-center gap-1.5">
+      <i class="ti ti-map-pin text-navy-500 text-sm"></i>
+      Valasaravakkam, Chennai — 600 087
+    </span>
+  </div>
+  <div class="flex items-center gap-4">
+    <span>GST: 33AABCV2361D1ZT</span>
+    <span class="text-navy-500">|</span>
+    <span>Mon–Sat 9AM–6PM</span>
+  </div>
+</div>
+
+{# ── MAIN NAV ── #}
+<nav class="bg-navy-800 sticky top-0 z-50 shadow-lg" id="main-nav">
+  <div class="max-w-7xl mx-auto px-4 flex items-center h-16 gap-2">
+
+    {# Logo #}
+    <a href="/" class="flex items-center gap-3 flex-shrink-0 mr-6">
+      <div class="w-9 h-9 bg-navy-600 rounded-lg flex items-center justify-center">
+        <i class="ti ti-cpu text-navy-100 text-lg"></i>
+      </div>
+      <div class="hidden sm:block">
+        <div class="text-sm font-semibold text-white leading-tight">VISA Pvt. Ltd</div>
+        <div class="text-[10px] text-navy-100/70 leading-tight">Chennai, India</div>
+      </div>
+    </a>
+
+    {# Nav links #}
+    <div class="hidden lg:flex items-center gap-0 flex-1">
+
+      <a href="/" class="px-4 h-16 flex items-center text-sm text-navy-100 hover:text-white hover:bg-navy-700 transition-colors {% if request.resolver_match.url_name == 'home' %}border-b-2 border-navy-500 text-white{% endif %}">
+        Home
+      </a>
+
+      {# Products mega menu #}
+      <div class="relative mega-trigger h-16 flex items-center">
+        <button class="px-4 h-16 flex items-center gap-1 text-sm text-navy-100 hover:text-white hover:bg-navy-700 transition-colors {% if 'product' in request.resolver_match.url_name|default:'' %}border-b-2 border-navy-500 text-white{% endif %}">
+          Products <i class="ti ti-chevron-down text-xs"></i>
+        </button>
+
+        <div class="mega-menu absolute top-16 left-0 bg-white rounded-b-xl shadow-2xl border border-gray-100 z-50 min-w-[720px]">
+          <div class="flex">
+            {# Left — divisions & categories #}
+            <div class="py-3 min-w-[220px] border-r border-gray-100">
+              {% for division in divisions %}
+              <div class="px-4 py-2 text-[11px] font-semibold text-navy-800 uppercase tracking-wider border-b border-gray-100 {% if not forloop.first %}mt-2{% endif %}">
+                {{ division.name }}
+              </div>
+              {% for cat in division.categories.all %}
+              {% if cat.is_active %}
+              <a href="/category/{{ cat.slug }}/"
+                 class="flex items-center justify-between px-4 py-2.5 hover:bg-navy-100 group transition-colors mega-cat-link"
+                 data-cat="{{ cat.slug }}"
+                 data-products="{% for p in cat.products.all %}{{ p.name }}|{{ p.slug }}{% if not forloop.last %},{% endif %}{% endfor %}">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-7 h-7 rounded-md bg-navy-100 flex items-center justify-center group-hover:bg-navy-600 transition-colors">
+                    <i class="ti {{ cat.icon|default:'ti-folder' }} text-xs text-navy-600 group-hover:text-white"></i>
+                  </span>
+                  <span class="text-xs font-medium text-gray-800">{{ cat.name }}</span>
+                </div>
+                <span class="text-[10px] text-navy-500 font-medium">{{ cat.products.count }}</span>
+              </a>
+              {% endif %}
+              {% endfor %}
+              {% endfor %}
+            </div>
+
+            {# Right — product list #}
+            <div class="flex-1 p-4 bg-gray-50/50 rounded-br-xl min-w-[280px]" id="mega-products-panel">
+              <p class="text-xs font-semibold text-gray-400 mb-3 uppercase tracking-wider">Hover a category to see products</p>
+              <div id="mega-product-list" class="grid grid-cols-2 gap-1"></div>
+            </div>
+          </div>
+
+          <div class="px-4 py-3 border-t border-gray-100 bg-navy-100/50 rounded-b-xl flex items-center justify-between">
+            <span class="text-xs text-gray-500">{{ divisions|length }} divisions · Browse all products below</span>
+            <a href="/products/" class="text-xs font-semibold text-navy-600 hover:text-navy-800 flex items-center gap-1">
+              View all products <i class="ti ti-arrow-right text-xs"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <a href="/manufacturing/" class="px-4 h-16 flex items-center text-sm text-navy-100 hover:text-white hover:bg-navy-700 transition-colors">
+        Manufacturing
+      </a>
+
+      {# About dropdown #}
+      <div class="relative simple-trigger h-16 flex items-center">
+        <button class="px-4 h-16 flex items-center gap-1 text-sm text-navy-100 hover:text-white hover:bg-navy-700 transition-colors">
+          About <i class="ti ti-chevron-down text-xs"></i>
+        </button>
+        <div class="simple-dd absolute top-16 left-0 bg-white rounded-b-xl shadow-xl border border-gray-100 py-1 min-w-[180px] z-50">
+          <a href="/about/"               class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-navy-100 hover:text-navy-800 transition-colors">Company Profile</a>
+          <a href="/about/#team"          class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-navy-100 hover:text-navy-800 transition-colors">Our Team</a>
+          <a href="/manufacturing/"       class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-navy-100 hover:text-navy-800 transition-colors">Infrastructure</a>
+          <a href="/about/#quality"       class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-navy-100 hover:text-navy-800 transition-colors">Quality</a>
+          <a href="/blog/"               class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-navy-100 hover:text-navy-800 transition-colors">Blog</a>
+        </div>
+      </div>
+
+      <a href="/contact/" class="px-4 h-16 flex items-center text-sm text-navy-100 hover:text-white hover:bg-navy-700 transition-colors">
+        Contact
+      </a>
+    </div>
+
+    {# CTA buttons #}
+    <div class="ml-auto flex items-center gap-3">
+      <a href="https://wa.me/{{ whatsapp_number }}" target="_blank"
+         class="hidden sm:flex items-center gap-1.5 text-xs font-medium text-green-400 hover:text-green-300 transition-colors">
+        <i class="ti ti-brand-whatsapp text-base"></i>
+        WhatsApp
+      </a>
+      <a href="/contact/"
+         class="bg-navy-600 hover:bg-navy-500 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors flex items-center gap-1.5">
+        <i class="ti ti-send text-sm"></i>
+        Get a Quote
+      </a>
+      {# Mobile menu button #}
+      <button class="lg:hidden text-white p-1" id="mobile-menu-btn" aria-label="Open menu">
+        <i class="ti ti-menu-2 text-xl"></i>
+      </button>
+    </div>
+
+  </div>
+
+  {# Mobile menu #}
+  <div class="hidden lg:hidden bg-navy-900 border-t border-navy-700" id="mobile-menu">
+    <div class="px-4 py-3 space-y-1">
+      <a href="/"              class="block py-2.5 text-sm text-navy-100 hover:text-white border-b border-navy-700">Home</a>
+      <a href="/products/"     class="block py-2.5 text-sm text-navy-100 hover:text-white border-b border-navy-700">All Products</a>
+      {% for division in divisions %}
+      <div class="pl-3">
+        <p class="text-[11px] font-semibold text-navy-500 uppercase tracking-wider py-1">{{ division.name }}</p>
+        {% for cat in division.categories.all %}
+        <a href="/category/{{ cat.slug }}/" class="block py-1.5 text-xs text-navy-200 hover:text-white">{{ cat.name }}</a>
+        {% endfor %}
+      </div>
+      {% endfor %}
+      <a href="/manufacturing/" class="block py-2.5 text-sm text-navy-100 hover:text-white border-b border-navy-700">Manufacturing</a>
+      <a href="/about/"         class="block py-2.5 text-sm text-navy-100 hover:text-white border-b border-navy-700">About Us</a>
+      <a href="/contact/"       class="block py-2.5 text-sm text-navy-100 hover:text-white border-b border-navy-700">Contact</a>
+      <a href="tel:+917949093762" class="block py-2.5 text-sm text-green-400 font-medium">
+        <i class="ti ti-phone mr-2"></i>+91 79490 93762
+      </a>
+    </div>
+  </div>
+</nav>
+
+{# ── MESSAGES ── #}
+{% if messages %}
+<div class="fixed top-20 right-4 z-50 space-y-2" id="alert-container">
+  {% for msg in messages %}
+  <div class="flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg text-sm font-medium
+    {% if msg.tags == 'success' %}bg-green-600 text-white{% else %}bg-red-600 text-white{% endif %}">
+    <i class="ti {% if msg.tags == 'success' %}ti-check{% else %}ti-alert-circle{% endif %} text-base"></i>
+    {{ msg }}
+    <button onclick="this.parentElement.remove()" class="ml-2 opacity-70 hover:opacity-100">
+      <i class="ti ti-x text-sm"></i>
+    </button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{# ── PAGE CONTENT ── #}
+<main id="main-content">
+  {% block content %}{% endblock %}
+</main>
+
+{# ── FOOTER ── #}
+<footer class="bg-navy-900 text-navy-100 mt-0">
+  <div class="max-w-7xl mx-auto px-4 py-14">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+
+      {# Company info #}
+      <div class="lg:col-span-1">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-navy-600 rounded-lg flex items-center justify-center">
+            <i class="ti ti-cpu text-navy-100 text-xl"></i>
+          </div>
+          <div>
+            <div class="font-semibold text-white text-sm">VISA Pvt. Ltd</div>
+            <div class="text-[11px] text-navy-100/60">Est. 1990, Chennai</div>
+          </div>
+        </div>
+        <p class="text-sm text-navy-100/70 leading-relaxed mb-4">
+          Virtual Instrumentation & Software Applications Pvt. Ltd — 35+ years of precision instrumentation manufacturing.
+        </p>
+        <div class="space-y-2 text-xs text-navy-100/60">
+          <div class="flex items-start gap-2">
+            <i class="ti ti-map-pin text-navy-500 text-sm mt-0.5 flex-shrink-0"></i>
+            <span>15/16/17 Vision Tower, Yogam Garden, Brindhavan Nagar, Valasaravakkam, Chennai — 600 087</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="ti ti-phone text-navy-500 text-sm"></i>
+            <a href="tel:+917949093762" class="hover:text-white">+91 79490 93762</a>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="ti ti-mail text-navy-500 text-sm"></i>
+            <a href="mailto:sales@visapvtltd.net" class="hover:text-white">sales@visapvtltd.net</a>
+          </div>
+        </div>
+      </div>
+
+      {# Products #}
+      <div>
+        <h3 class="text-sm font-semibold text-white mb-4">Industrial Instruments</h3>
+        <ul class="space-y-2 text-sm text-navy-100/70">
+          <li><a href="/category/flow-measurement/"       class="hover:text-white transition-colors">Flow Measurement</a></li>
+          <li><a href="/category/temperature/"            class="hover:text-white transition-colors">Temperature Instruments</a></li>
+          <li><a href="/category/level-measurement/"      class="hover:text-white transition-colors">Level Measurement</a></li>
+          <li><a href="/category/pressure-measurement/"   class="hover:text-white transition-colors">Pressure Transmitters</a></li>
+          <li><a href="/category/data-acquisition-iot/"   class="hover:text-white transition-colors">DAQ & IoT Modules</a></li>
+          <li><a href="/category/communication/"          class="hover:text-white transition-colors">HART Communicators</a></li>
+        </ul>
+      </div>
+
+      {# Fluid handling #}
+      <div>
+        <h3 class="text-sm font-semibold text-white mb-4">Fluid Handling</h3>
+        <ul class="space-y-2 text-sm text-navy-100/70">
+          <li><a href="/category/peristaltic-pumps/"    class="hover:text-white transition-colors">Peristaltic Pumps</a></li>
+          <li><a href="/category/oem-peristaltic-pumps/" class="hover:text-white transition-colors">OEM Pumps</a></li>
+          <li><a href="/category/gear-pumps/"            class="hover:text-white transition-colors">Gear Pumps</a></li>
+          <li><a href="/category/syringe-pumps/"         class="hover:text-white transition-colors">Syringe Pumps</a></li>
+          <li><a href="/category/filling-machines/"      class="hover:text-white transition-colors">Filling Machines</a></li>
+        </ul>
+        <div class="mt-6 pt-4 border-t border-navy-700 space-y-2">
+          <h3 class="text-sm font-semibold text-white mb-3">Specialist Sites</h3>
+          <a href="https://peristalticpump.in" target="_blank"
+             class="flex items-center gap-2 text-sm text-green-400 hover:text-green-300 transition-colors">
+            <i class="ti ti-external-link text-xs"></i>peristalticpump.in
+          </a>
+          <a href="https://hartcommunicator.in" target="_blank"
+             class="flex items-center gap-2 text-sm text-yellow-400 hover:text-yellow-300 transition-colors">
+            <i class="ti ti-external-link text-xs"></i>hartcommunicator.in
+          </a>
+        </div>
+      </div>
+
+      {# Company #}
+      <div>
+        <h3 class="text-sm font-semibold text-white mb-4">Company</h3>
+        <ul class="space-y-2 text-sm text-navy-100/70">
+          <li><a href="/about/"          class="hover:text-white transition-colors">About Us</a></li>
+          <li><a href="/manufacturing/"  class="hover:text-white transition-colors">Manufacturing</a></li>
+          <li><a href="/blog/"           class="hover:text-white transition-colors">Blog & Insights</a></li>
+          <li><a href="/contact/"        class="hover:text-white transition-colors">Contact Us</a></li>
+          <li><a href="/sitemap.xml"     class="hover:text-white transition-colors">Sitemap</a></li>
+        </ul>
+        <div class="mt-6 pt-4 border-t border-navy-700">
+          <p class="text-xs text-navy-100/50 mb-2">Exporting to:</p>
+          <div class="flex flex-wrap gap-1">
+            {% for country in "India,Nepal,Bangladesh,Saudi Arabia,Indonesia,Turkey"|split:"," %}
+            <span class="text-[10px] bg-navy-700 text-navy-100/70 px-2 py-0.5 rounded">{{ country }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="border-t border-navy-700">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-navy-100/50">
+      <span>© {% now "Y" %} Virtual Instrumentation & Software Applications Pvt. Ltd. All rights reserved.</span>
+      <div class="flex items-center gap-4">
+        <span>CIN: U72200TN1999PTC042478</span>
+        <span>GST: 33AABCV2361D1ZT</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{# ── FLOATING WHATSAPP ── #}
+<a href="https://wa.me/{{ whatsapp_number }}?text=Hello%20VISA%20Pvt.%20Ltd%2C%20I%20need%20a%20quote%20for%20your%20products."
+   target="_blank"
+   class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-2xl transition-transform hover:scale-110"
+   aria-label="Chat on WhatsApp">
+  <i class="ti ti-brand-whatsapp text-white text-2xl"></i>
+</a>
+
+{# ── ENQUIRY MODAL ── #}
+<div id="enquiry-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 relative animate-fade-up">
+    <button onclick="closeEnquiryModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+      <i class="ti ti-x text-xl"></i>
+    </button>
+    <h2 class="text-xl font-semibold text-gray-900 mb-1">Request a Quote</h2>
+    <p class="text-sm text-gray-500 mb-5">Our team responds within 24 hours</p>
+    {% include 'visa_main/includes/enquiry_form.html' with modal=True %}
+  </div>
+</div>
+
+{# ── SCRIPTS ── #}
+<script>
+// Mobile menu toggle
+document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+  const menu = document.getElementById('mobile-menu');
+  menu.classList.toggle('hidden');
+});
+
+// Mega menu — show products on category hover
+document.querySelectorAll('.mega-cat-link').forEach(link => {
+  link.addEventListener('mouseenter', function() {
+    const data     = this.dataset.products;
+    const panel    = document.getElementById('mega-product-list');
+    const panelWrap = document.getElementById('mega-products-panel');
+    if (!data) { panel.innerHTML = ''; return; }
+
+    const products = data.split(',').map(p => {
+      const [name, slug] = p.split('|');
+      return { name, slug };
+    });
+
+    panel.innerHTML = products.map(p => `
+      <a href="/products/${p.slug}/"
+         class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-navy-100 text-sm text-gray-700 hover:text-navy-800 transition-colors group">
+        <i class="ti ti-arrow-right text-xs text-navy-500 group-hover:translate-x-0.5 transition-transform"></i>
+        ${p.name}
+      </a>
+    `).join('');
+
+    const catName = this.querySelector('span.text-xs').textContent;
+    panelWrap.querySelector('p').textContent = catName;
+  });
+});
+
+// Scroll animations
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+// Counter animation
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const duration = 2000;
+  const step = target / (duration / 16);
+  let current = 0;
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) { current = target; clearInterval(timer); }
+    el.textContent = Math.floor(current).toLocaleString() + (el.dataset.suffix || '');
+  }, 16);
+}
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !e.target.dataset.counted) {
+      e.target.dataset.counted = 'true';
+      animateCounter(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
+
+// Enquiry modal
+function openEnquiryModal(productName) {
+  const modal = document.getElementById('enquiry-modal');
+  const input = modal.querySelector('[name="product_name"]');
+  if (input && productName) input.value = productName;
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+}
+function closeEnquiryModal() {
+  const modal = document.getElementById('enquiry-modal');
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+  document.body.style.overflow = '';
+}
+document.getElementById('enquiry-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeEnquiryModal();
+});
+
+// AJAX enquiry form submission
+document.querySelectorAll('.enquiry-form').forEach(form => {
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('[type="submit"]');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="ti ti-loader animate-spin mr-2"></i>Sending...';
+    btn.disabled = true;
+    try {
+      const res = await fetch('/enquiry/submit/', {
+        method: 'POST',
+        body: new FormData(this),
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      });
+      const data = await res.json();
+      if (data.success) {
+        this.innerHTML = `
+          <div class="text-center py-8">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="ti ti-check text-3xl text-green-600"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Thank you!</h3>
+            <p class="text-gray-600 text-sm">We'll contact you within 24 hours.</p>
+          </div>`;
+        setTimeout(() => closeEnquiryModal(), 2000);
+      } else {
+        btn.innerHTML = orig;
+        btn.disabled = false;
+        alert('Please fill all required fields.');
+      }
+    } catch(err) {
+      btn.innerHTML = orig;
+      btn.disabled = false;
+    }
+  });
+});
+
+// Auto-dismiss alerts
+setTimeout(() => {
+  const alerts = document.getElementById('alert-container');
+  if (alerts) alerts.style.display = 'none';
+}, 5000);
+
+// Sticky nav shadow
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('main-nav');
+  nav.style.boxShadow = window.scrollY > 10
+    ? '0 4px 24px rgba(4,44,83,0.3)'
+    : '0 2px 8px rgba(4,44,83,0.15)';
+});
+</script>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

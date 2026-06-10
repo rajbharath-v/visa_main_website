@@ -1,0 +1,7 @@
+django>=5.0
+psycopg2-binary
+pillow
+python-dotenv
+whitenoise
+django-compressor
+gunicorn

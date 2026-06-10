@@ -1,0 +1,22 @@
+"""shared/context_processors.py"""
+from django.conf import settings
+from .models import ProductDivision
+
+
+def global_context(request):
+    return {
+        'divisions':       ProductDivision.objects.filter(is_active=True).prefetch_related(
+                               'categories__products'
+                           ),
+        'whatsapp_number': getattr(settings, 'WHATSAPP_NUMBER', '917949093762'),
+        'company': {
+            'name':    'Virtual Instrumentation & Software Applications Pvt. Ltd',
+            'short':   'VISA Pvt. Ltd',
+            'phone':   '+91 79490 93762',
+            'email':   'sales@visapvtltd.net',
+            'address': '15/16/17 Vision Tower, Yogam Garden, Brindhavan Nagar, Valasaravakkam, Chennai — 600 087',
+            'gst':     '33AABCV2361D1ZT',
+            'cin':     'U72200TN1999PTC042478',
+            'url':     'https://www.visapvtltd.net',
+        },
+    }
