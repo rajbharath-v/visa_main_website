@@ -1,2 +1,8 @@
-New-Item D:\COMPANY\visa_project\railway.json -ItemType File
-notepad D:\COMPANY\visa_project\railway.json
+﻿{
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "python manage.py collectstatic --noinput && python manage.py migrate && gunicorn visa_group.wsgi --bind 0.0.0.0:$PORT"
+  }
+}
