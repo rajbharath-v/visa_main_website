@@ -1,67 +1,54 @@
-{% extends 'visa_main/base.html' %}
-{% load static custom_tags %}
+﻿{% extends 'visa_main/base.html' %}
 {% load static %}
 
 {% block content %}
 
-{# ── HERO ── #}
+{# -- HERO -- #}
 <section class="relative bg-navy-900 overflow-hidden min-h-[88vh] flex items-center">
-  {# Animated grid background #}
   <div class="absolute inset-0 grid-bg opacity-40"></div>
-  {# Gradient overlay #}
   <div class="absolute inset-0 bg-gradient-to-br from-navy-900 via-navy-800/95 to-navy-900/80"></div>
-  {# Glowing orbs #}
   <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-navy-600/20 rounded-full blur-3xl animate-pulse-slow"></div>
-  <div class="absolute bottom-1/4 left-1/3 w-64 h-64 bg-blue-500/10 rounded-full blur-2xl animate-pulse-slow" style="animation-delay:1.5s"></div>
+  <div class="absolute bottom-1/4 left-1/3 w-64 h-64 bg-blue-500/10 rounded-full blur-2xl animate-pulse-slow"></div>
 
   <div class="relative max-w-7xl mx-auto px-4 py-24 lg:py-32 w-full">
     <div class="grid lg:grid-cols-2 gap-16 items-center">
-
-      {# Left — text #}
       <div>
         <div class="inline-flex items-center gap-2 bg-navy-700/60 border border-navy-600/50 rounded-full px-4 py-1.5 text-xs font-medium text-navy-100 mb-6 backdrop-blur-sm">
           <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
           35+ Years of Precision Instrumentation
         </div>
-
         <h1 class="text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight mb-6">
           Process Control
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-navy-500 to-blue-400">
-            Instruments
-          </span>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-navy-500 to-blue-400">Instruments</span>
           <br>Built for Industry
         </h1>
-
         <p class="text-lg text-navy-100/80 leading-relaxed mb-8 max-w-xl">
-          Manufacturer of peristaltic pumps, flow meters, pressure transmitters & IoT modules.
-          Trusted by clients across India, Nepal, Saudi Arabia & Indonesia.
+          Manufacturer of peristaltic pumps, flow meters, pressure transmitters & IoT modules. Trusted by clients across India, Nepal, Saudi Arabia & Indonesia.
         </p>
-
         <div class="flex flex-wrap gap-4 mb-10">
-          <a href="/products/"
-             class="bg-navy-600 hover:bg-navy-500 text-white font-semibold px-7 py-3.5 rounded-xl transition-all hover:shadow-lg hover:shadow-navy-600/30 flex items-center gap-2">
-            <i class="ti ti-packages text-lg"></i>
-            Explore Products
+          <a href="/products/" class="bg-navy-600 hover:bg-navy-500 text-white font-semibold px-7 py-3.5 rounded-xl transition-all hover:shadow-lg flex items-center gap-2">
+            <i class="ti ti-packages text-lg"></i> Explore Products
           </a>
-          <button onclick="openEnquiryModal('')"
-                  class="border border-navy-500/50 hover:border-navy-400 text-white font-semibold px-7 py-3.5 rounded-xl transition-all hover:bg-navy-700/50 flex items-center gap-2 backdrop-blur-sm">
-            <i class="ti ti-send text-lg"></i>
-            Request a Quote
+          <button onclick="openEnquiryModal('')" class="border border-navy-500/50 hover:border-navy-400 text-white font-semibold px-7 py-3.5 rounded-xl transition-all hover:bg-navy-700/50 flex items-center gap-2 backdrop-blur-sm">
+            <i class="ti ti-send text-lg"></i> Request a Quote
           </button>
         </div>
-
-        {# Trust badges #}
         <div class="flex flex-wrap gap-3">
-          {% for badge in "GST Verified Manufacturer,Exporting to 5 Countries,ISO Quality Standards,89% Call Response Rate"|split:"," %}
           <div class="flex items-center gap-1.5 text-xs text-navy-100/70 bg-navy-800/60 border border-navy-700/50 px-3 py-1.5 rounded-full backdrop-blur-sm">
-            <i class="ti ti-check text-green-400 text-xs"></i>
-            {{ badge }}
+            <i class="ti ti-check text-green-400 text-xs"></i> GST Verified Manufacturer
           </div>
-          {% endfor %}
+          <div class="flex items-center gap-1.5 text-xs text-navy-100/70 bg-navy-800/60 border border-navy-700/50 px-3 py-1.5 rounded-full backdrop-blur-sm">
+            <i class="ti ti-check text-green-400 text-xs"></i> Exporting to 5 Countries
+          </div>
+          <div class="flex items-center gap-1.5 text-xs text-navy-100/70 bg-navy-800/60 border border-navy-700/50 px-3 py-1.5 rounded-full backdrop-blur-sm">
+            <i class="ti ti-check text-green-400 text-xs"></i> ISO Quality Standards
+          </div>
+          <div class="flex items-center gap-1.5 text-xs text-navy-100/70 bg-navy-800/60 border border-navy-700/50 px-3 py-1.5 rounded-full backdrop-blur-sm">
+            <i class="ti ti-check text-green-400 text-xs"></i> 89% Call Response Rate
+          </div>
         </div>
       </div>
 
-      {# Right — stats cards #}
       <div class="hidden lg:grid grid-cols-2 gap-4">
         <div class="bg-navy-700/40 border border-navy-600/30 rounded-2xl p-6 backdrop-blur-sm text-center hover:bg-navy-700/60 transition-colors">
           <div class="text-4xl font-bold text-white mb-1" data-target="{{ stats.years }}" data-suffix="+">0+</div>
@@ -87,14 +74,13 @@
     </div>
   </div>
 
-  {# Scroll indicator #}
   <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-navy-100/40 text-xs">
     <span>Scroll to explore</span>
     <i class="ti ti-chevron-down animate-bounce"></i>
   </div>
 </section>
 
-{# ── PRODUCT DIVISIONS ── #}
+{# -- PRODUCT DIVISIONS -- #}
 <section class="py-20 bg-white">
   <div class="max-w-7xl mx-auto px-4">
     <div class="text-center mb-14 animate-on-scroll">
@@ -102,39 +88,27 @@
       <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Two Divisions. One Vision.</h2>
       <p class="text-gray-500 max-w-2xl mx-auto">35+ years of engineering precision across process control and fluid handling for India's industrial sector.</p>
     </div>
-
     <div class="grid md:grid-cols-2 gap-8">
       {% for division in divisions %}
-      <div class="group relative bg-gradient-to-br
-        {% if forloop.first %}from-navy-900 to-navy-700{% else %}from-emerald-900 to-emerald-700{% endif %}
-        rounded-2xl p-8 overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 animate-on-scroll">
-
+      <div class="group relative {% if forloop.first %}bg-gradient-to-br from-navy-900 to-navy-700{% else %}bg-gradient-to-br from-emerald-900 to-emerald-700{% endif %} rounded-2xl p-8 overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 animate-on-scroll">
         <div class="absolute inset-0 grid-bg opacity-20"></div>
-        <div class="absolute top-0 right-0 w-48 h-48 rounded-full blur-3xl
-          {% if forloop.first %}bg-navy-500/20{% else %}bg-emerald-500/20{% endif %}"></div>
-
         <div class="relative">
           <div class="w-14 h-14 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
             <i class="ti {{ division.icon }} text-white text-2xl"></i>
           </div>
-
           <h3 class="text-2xl font-bold text-white mb-3">{{ division.name }}</h3>
           <p class="text-white/70 text-sm leading-relaxed mb-6">{{ division.description|default:"Precision instruments built for industrial applications across India and beyond." }}</p>
-
           <div class="grid grid-cols-2 gap-2 mb-6">
             {% for cat in division.categories.all|slice:":6" %}
             {% if cat.is_active %}
-            <a href="/category/{{ cat.slug }}/"
-               class="flex items-center gap-2 text-xs text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-lg px-3 py-2 transition-colors">
+            <a href="/category/{{ cat.slug }}/" class="flex items-center gap-2 text-xs text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-lg px-3 py-2 transition-colors">
               <i class="ti {{ cat.icon|default:'ti-folder' }} text-xs"></i>
               {{ cat.name }}
             </a>
             {% endif %}
             {% endfor %}
           </div>
-
-          <a href="/products/?division={{ division.slug }}/"
-             class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/20 px-5 py-2.5 rounded-xl transition-all">
+          <a href="/products/?division={{ division.slug }}" class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-white/15 hover:bg-white/25 border border-white/20 px-5 py-2.5 rounded-xl transition-all">
             View all {{ division.categories.count }} categories
             <i class="ti ti-arrow-right"></i>
           </a>
@@ -145,7 +119,7 @@
   </div>
 </section>
 
-{# ── FEATURED PRODUCTS ── #}
+{# -- FEATURED PRODUCTS -- #}
 {% if featured %}
 <section class="py-20 bg-gray-50">
   <div class="max-w-7xl mx-auto px-4">
@@ -158,19 +132,13 @@
         View all products <i class="ti ti-arrow-right"></i>
       </a>
     </div>
-
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {% for product in featured %}
       <div class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-navy-200 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 animate-on-scroll">
-
-        {# Image #}
         <a href="/products/{{ product.slug }}/" class="block">
           <div class="aspect-[4/3] bg-gray-50 overflow-hidden relative">
             {% if product.primary_image %}
-            <img src="{{ product.primary_image.image.url }}"
-                 alt="{{ product.primary_image.alt_text }}"
-                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                 loading="lazy">
+            <img src="{{ product.primary_image.image.url }}" alt="{{ product.primary_image.alt_text }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
             {% else %}
             <div class="w-full h-full flex flex-col items-center justify-center gap-2">
               <div class="w-14 h-14 rounded-xl bg-navy-100 flex items-center justify-center">
@@ -180,37 +148,27 @@
             </div>
             {% endif %}
             <div class="absolute top-3 left-3">
-              <span class="text-[10px] font-semibold px-2 py-1 rounded-full
-                {% if product.division.slug == 'fluid-handling' %}bg-emerald-100 text-emerald-700
-                {% else %}bg-navy-100 text-navy-700{% endif %}">
+              <span class="text-[10px] font-semibold px-2 py-1 rounded-full {% if product.division.slug == 'fluid-handling' %}bg-emerald-100 text-emerald-700{% else %}bg-navy-100 text-navy-700{% endif %}">
                 {{ product.category.name }}
               </span>
             </div>
             <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button onclick="event.preventDefault();openEnquiryModal('{{ product.name }}')"
-                      class="bg-white/90 text-navy-700 text-[10px] font-semibold px-2 py-1 rounded-full shadow-sm hover:bg-white">
+              <button onclick="event.preventDefault();openEnquiryModal('{{ product.name }}')" class="bg-white/90 text-navy-700 text-[10px] font-semibold px-2 py-1 rounded-full shadow-sm hover:bg-white">
                 Quick Enquiry
               </button>
             </div>
           </div>
         </a>
-
         <div class="p-4">
           <a href="/products/{{ product.slug }}/">
-            <h3 class="font-semibold text-gray-900 text-sm mb-1.5 line-clamp-2 group-hover:text-navy-700 transition-colors">
-              {{ product.name }}
-            </h3>
+            <h3 class="font-semibold text-gray-900 text-sm mb-1.5 line-clamp-2 group-hover:text-navy-700 transition-colors">{{ product.name }}</h3>
           </a>
           <p class="text-xs text-gray-500 line-clamp-2 mb-3 leading-relaxed">{{ product.short_desc }}</p>
           <div class="flex items-center justify-between">
-            <span class="text-[10px] font-semibold px-2 py-1 rounded-full
-              {% if product.stock_status == 'available' %}bg-green-100 text-green-700
-              {% elif product.stock_status == 'on_request' %}bg-yellow-100 text-yellow-700
-              {% else %}bg-gray-100 text-gray-500{% endif %}">
+            <span class="text-[10px] font-semibold px-2 py-1 rounded-full {% if product.stock_status == 'available' %}bg-green-100 text-green-700{% elif product.stock_status == 'on_request' %}bg-yellow-100 text-yellow-700{% else %}bg-gray-100 text-gray-500{% endif %}">
               {{ product.get_stock_status_display }}
             </span>
-            <a href="/products/{{ product.slug }}/"
-               class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-navy-600 flex items-center justify-center transition-colors">
+            <a href="/products/{{ product.slug }}/" class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-navy-600 flex items-center justify-center transition-colors">
               <i class="ti ti-arrow-right text-sm text-gray-400 group-hover:text-white"></i>
             </a>
           </div>
@@ -222,7 +180,7 @@
 </section>
 {% endif %}
 
-{# ── WHY VISA ── #}
+{# -- WHY VISA -- #}
 <section class="py-20 bg-white">
   <div class="max-w-7xl mx-auto px-4">
     <div class="text-center mb-14 animate-on-scroll">
@@ -230,40 +188,50 @@
       <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">The VISA Advantage</h2>
     </div>
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {% for item in "In-house Manufacturing|ti-building-factory|35-year manufacturing subsidiary — Teletherm Instruments Chennai,Software Division|ti-code|Custom process control software built alongside hardware products,Global Exports|ti-world|Shipping to Nepal Bangladesh Saudi Arabia Indonesia & Turkey,R&D Expertise|ti-microscope|Team of engineers with 25+ years in advanced process control"|split:"," %}
-      {% with parts=item|split:"|" %}
       <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:border-navy-200 hover:shadow-lg transition-all animate-on-scroll">
         <div class="w-12 h-12 bg-navy-100 rounded-xl flex items-center justify-center mb-4">
-          <i class="ti {{ parts.1 }} text-navy-600 text-xl"></i>
+          <i class="ti ti-building-factory text-navy-600 text-xl"></i>
         </div>
-        <h3 class="font-semibold text-gray-900 mb-2">{{ parts.0 }}</h3>
-        <p class="text-sm text-gray-500 leading-relaxed">{{ parts.2 }}</p>
+        <h3 class="font-semibold text-gray-900 mb-2">In-house Manufacturing</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">35-year manufacturing subsidiary � Teletherm Instruments Chennai</p>
       </div>
-      {% endwith %}
-      {% endfor %}
+      <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:border-navy-200 hover:shadow-lg transition-all animate-on-scroll">
+        <div class="w-12 h-12 bg-navy-100 rounded-xl flex items-center justify-center mb-4">
+          <i class="ti ti-code text-navy-600 text-xl"></i>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-2">Software Division</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Custom process control software built alongside hardware products</p>
+      </div>
+      <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:border-navy-200 hover:shadow-lg transition-all animate-on-scroll">
+        <div class="w-12 h-12 bg-navy-100 rounded-xl flex items-center justify-center mb-4">
+          <i class="ti ti-world text-navy-600 text-xl"></i>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-2">Global Exports</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Shipping to Nepal, Bangladesh, Saudi Arabia, Indonesia & Turkey</p>
+      </div>
+      <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:border-navy-200 hover:shadow-lg transition-all animate-on-scroll">
+        <div class="w-12 h-12 bg-navy-100 rounded-xl flex items-center justify-center mb-4">
+          <i class="ti ti-microscope text-navy-600 text-xl"></i>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-2">R&D Expertise</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Team of engineers with 25+ years in advanced process control</p>
+      </div>
     </div>
   </div>
 </section>
 
-{# ── ENQUIRY SECTION ── #}
+{# -- ENQUIRY SECTION -- #}
 <section class="py-20 bg-navy-900 relative overflow-hidden" id="enquiry">
   <div class="absolute inset-0 grid-bg opacity-30"></div>
   <div class="absolute top-0 right-0 w-96 h-96 bg-navy-600/20 rounded-full blur-3xl"></div>
-
   <div class="relative max-w-7xl mx-auto px-4">
     <div class="grid lg:grid-cols-2 gap-16 items-start">
-
-      {# Left #}
       <div class="animate-on-scroll">
         <p class="text-sm font-semibold text-navy-400 uppercase tracking-widest mb-3">Get in touch</p>
         <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">Request a Quote</h2>
-        <p class="text-navy-100/70 leading-relaxed mb-8">
-          Our team responds within 24 hours. For urgent requirements, call or WhatsApp us directly.
-        </p>
-
+        <p class="text-navy-100/70 leading-relaxed mb-8">Our team responds within 24 hours. For urgent requirements, call or WhatsApp us directly.</p>
         <div class="space-y-4">
-          <a href="tel:+917949093762"
-             class="flex items-center gap-4 bg-navy-700/50 border border-navy-600/30 rounded-xl p-4 hover:bg-navy-700 transition-colors group">
+          <a href="tel:+917949093762" class="flex items-center gap-4 bg-navy-700/50 border border-navy-600/30 rounded-xl p-4 hover:bg-navy-700 transition-colors">
             <div class="w-10 h-10 bg-navy-600 rounded-lg flex items-center justify-center flex-shrink-0">
               <i class="ti ti-phone text-white text-lg"></i>
             </div>
@@ -272,8 +240,7 @@
               <div class="text-white font-semibold">+91 79490 93762</div>
             </div>
           </a>
-          <a href="https://wa.me/{{ whatsapp_number }}" target="_blank"
-             class="flex items-center gap-4 bg-green-900/30 border border-green-700/30 rounded-xl p-4 hover:bg-green-900/50 transition-colors">
+          <a href="https://wa.me/{{ whatsapp_number }}" target="_blank" class="flex items-center gap-4 bg-green-900/30 border border-green-700/30 rounded-xl p-4 hover:bg-green-900/50 transition-colors">
             <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
               <i class="ti ti-brand-whatsapp text-white text-lg"></i>
             </div>
@@ -293,19 +260,16 @@
           </div>
         </div>
       </div>
-
-      {# Right — form #}
       <div class="bg-white rounded-2xl p-8 shadow-2xl animate-on-scroll">
         <h3 class="font-bold text-gray-900 text-xl mb-1">Send us your requirement</h3>
-        <p class="text-sm text-gray-500 mb-6">We'll respond with a competitive quote within 24 hours</p>
+        <p class="text-sm text-gray-500 mb-6">We will respond with a competitive quote within 24 hours</p>
         {% include 'visa_main/includes/enquiry_form.html' %}
       </div>
-
     </div>
   </div>
 </section>
 
-{# ── EXPORT COUNTRIES ── #}
+{# -- EXPORT COUNTRIES -- #}
 <section class="py-16 bg-gray-50 border-t border-gray-100">
   <div class="max-w-7xl mx-auto px-4">
     <div class="text-center mb-8 animate-on-scroll">
@@ -313,12 +277,13 @@
       <h2 class="text-2xl font-bold text-gray-900">Exporting to 5+ Countries</h2>
     </div>
     <div class="flex flex-wrap justify-center gap-4">
-      {% for country in "🇮🇳 India,🇳🇵 Nepal,🇧🇩 Bangladesh,🇸🇦 Saudi Arabia,🇮🇩 Indonesia,🇹🇷 Turkey"|split:"," %}
-      <div class="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-5 py-3 text-sm font-medium text-gray-700 hover:border-navy-300 hover:shadow-sm transition-all animate-on-scroll">
-        {{ country }}
-      </div>
-      {% endfor %}
-    </div>
+  <div class="bg-white border border-gray-200 rounded-xl px-5 py-3 text-sm font-medium text-gray-700">India</div>
+  <div class="bg-white border border-gray-200 rounded-xl px-5 py-3 text-sm font-medium text-gray-700">Nepal</div>
+  <div class="bg-white border border-gray-200 rounded-xl px-5 py-3 text-sm font-medium text-gray-700">Bangladesh</div>
+  <div class="bg-white border border-gray-200 rounded-xl px-5 py-3 text-sm font-medium text-gray-700">Saudi Arabia</div>
+  <div class="bg-white border border-gray-200 rounded-xl px-5 py-3 text-sm font-medium text-gray-700">Indonesia</div>
+  <div class="bg-white border border-gray-200 rounded-xl px-5 py-3 text-sm font-medium text-gray-700">Turkey</div>
+</div>
   </div>
 </section>
 

@@ -117,16 +117,17 @@
 <nav class="bg-navy-800 sticky top-0 z-50 shadow-lg" id="main-nav">
   <div class="max-w-7xl mx-auto px-4 flex items-center h-16 gap-2">
 
-    {# Logo #}
-    <a href="/" class="flex items-center gap-3 flex-shrink-0 mr-6">
-      <div class="w-9 h-9 bg-navy-600 rounded-lg flex items-center justify-center">
-        <i class="ti ti-cpu text-navy-100 text-lg"></i>
-      </div>
-      <div class="hidden sm:block">
-        <div class="text-sm font-semibold text-white leading-tight">VISA Pvt. Ltd</div>
-        <div class="text-[10px] text-navy-100/70 leading-tight">Chennai, India</div>
-      </div>
-    </a>
+{# Logo #}
+<a href="/" class="flex items-center gap-3 flex-shrink-0 mr-6">
+  <img src="{% static 'visa/img/logo.png' %}"
+       alt="VISA Pvt. Ltd Logo"
+       class="h-10 w-10 object-contain bg-white rounded-lg p-1"
+       width="40" height="40">
+  <div class="hidden sm:block">
+    <div class="text-sm font-semibold text-white leading-tight">VISA Pvt. Ltd</div>
+    <div class="text-[10px] text-navy-100/70 leading-tight">Chennai, India</div>
+  </div>
+</a>
 
     {# Nav links #}
     <div class="hidden lg:flex items-center gap-0 flex-1">
@@ -279,9 +280,7 @@
       {# Company info #}
       <div class="lg:col-span-1">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 bg-navy-600 rounded-lg flex items-center justify-center">
-            <i class="ti ti-cpu text-navy-100 text-xl"></i>
-          </div>
+          <img src="{% static 'visa/img/logo.png' %}" class="h-10 w-10 object-contain bg-white rounded-lg p-1">
           <div>
             <div class="font-semibold text-white text-sm">VISA Pvt. Ltd</div>
             <div class="text-[11px] text-navy-100/60">Est. 1990, Chennai</div>
