@@ -1,1 +1,1 @@
-[System.IO.File]::WriteAllText("D:\COMPANY\visa_project\Procfile", "web: python manage.py collectstatic --noinput && python manage.py migrate && gunicorn visa_group.wsgi`n")
+web: python manage.py collectstatic --noinput && python manage.py migrate && gunicorn visa_group.wsgi
