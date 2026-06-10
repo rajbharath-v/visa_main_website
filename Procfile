@@ -1,1 +1,1 @@
-web: python manage.py collectstatic --noinput && gunicorn visa_group.wsgi --log-file -
+web: python manage.py collectstatic --noinput && gunicorn visa_group.wsgi

@@ -1,0 +1,2 @@
+New-Item D:\COMPANY\visa_project\railway.json -ItemType File
+notepad D:\COMPANY\visa_project\railway.json
