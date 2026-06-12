@@ -64,17 +64,33 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'visa_group.wsgi.application'
 
-# Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'visa_db'),
-        'USER': os.getenv('DB_USER', 'postgres'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'password'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '5432'),
+# Database — supports both DATABASE_URL (Railway) and individual DB_* vars
+import urllib.parse
+
+_database_url = os.getenv('DATABASE_URL', '').strip()
+if _database_url:
+    _url = urllib.parse.urlparse(_database_url)
+    DATABASES = {
+        'default': {
+            'ENGINE':   'django.db.backends.postgresql',
+            'NAME':     _url.path.lstrip('/'),
+            'USER':     _url.username,
+            'PASSWORD': _url.password,
+            'HOST':     _url.hostname,
+            'PORT':     str(_url.port or 5432),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE':   'django.db.backends.postgresql',
+            'NAME':     os.getenv('DB_NAME', 'visa_db'),
+            'USER':     os.getenv('DB_USER', 'postgres'),
+            'PASSWORD': os.getenv('DB_PASSWORD', 'password'),
+            'HOST':     os.getenv('DB_HOST', 'localhost').strip(),
+            'PORT':     os.getenv('DB_PORT', '5432').strip(),
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
