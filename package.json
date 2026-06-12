@@ -1,0 +1,10 @@
+{
+  "name": "visa-website",
+  "version": "1.0.0",
+  "scripts": {
+    "build:css": "tailwindcss -i ./static/visa/css/input.css -o ./static/visa/css/tailwind.min.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}

@@ -1,1 +1,1 @@
-web: python manage.py collectstatic --noinput && python manage.py migrate && gunicorn visa_group.wsgi
+web: npm ci && npm run build:css && python manage.py collectstatic --noinput && python manage.py migrate && gunicorn visa_group.wsgi

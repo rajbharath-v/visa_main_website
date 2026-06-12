@@ -25,29 +25,8 @@
   <meta name="twitter:title"       content="{{ meta_title|default:'VISA Pvt. Ltd' }}">
   <meta name="twitter:description" content="{{ meta_desc|default:'Process Control Instruments, Chennai' }}">
 
-  {# Tailwind CSS #}
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            navy:  { 900:'#021D38', 800:'#042C53', 700:'#0B3D6B', 600:'#185FA5', 500:'#378ADD', 100:'#E6F1FB' },
-            brand: '#185FA5',
-          },
-          fontFamily: { sans: ['Inter','system-ui','sans-serif'] },
-          animation: {
-            'fade-up':    'fadeUp 0.6s ease forwards',
-            'count-up':   'countUp 2s ease forwards',
-            'pulse-slow': 'pulse 3s ease-in-out infinite',
-          },
-          keyframes: {
-            fadeUp: { '0%':{ opacity:'0', transform:'translateY(24px)' }, '100%':{ opacity:'1', transform:'translateY(0)' } },
-          }
-        }
-      }
-    }
-  </script>
+  {# Tailwind CSS — built file (production-safe, no JS required) #}
+  <link rel="stylesheet" href="{% static 'visa/css/tailwind.min.css' %}">
 
   {# Tabler Icons #}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
