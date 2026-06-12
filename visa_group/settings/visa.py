@@ -19,9 +19,10 @@ if _extra_host:
 SITE_ID = 1
 CURRENT_SITE = 'visa_main'
 
-# Production security
+# Production security — Railway terminates SSL at proxy level
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = False  # Railway handles this, not Django
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SESSION_COOKIE_SECURE = True
