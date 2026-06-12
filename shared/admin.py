@@ -79,7 +79,7 @@ class ProductAdmin(admin.ModelAdmin):
                 '<img src="{}" style="height:44px;width:44px;object-fit:cover;border-radius:6px;"/>',
                 img.image.url
             )
-        return format_html('<div style="width:44px;height:44px;background:#E6F1FB;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;">📦</div>')
+        return format_html('<div style="width:44px;height:44px;background:#E6F1FB;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;">{}</div>', '📦')
     thumbnail.short_description = ''
 
     def division_name(self, obj):

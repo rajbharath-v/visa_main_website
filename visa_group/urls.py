@@ -3,10 +3,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from shared.views_admin import analytics_dashboard
 
 urlpatterns = [
+    path('admin/analytics/', analytics_dashboard, name='admin_analytics'),
     path('admin/', admin.site.urls),
-    # Domain routing handled by middleware — each app includes its own urls
     path('', include('visa_main.urls')),
 ]
 

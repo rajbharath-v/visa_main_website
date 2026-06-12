@@ -15,6 +15,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-this-in-production'
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -109,3 +110,86 @@ ENQUIRY_EMAIL = os.getenv('ENQUIRY_EMAIL', 'sales@visapvtltd.net')
 
 # WhatsApp
 WHATSAPP_NUMBER = os.getenv('WHATSAPP_NUMBER', '917949093762')
+
+# ── JAZZMIN ──────────────────────────────────────────────────────────────────
+JAZZMIN_SETTINGS = {
+    "site_title":        "VISA Admin",
+    "site_header":       "VISA Pvt. Ltd",
+    "site_brand":        "VISA",
+    "site_logo":         "visa/img/logo.png",
+    "site_logo_classes": "img-circle elevation-3",
+    "login_logo":        "visa/img/logo.png",
+    "login_logo_dark":   "visa/img/logo.png",
+    "site_icon":         "visa/img/logo.png",
+    "welcome_sign":      "Welcome to VISA Admin Panel",
+    "copyright":         "VISA Pvt. Ltd, Chennai",
+    "search_model":      ["shared.Enquiry", "shared.Product"],
+    "user_avatar":       None,
+    "topmenu_links": [
+        {"name": "Analytics",   "url": "/admin/analytics/", "permissions": ["auth.view_user"], "icon": "fas fa-chart-bar"},
+        {"name": "View Site",   "url": "/",  "new_window": True, "icon": "fas fa-external-link-alt"},
+        {"model": "shared.Enquiry"},
+    ],
+    "usermenu_links": [
+        {"name": "View Site", "url": "/", "new_window": True},
+    ],
+    "show_sidebar":           True,
+    "navigation_expanded":    True,
+    "hide_apps":              [],
+    "hide_models":            [],
+    "order_with_respect_to":  [
+        "shared", "shared.Enquiry", "shared.Product",
+        "shared.ProductCategory", "shared.ProductDivision", "shared.BlogPost",
+        "auth",
+    ],
+    "icons": {
+        "auth":                    "fas fa-users-cog",
+        "auth.user":               "fas fa-user",
+        "auth.Group":              "fas fa-users",
+        "shared.Enquiry":          "fas fa-envelope-open-text",
+        "shared.Product":          "fas fa-boxes",
+        "shared.ProductCategory":  "fas fa-folder-open",
+        "shared.ProductDivision":  "fas fa-layer-group",
+        "shared.ProductImage":     "fas fa-images",
+        "shared.BlogPost":         "fas fa-blog",
+    },
+    "default_icon_parents":  "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    "related_modal_active":  False,
+    "show_ui_builder":       False,
+    "changeform_format":     "horizontal_tabs",
+    "changeform_format_overrides": {"auth.user": "collapsible"},
+    "language_chooser":      False,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text":          False,
+    "footer_small_text":          False,
+    "body_small_text":            False,
+    "brand_small_text":           False,
+    "brand_colour":               "navbar-primary",
+    "accent":                     "accent-primary",
+    "navbar":                     "navbar-dark",
+    "no_navbar_border":           True,
+    "navbar_fixed":               True,
+    "layout_boxed":               False,
+    "footer_fixed":               False,
+    "sidebar_fixed":              True,
+    "sidebar":                    "sidebar-dark-primary",
+    "sidebar_nav_small_text":     False,
+    "sidebar_disable_expand":     False,
+    "sidebar_nav_child_indent":   True,
+    "sidebar_nav_compact_style":  True,
+    "sidebar_nav_legacy_style":   False,
+    "sidebar_nav_flat_style":     False,
+    "theme":                      "default",
+    "dark_mode_theme":            None,
+    "button_classes": {
+        "primary":   "btn-primary",
+        "secondary": "btn-secondary",
+        "info":      "btn-info",
+        "warning":   "btn-warning",
+        "danger":    "btn-danger",
+        "success":   "btn-success",
+    },
+}

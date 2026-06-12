@@ -1,86 +1,128 @@
-﻿{% extends 'visa_main/base.html' %}
+{% extends 'visa_main/base.html' %}
 {% load static %}
 
 {% block content %}
 
-{# -- HERO -- #}
-<section class="relative bg-navy-900 overflow-hidden min-h-[88vh] flex items-center">
+{# ── HERO ── #}
+<section class="relative bg-navy-900 overflow-hidden flex items-center">
   <div class="absolute inset-0 grid-bg opacity-40"></div>
   <div class="absolute inset-0 bg-gradient-to-br from-navy-900 via-navy-800/95 to-navy-900/80"></div>
   <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-navy-600/20 rounded-full blur-3xl animate-pulse-slow"></div>
   <div class="absolute bottom-1/4 left-1/3 w-64 h-64 bg-blue-500/10 rounded-full blur-2xl animate-pulse-slow"></div>
 
-  <div class="relative max-w-7xl mx-auto px-4 py-24 lg:py-32 w-full">
-    <div class="grid lg:grid-cols-2 gap-16 items-center">
+  <div class="relative max-w-7xl mx-auto px-4 py-14 lg:py-20 w-full">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+
+      {# Left — text #}
       <div>
         <div class="inline-flex items-center gap-2 bg-navy-700/60 border border-navy-600/50 rounded-full px-4 py-1.5 text-xs font-medium text-navy-100 mb-6 backdrop-blur-sm">
           <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
           35+ Years of Precision Instrumentation
         </div>
-        <h1 class="text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight mb-6">
+        <h1 class="text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight mb-5">
           Process Control
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-navy-500 to-blue-400">Instruments</span>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 to-blue-400">Instruments</span>
           <br>Built for Industry
         </h1>
         <p class="text-lg text-navy-100/80 leading-relaxed mb-8 max-w-xl">
           Manufacturer of peristaltic pumps, flow meters, pressure transmitters & IoT modules. Trusted by clients across India, Nepal, Saudi Arabia & Indonesia.
         </p>
-        <div class="flex flex-wrap gap-4 mb-10">
-          <a href="/products/" class="bg-navy-600 hover:bg-navy-500 text-white font-semibold px-7 py-3.5 rounded-xl transition-all hover:shadow-lg flex items-center gap-2">
+
+        {# CTA buttons — full width on mobile #}
+        <div class="flex flex-col sm:flex-row gap-3 mb-8">
+          <a href="/products/" class="w-full sm:w-auto bg-navy-600 hover:bg-navy-500 text-white font-semibold px-7 py-3.5 rounded-xl transition-all hover:shadow-lg flex items-center justify-center gap-2">
             <i class="ti ti-packages text-lg"></i> Explore Products
           </a>
-          <button onclick="openEnquiryModal('')" class="border border-navy-500/50 hover:border-navy-400 text-white font-semibold px-7 py-3.5 rounded-xl transition-all hover:bg-navy-700/50 flex items-center gap-2 backdrop-blur-sm">
+          <button onclick="openEnquiryModal('')" class="w-full sm:w-auto border border-navy-500/50 hover:border-navy-400 text-white font-semibold px-7 py-3.5 rounded-xl transition-all hover:bg-navy-700/50 flex items-center justify-center gap-2 backdrop-blur-sm">
             <i class="ti ti-send text-lg"></i> Request a Quote
           </button>
         </div>
-        <div class="flex flex-wrap gap-3">
-          <div class="flex items-center gap-1.5 text-xs text-navy-100/70 bg-navy-800/60 border border-navy-700/50 px-3 py-1.5 rounded-full backdrop-blur-sm">
+
+        {# Trust badges #}
+        <div class="flex flex-wrap gap-2">
+          <div class="flex items-center gap-1.5 text-xs text-navy-100/70 bg-navy-800/60 border border-navy-700/50 px-3 py-1.5 rounded-full">
             <i class="ti ti-check text-green-400 text-xs"></i> GST Verified Manufacturer
           </div>
-          <div class="flex items-center gap-1.5 text-xs text-navy-100/70 bg-navy-800/60 border border-navy-700/50 px-3 py-1.5 rounded-full backdrop-blur-sm">
-            <i class="ti ti-check text-green-400 text-xs"></i> Exporting to 5 Countries
+          <div class="flex items-center gap-1.5 text-xs text-navy-100/70 bg-navy-800/60 border border-navy-700/50 px-3 py-1.5 rounded-full">
+            <i class="ti ti-check text-green-400 text-xs"></i> Exporting to 5+ Countries
           </div>
-          <div class="flex items-center gap-1.5 text-xs text-navy-100/70 bg-navy-800/60 border border-navy-700/50 px-3 py-1.5 rounded-full backdrop-blur-sm">
+          <div class="flex items-center gap-1.5 text-xs text-navy-100/70 bg-navy-800/60 border border-navy-700/50 px-3 py-1.5 rounded-full">
             <i class="ti ti-check text-green-400 text-xs"></i> ISO Quality Standards
           </div>
-          <div class="flex items-center gap-1.5 text-xs text-navy-100/70 bg-navy-800/60 border border-navy-700/50 px-3 py-1.5 rounded-full backdrop-blur-sm">
-            <i class="ti ti-check text-green-400 text-xs"></i> 89% Call Response Rate
+          <div class="flex items-center gap-1.5 text-xs text-navy-100/70 bg-navy-800/60 border border-navy-700/50 px-3 py-1.5 rounded-full">
+            <i class="ti ti-check text-green-400 text-xs"></i> 24hr Response Guarantee
           </div>
         </div>
       </div>
 
-      <div class="hidden lg:grid grid-cols-2 gap-4">
-        <div class="bg-navy-700/40 border border-navy-600/30 rounded-2xl p-6 backdrop-blur-sm text-center hover:bg-navy-700/60 transition-colors">
-          <div class="text-4xl font-bold text-white mb-1" data-target="{{ stats.years }}" data-suffix="+">0+</div>
-          <div class="text-sm text-navy-100/70">Years Experience</div>
-          <i class="ti ti-calendar text-navy-500 text-2xl mt-2"></i>
+      {# Right — visual panel (desktop) #}
+      <div class="hidden lg:block">
+        {# Stats row #}
+        <div class="grid grid-cols-3 gap-3 mb-4">
+          <div class="bg-navy-700/40 border border-navy-600/30 rounded-2xl py-4 text-center backdrop-blur-sm">
+            <div class="text-3xl font-bold text-white" data-target="{{ stats.years }}" data-suffix="+">0+</div>
+            <div class="text-[11px] text-navy-100/50 mt-1">Years</div>
+          </div>
+          <div class="bg-navy-700/40 border border-navy-600/30 rounded-2xl py-4 text-center backdrop-blur-sm">
+            <div class="text-3xl font-bold text-white" data-target="{{ stats.products }}" data-suffix="+">0+</div>
+            <div class="text-[11px] text-navy-100/50 mt-1">Products</div>
+          </div>
+          <div class="bg-navy-700/40 border border-navy-600/30 rounded-2xl py-4 text-center backdrop-blur-sm">
+            <div class="text-3xl font-bold text-white" data-target="{{ stats.countries }}">0</div>
+            <div class="text-[11px] text-navy-100/50 mt-1">Countries</div>
+          </div>
         </div>
-        <div class="bg-navy-700/40 border border-navy-600/30 rounded-2xl p-6 backdrop-blur-sm text-center hover:bg-navy-700/60 transition-colors mt-6">
-          <div class="text-4xl font-bold text-white mb-1" data-target="{{ stats.products }}" data-suffix="+">0+</div>
-          <div class="text-sm text-navy-100/70">Products</div>
-          <i class="ti ti-packages text-navy-500 text-2xl mt-2"></i>
+
+        {# Feature cards #}
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-gradient-to-br from-sky-600/20 to-blue-700/10 border border-sky-600/20 rounded-2xl p-5">
+            <i class="ti ti-certificate text-sky-400 text-2xl mb-3 block"></i>
+            <div class="text-white font-semibold text-sm mb-1">ISO Quality</div>
+            <div class="text-navy-100/50 text-xs leading-relaxed">Factory-calibrated instruments traceable to national standards</div>
+          </div>
+          <div class="bg-gradient-to-br from-green-600/20 to-emerald-700/10 border border-green-600/20 rounded-2xl p-5">
+            <i class="ti ti-world text-green-400 text-2xl mb-3 block"></i>
+            <div class="text-white font-semibold text-sm mb-1">Global Export</div>
+            <div class="text-navy-100/50 text-xs leading-relaxed">Shipping to 5 countries across Asia & Middle East</div>
+          </div>
+          <div class="bg-gradient-to-br from-purple-600/20 to-violet-700/10 border border-purple-600/20 rounded-2xl p-5">
+            <i class="ti ti-headset text-purple-400 text-2xl mb-3 block"></i>
+            <div class="text-white font-semibold text-sm mb-1">24hr Support</div>
+            <div class="text-navy-100/50 text-xs leading-relaxed">Dedicated engineers available Mon–Sat for technical help</div>
+          </div>
+          <div class="bg-gradient-to-br from-orange-600/20 to-amber-700/10 border border-orange-600/20 rounded-2xl p-5">
+            <i class="ti ti-building-factory text-orange-400 text-2xl mb-3 block"></i>
+            <div class="text-white font-semibold text-sm mb-1">{{ stats.sqft }} Sqft</div>
+            <div class="text-navy-100/50 text-xs leading-relaxed">State-of-art project facility in Chennai, India</div>
+          </div>
         </div>
-        <div class="bg-navy-700/40 border border-navy-600/30 rounded-2xl p-6 backdrop-blur-sm text-center hover:bg-navy-700/60 transition-colors">
-          <div class="text-4xl font-bold text-white mb-1" data-target="{{ stats.countries }}">0</div>
-          <div class="text-sm text-navy-100/70">Export Countries</div>
-          <i class="ti ti-world text-navy-500 text-2xl mt-2"></i>
-        </div>
-        <div class="bg-navy-700/40 border border-navy-600/30 rounded-2xl p-6 backdrop-blur-sm text-center hover:bg-navy-700/60 transition-colors mt-6">
-          <div class="text-4xl font-bold text-white mb-1" data-target="{{ stats.sqft }}" data-suffix="sqft">0sqft</div>
-          <div class="text-sm text-navy-100/70">Facility Size</div>
-          <i class="ti ti-building-factory text-navy-500 text-2xl mt-2"></i>
-        </div>
+      </div>
+    </div>
+
+    {# Mobile stats strip — visible only on small screens #}
+    <div class="lg:hidden mt-10 grid grid-cols-2 gap-3">
+      <div class="bg-navy-700/50 border border-navy-600/40 rounded-xl p-4 text-center">
+        <div class="text-2xl font-bold text-white" data-target="{{ stats.years }}" data-suffix="+">0+</div>
+        <div class="text-xs text-navy-100/60 mt-1">Years Experience</div>
+      </div>
+      <div class="bg-navy-700/50 border border-navy-600/40 rounded-xl p-4 text-center">
+        <div class="text-2xl font-bold text-white" data-target="{{ stats.products }}" data-suffix="+">0+</div>
+        <div class="text-xs text-navy-100/60 mt-1">Products</div>
+      </div>
+      <div class="bg-navy-700/50 border border-navy-600/40 rounded-xl p-4 text-center">
+        <div class="text-2xl font-bold text-white" data-target="{{ stats.countries }}">0</div>
+        <div class="text-xs text-navy-100/60 mt-1">Export Countries</div>
+      </div>
+      <div class="bg-navy-700/50 border border-navy-600/40 rounded-xl p-4 text-center">
+        <div class="text-2xl font-bold text-white">5250</div>
+        <div class="text-xs text-navy-100/60 mt-1">Sqft Facility</div>
       </div>
     </div>
   </div>
 
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-navy-100/40 text-xs">
-    <span>Scroll to explore</span>
-    <i class="ti ti-chevron-down animate-bounce"></i>
-  </div>
 </section>
 
-{# -- PRODUCT DIVISIONS -- #}
+{# ── PRODUCT DIVISIONS ── #}
 <section class="py-20 bg-white">
   <div class="max-w-7xl mx-auto px-4">
     <div class="text-center mb-14 animate-on-scroll">
@@ -92,6 +134,7 @@
       {% for division in divisions %}
       <div class="group relative {% if forloop.first %}bg-gradient-to-br from-navy-900 to-navy-700{% else %}bg-gradient-to-br from-emerald-900 to-emerald-700{% endif %} rounded-2xl p-8 overflow-hidden cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 animate-on-scroll">
         <div class="absolute inset-0 grid-bg opacity-20"></div>
+        <div class="absolute -bottom-8 -right-8 w-48 h-48 bg-white/5 rounded-full"></div>
         <div class="relative">
           <div class="w-14 h-14 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
             <i class="ti {{ division.icon }} text-white text-2xl"></i>
@@ -119,7 +162,7 @@
   </div>
 </section>
 
-{# -- FEATURED PRODUCTS -- #}
+{# ── FEATURED PRODUCTS ── #}
 {% if featured %}
 <section class="py-20 bg-gray-50">
   <div class="max-w-7xl mx-auto px-4">
@@ -132,7 +175,7 @@
         View all products <i class="ti ti-arrow-right"></i>
       </a>
     </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
       {% for product in featured %}
       <div class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-navy-200 hover:-translate-y-1 hover:shadow-xl transition-all duration-300 animate-on-scroll">
         <a href="/products/{{ product.slug }}/" class="block">
@@ -147,14 +190,14 @@
               <span class="text-xs text-gray-400">Product image</span>
             </div>
             {% endif %}
-            <div class="absolute top-3 left-3">
+            <div class="absolute top-2 left-2">
               <span class="text-[10px] font-semibold px-2 py-1 rounded-full {% if product.division.slug == 'fluid-handling' %}bg-emerald-100 text-emerald-700{% else %}bg-navy-100 text-navy-700{% endif %}">
                 {{ product.category.name }}
               </span>
             </div>
-            <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
               <button onclick="event.preventDefault();openEnquiryModal('{{ product.name }}')" class="bg-white/90 text-navy-700 text-[10px] font-semibold px-2 py-1 rounded-full shadow-sm hover:bg-white">
-                Quick Enquiry
+                Quick Quote
               </button>
             </div>
           </div>
@@ -176,67 +219,192 @@
       </div>
       {% endfor %}
     </div>
+    <div class="text-center mt-8 md:hidden">
+      <a href="/products/" class="inline-flex items-center gap-2 text-sm font-semibold text-navy-600 border border-navy-200 px-6 py-2.5 rounded-xl hover:bg-navy-50 transition-colors">
+        View all products <i class="ti ti-arrow-right"></i>
+      </a>
+    </div>
   </div>
 </section>
 {% endif %}
 
-{# -- WHY VISA -- #}
+{# ── INDUSTRIES WE SERVE ── #}
 <section class="py-20 bg-white">
   <div class="max-w-7xl mx-auto px-4">
-    <div class="text-center mb-14 animate-on-scroll">
-      <p class="text-sm font-semibold text-navy-600 uppercase tracking-widest mb-2">Why choose us</p>
-      <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">The VISA Advantage</h2>
+    <div class="text-center mb-12 animate-on-scroll">
+      <p class="text-sm font-semibold text-navy-600 uppercase tracking-widest mb-2">Industries</p>
+      <h2 class="text-3xl font-bold text-gray-900 mb-3">Who We Serve</h2>
+      <p class="text-gray-500 max-w-xl mx-auto text-sm">Our instruments are trusted across critical industries that demand accuracy and reliability.</p>
     </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:border-navy-200 hover:shadow-lg transition-all animate-on-scroll">
-        <div class="w-12 h-12 bg-navy-100 rounded-xl flex items-center justify-center mb-4">
-          <i class="ti ti-building-factory text-navy-600 text-xl"></i>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div class="group bg-gray-50 hover:bg-navy-600 border border-gray-100 hover:border-navy-600 rounded-2xl p-5 text-center transition-all duration-300 animate-on-scroll cursor-default">
+        <div class="w-12 h-12 rounded-xl bg-blue-100 group-hover:bg-white/20 flex items-center justify-center mb-3 mx-auto transition-colors">
+          <i class="ti ti-pill text-blue-600 group-hover:text-white text-xl transition-colors"></i>
         </div>
-        <h3 class="font-semibold text-gray-900 mb-2">In-house Manufacturing</h3>
-        <p class="text-sm text-gray-500 leading-relaxed">35-year manufacturing subsidiary � Teletherm Instruments Chennai</p>
+        <h3 class="text-xs font-semibold text-gray-800 group-hover:text-white transition-colors">Pharma</h3>
       </div>
-      <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:border-navy-200 hover:shadow-lg transition-all animate-on-scroll">
-        <div class="w-12 h-12 bg-navy-100 rounded-xl flex items-center justify-center mb-4">
-          <i class="ti ti-code text-navy-600 text-xl"></i>
+      <div class="group bg-gray-50 hover:bg-emerald-600 border border-gray-100 hover:border-emerald-600 rounded-2xl p-5 text-center transition-all duration-300 animate-on-scroll cursor-default">
+        <div class="w-12 h-12 rounded-xl bg-emerald-100 group-hover:bg-white/20 flex items-center justify-center mb-3 mx-auto transition-colors">
+          <i class="ti ti-coffee text-emerald-600 group-hover:text-white text-xl transition-colors"></i>
         </div>
-        <h3 class="font-semibold text-gray-900 mb-2">Software Division</h3>
-        <p class="text-sm text-gray-500 leading-relaxed">Custom process control software built alongside hardware products</p>
+        <h3 class="text-xs font-semibold text-gray-800 group-hover:text-white transition-colors">Food & Beverage</h3>
       </div>
-      <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:border-navy-200 hover:shadow-lg transition-all animate-on-scroll">
-        <div class="w-12 h-12 bg-navy-100 rounded-xl flex items-center justify-center mb-4">
-          <i class="ti ti-world text-navy-600 text-xl"></i>
+      <div class="group bg-gray-50 hover:bg-orange-500 border border-gray-100 hover:border-orange-500 rounded-2xl p-5 text-center transition-all duration-300 animate-on-scroll cursor-default">
+        <div class="w-12 h-12 rounded-xl bg-orange-100 group-hover:bg-white/20 flex items-center justify-center mb-3 mx-auto transition-colors">
+          <i class="ti ti-flame text-orange-600 group-hover:text-white text-xl transition-colors"></i>
         </div>
-        <h3 class="font-semibold text-gray-900 mb-2">Global Exports</h3>
-        <p class="text-sm text-gray-500 leading-relaxed">Shipping to Nepal, Bangladesh, Saudi Arabia, Indonesia & Turkey</p>
+        <h3 class="text-xs font-semibold text-gray-800 group-hover:text-white transition-colors">Chemical</h3>
       </div>
-      <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:border-navy-200 hover:shadow-lg transition-all animate-on-scroll">
-        <div class="w-12 h-12 bg-navy-100 rounded-xl flex items-center justify-center mb-4">
-          <i class="ti ti-microscope text-navy-600 text-xl"></i>
+      <div class="group bg-gray-50 hover:bg-cyan-600 border border-gray-100 hover:border-cyan-600 rounded-2xl p-5 text-center transition-all duration-300 animate-on-scroll cursor-default">
+        <div class="w-12 h-12 rounded-xl bg-cyan-100 group-hover:bg-white/20 flex items-center justify-center mb-3 mx-auto transition-colors">
+          <i class="ti ti-droplet text-cyan-600 group-hover:text-white text-xl transition-colors"></i>
         </div>
-        <h3 class="font-semibold text-gray-900 mb-2">R&D Expertise</h3>
-        <p class="text-sm text-gray-500 leading-relaxed">Team of engineers with 25+ years in advanced process control</p>
+        <h3 class="text-xs font-semibold text-gray-800 group-hover:text-white transition-colors">Water Treatment</h3>
+      </div>
+      <div class="group bg-gray-50 hover:bg-gray-700 border border-gray-100 hover:border-gray-700 rounded-2xl p-5 text-center transition-all duration-300 animate-on-scroll cursor-default">
+        <div class="w-12 h-12 rounded-xl bg-gray-200 group-hover:bg-white/20 flex items-center justify-center mb-3 mx-auto transition-colors">
+          <i class="ti ti-engine text-gray-600 group-hover:text-white text-xl transition-colors"></i>
+        </div>
+        <h3 class="text-xs font-semibold text-gray-800 group-hover:text-white transition-colors">Oil & Gas</h3>
+      </div>
+      <div class="group bg-gray-50 hover:bg-yellow-500 border border-gray-100 hover:border-yellow-500 rounded-2xl p-5 text-center transition-all duration-300 animate-on-scroll cursor-default">
+        <div class="w-12 h-12 rounded-xl bg-yellow-100 group-hover:bg-white/20 flex items-center justify-center mb-3 mx-auto transition-colors">
+          <i class="ti ti-bolt text-yellow-600 group-hover:text-white text-xl transition-colors"></i>
+        </div>
+        <h3 class="text-xs font-semibold text-gray-800 group-hover:text-white transition-colors">Power Plants</h3>
       </div>
     </div>
   </div>
 </section>
 
-{# -- ENQUIRY SECTION -- #}
+{# ── WHY VISA — colored cards ── #}
+<section class="py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-14 animate-on-scroll">
+      <p class="text-sm font-semibold text-navy-600 uppercase tracking-widest mb-2">Why choose us</p>
+      <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">The VISA Advantage</h2>
+      <p class="text-gray-500 max-w-xl mx-auto text-sm">What makes VISA Pvt. Ltd the preferred choice for process control instruments.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-on-scroll">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:#E6F1FB">
+          <i class="ti ti-building-factory text-xl" style="color:#185FA5"></i>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-2">In-house Projects</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">35-year project subsidiary — Teletherm Instruments Chennai, 5250 sqft facility.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-on-scroll">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:#E1F5EE">
+          <i class="ti ti-code text-xl" style="color:#0F6E56"></i>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-2">Software Division</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Custom SCADA, HMI and process control software built alongside hardware.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-on-scroll">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:#FEF3E2">
+          <i class="ti ti-world text-xl" style="color:#C05700"></i>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-2">Global Exports</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Shipping to Nepal, Bangladesh, Saudi Arabia, Indonesia & Turkey since 1999.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-on-scroll">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:#EEEDFE">
+          <i class="ti ti-microscope text-xl" style="color:#534AB7"></i>
+        </div>
+        <h3 class="font-semibold text-gray-900 mb-2">R&D Expertise</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Team of engineers with 25+ years in advanced process control instrumentation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ── TESTIMONIALS ── #}
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-12 animate-on-scroll">
+      <p class="text-sm font-semibold text-navy-600 uppercase tracking-widest mb-2">Client feedback</p>
+      <h2 class="text-3xl font-bold text-gray-900">What Our Clients Say</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-gray-50 border border-gray-100 rounded-2xl p-6 hover:shadow-lg transition-all animate-on-scroll">
+        <div class="flex gap-0.5 mb-4">
+          <i class="ti ti-star-filled text-yellow-400 text-sm"></i>
+          <i class="ti ti-star-filled text-yellow-400 text-sm"></i>
+          <i class="ti ti-star-filled text-yellow-400 text-sm"></i>
+          <i class="ti ti-star-filled text-yellow-400 text-sm"></i>
+          <i class="ti ti-star-filled text-yellow-400 text-sm"></i>
+        </div>
+        <p class="text-gray-600 text-sm leading-relaxed mb-5">"VISA Pvt. Ltd has been our go-to supplier for peristaltic pumps for the past 8 years. Their after-sales support and calibration service is exceptional."</p>
+        <div class="flex items-center gap-3 border-t border-gray-200 pt-4">
+          <div class="w-10 h-10 rounded-full bg-navy-100 flex items-center justify-center flex-shrink-0">
+            <i class="ti ti-user text-navy-600 text-sm"></i>
+          </div>
+          <div>
+            <div class="text-sm font-semibold text-gray-900">Rajesh Kumar</div>
+            <div class="text-xs text-gray-500">Plant Manager — Pharmaceutical Industry</div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-navy-900 border border-navy-700 rounded-2xl p-6 hover:shadow-xl transition-all animate-on-scroll">
+        <div class="flex gap-0.5 mb-4">
+          <i class="ti ti-star-filled text-yellow-400 text-sm"></i>
+          <i class="ti ti-star-filled text-yellow-400 text-sm"></i>
+          <i class="ti ti-star-filled text-yellow-400 text-sm"></i>
+          <i class="ti ti-star-filled text-yellow-400 text-sm"></i>
+          <i class="ti ti-star-filled text-yellow-400 text-sm"></i>
+        </div>
+        <p class="text-navy-100/80 text-sm leading-relaxed mb-5">"The flow meters we sourced from VISA have been running without issues for 3 years. Competitive pricing and fast delivery from Chennai."</p>
+        <div class="flex items-center gap-3 border-t border-navy-700 pt-4">
+          <div class="w-10 h-10 rounded-full bg-navy-700 flex items-center justify-center flex-shrink-0">
+            <i class="ti ti-user text-navy-300 text-sm"></i>
+          </div>
+          <div>
+            <div class="text-sm font-semibold text-white">Suresh Babu</div>
+            <div class="text-xs text-navy-100/60">Purchase Manager — Oil & Gas Sector</div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-50 border border-gray-100 rounded-2xl p-6 hover:shadow-lg transition-all animate-on-scroll">
+        <div class="flex gap-0.5 mb-4">
+          <i class="ti ti-star-filled text-yellow-400 text-sm"></i>
+          <i class="ti ti-star-filled text-yellow-400 text-sm"></i>
+          <i class="ti ti-star-filled text-yellow-400 text-sm"></i>
+          <i class="ti ti-star-filled text-yellow-400 text-sm"></i>
+          <i class="ti ti-star-half-filled text-yellow-400 text-sm"></i>
+        </div>
+        <p class="text-gray-600 text-sm leading-relaxed mb-5">"We rely on VISA for pressure transmitters across our water treatment plants. Their technical team is always responsive and knowledgeable."</p>
+        <div class="flex items-center gap-3 border-t border-gray-200 pt-4">
+          <div class="w-10 h-10 rounded-full bg-navy-100 flex items-center justify-center flex-shrink-0">
+            <i class="ti ti-user text-navy-600 text-sm"></i>
+          </div>
+          <div>
+            <div class="text-sm font-semibold text-gray-900">Priya Nair</div>
+            <div class="text-xs text-gray-500">Production Head — Food & Beverage</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ── ENQUIRY SECTION ── #}
 <section class="py-20 bg-navy-900 relative overflow-hidden" id="enquiry">
   <div class="absolute inset-0 grid-bg opacity-30"></div>
   <div class="absolute top-0 right-0 w-96 h-96 bg-navy-600/20 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-2xl"></div>
   <div class="relative max-w-7xl mx-auto px-4">
     <div class="grid lg:grid-cols-2 gap-16 items-start">
       <div class="animate-on-scroll">
         <p class="text-sm font-semibold text-navy-400 uppercase tracking-widest mb-3">Get in touch</p>
         <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">Request a Quote</h2>
         <p class="text-navy-100/70 leading-relaxed mb-8">Our team responds within 24 hours. For urgent requirements, call or WhatsApp us directly.</p>
-        <div class="space-y-4">
+        <div class="space-y-3">
           <a href="tel:+917949093762" class="flex items-center gap-4 bg-navy-700/50 border border-navy-600/30 rounded-xl p-4 hover:bg-navy-700 transition-colors">
             <div class="w-10 h-10 bg-navy-600 rounded-lg flex items-center justify-center flex-shrink-0">
               <i class="ti ti-phone text-white text-lg"></i>
             </div>
             <div>
-              <div class="text-xs text-navy-100/60">Call us</div>
+              <div class="text-xs text-navy-100/60">Call us directly</div>
               <div class="text-white font-semibold">+91 79490 93762</div>
             </div>
           </a>
@@ -245,7 +413,7 @@
               <i class="ti ti-brand-whatsapp text-white text-lg"></i>
             </div>
             <div>
-              <div class="text-xs text-green-400/70">WhatsApp</div>
+              <div class="text-xs text-green-400/70">Chat on WhatsApp</div>
               <div class="text-white font-semibold">+91 79490 93762</div>
             </div>
           </a>
@@ -254,10 +422,14 @@
               <i class="ti ti-mail text-white text-lg"></i>
             </div>
             <div>
-              <div class="text-xs text-navy-100/60">Email</div>
+              <div class="text-xs text-navy-100/60">Email us</div>
               <div class="text-white font-semibold">sales@visapvtltd.net</div>
             </div>
           </div>
+        </div>
+        <div class="mt-6 flex items-center gap-3 text-xs text-navy-100/50">
+          <i class="ti ti-clock text-navy-500"></i>
+          Mon–Sat, 9 AM – 6 PM IST
         </div>
       </div>
       <div class="bg-white rounded-2xl p-8 shadow-2xl animate-on-scroll">
@@ -269,21 +441,40 @@
   </div>
 </section>
 
-{# -- EXPORT COUNTRIES -- #}
-<section class="py-16 bg-gray-50 border-t border-gray-100">
+{# ── EXPORT COUNTRIES ── #}
+<section class="py-16 bg-white border-t border-gray-100">
   <div class="max-w-7xl mx-auto px-4">
-    <div class="text-center mb-8 animate-on-scroll">
+    <div class="text-center mb-10 animate-on-scroll">
       <p class="text-sm font-semibold text-navy-600 uppercase tracking-widest mb-2">Global reach</p>
       <h2 class="text-2xl font-bold text-gray-900">Exporting to 5+ Countries</h2>
+      <p class="text-gray-500 text-sm mt-2">Trusted by industrial clients across South Asia and the Middle East</p>
     </div>
     <div class="flex flex-wrap justify-center gap-4">
-  <div class="bg-white border border-gray-200 rounded-xl px-5 py-3 text-sm font-medium text-gray-700">India</div>
-  <div class="bg-white border border-gray-200 rounded-xl px-5 py-3 text-sm font-medium text-gray-700">Nepal</div>
-  <div class="bg-white border border-gray-200 rounded-xl px-5 py-3 text-sm font-medium text-gray-700">Bangladesh</div>
-  <div class="bg-white border border-gray-200 rounded-xl px-5 py-3 text-sm font-medium text-gray-700">Saudi Arabia</div>
-  <div class="bg-white border border-gray-200 rounded-xl px-5 py-3 text-sm font-medium text-gray-700">Indonesia</div>
-  <div class="bg-white border border-gray-200 rounded-xl px-5 py-3 text-sm font-medium text-gray-700">Turkey</div>
-</div>
+      <div class="group bg-gray-50 hover:bg-navy-600 border border-gray-200 hover:border-navy-600 rounded-xl px-6 py-4 text-center transition-all duration-300 min-w-[110px] animate-on-scroll">
+        <div class="text-2xl mb-1">🇮🇳</div>
+        <div class="text-sm font-medium text-gray-700 group-hover:text-white transition-colors">India</div>
+      </div>
+      <div class="group bg-gray-50 hover:bg-navy-600 border border-gray-200 hover:border-navy-600 rounded-xl px-6 py-4 text-center transition-all duration-300 min-w-[110px] animate-on-scroll">
+        <div class="text-2xl mb-1">🇳🇵</div>
+        <div class="text-sm font-medium text-gray-700 group-hover:text-white transition-colors">Nepal</div>
+      </div>
+      <div class="group bg-gray-50 hover:bg-navy-600 border border-gray-200 hover:border-navy-600 rounded-xl px-6 py-4 text-center transition-all duration-300 min-w-[110px] animate-on-scroll">
+        <div class="text-2xl mb-1">🇧🇩</div>
+        <div class="text-sm font-medium text-gray-700 group-hover:text-white transition-colors">Bangladesh</div>
+      </div>
+      <div class="group bg-gray-50 hover:bg-navy-600 border border-gray-200 hover:border-navy-600 rounded-xl px-6 py-4 text-center transition-all duration-300 min-w-[110px] animate-on-scroll">
+        <div class="text-2xl mb-1">🇸🇦</div>
+        <div class="text-sm font-medium text-gray-700 group-hover:text-white transition-colors">Saudi Arabia</div>
+      </div>
+      <div class="group bg-gray-50 hover:bg-navy-600 border border-gray-200 hover:border-navy-600 rounded-xl px-6 py-4 text-center transition-all duration-300 min-w-[110px] animate-on-scroll">
+        <div class="text-2xl mb-1">🇮🇩</div>
+        <div class="text-sm font-medium text-gray-700 group-hover:text-white transition-colors">Indonesia</div>
+      </div>
+      <div class="group bg-gray-50 hover:bg-navy-600 border border-gray-200 hover:border-navy-600 rounded-xl px-6 py-4 text-center transition-all duration-300 min-w-[110px] animate-on-scroll">
+        <div class="text-2xl mb-1">🇹🇷</div>
+        <div class="text-sm font-medium text-gray-700 group-hover:text-white transition-colors">Turkey</div>
+      </div>
+    </div>
   </div>
 </section>
 

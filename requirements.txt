@@ -1,4 +1,5 @@
 django>=5.0
+django-jazzmin
 psycopg2-binary
 pillow
 python-dotenv

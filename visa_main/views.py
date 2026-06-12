@@ -177,10 +177,10 @@ def about(request):
     })
 
 
-def manufacturing(request):
-    return render(request, 'visa_main/pages/manufacturing.html', {
-        'meta_title': 'Manufacturing — Teletherm Instruments, Chennai | VISA Pvt. Ltd',
-        'meta_desc':  'Our 5250 sqft manufacturing facility in Chennai. Teletherm Instruments — 35 years of precision instrument manufacturing.',
+def projects(request):
+    return render(request, 'visa_main/pages/projects.html', {
+        'meta_title': 'Projects — Teletherm Instruments, Chennai | VISA Pvt. Ltd',
+        'meta_desc':  'Our 5250 sqft facility in Chennai. Teletherm Instruments — 35 years of precision instrument projects.',
     })
 
 

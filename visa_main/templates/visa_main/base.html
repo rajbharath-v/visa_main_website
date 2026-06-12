@@ -185,8 +185,8 @@
         </div>
       </div>
 
-      <a href="/manufacturing/" class="px-4 h-16 flex items-center text-sm text-navy-100 hover:text-white hover:bg-navy-700 transition-colors">
-        Manufacturing
+      <a href="/projects/" class="px-4 h-16 flex items-center text-sm text-navy-100 hover:text-white hover:bg-navy-700 transition-colors">
+        Projects
       </a>
 
       {# About dropdown #}
@@ -197,7 +197,7 @@
         <div class="simple-dd absolute top-16 left-0 bg-white rounded-b-xl shadow-xl border border-gray-100 py-1 min-w-[180px] z-50">
           <a href="/about/"               class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-navy-100 hover:text-navy-800 transition-colors">Company Profile</a>
           <a href="/about/#team"          class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-navy-100 hover:text-navy-800 transition-colors">Our Team</a>
-          <a href="/manufacturing/"       class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-navy-100 hover:text-navy-800 transition-colors">Infrastructure</a>
+          <a href="/projects/"            class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-navy-100 hover:text-navy-800 transition-colors">Projects</a>
           <a href="/about/#quality"       class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-navy-100 hover:text-navy-800 transition-colors">Quality</a>
           <a href="/blog/"               class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-navy-100 hover:text-navy-800 transition-colors">Blog</a>
         </div>
@@ -230,6 +230,15 @@
 
   {# Mobile menu #}
   <div class="hidden lg:hidden bg-navy-900 border-t border-navy-700" id="mobile-menu">
+    {# Quick contact strip #}
+    <div class="grid grid-cols-2 gap-2 px-4 pt-4 pb-2">
+      <a href="tel:+917949093762" class="flex items-center justify-center gap-2 bg-navy-700 hover:bg-navy-600 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
+        <i class="ti ti-phone text-green-400"></i> Call Now
+      </a>
+      <a href="https://wa.me/{{ whatsapp_number }}" target="_blank" class="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
+        <i class="ti ti-brand-whatsapp"></i> WhatsApp
+      </a>
+    </div>
     <div class="px-4 py-3 space-y-1">
       <a href="/"              class="block py-2.5 text-sm text-navy-100 hover:text-white border-b border-navy-700">Home</a>
       <a href="/products/"     class="block py-2.5 text-sm text-navy-100 hover:text-white border-b border-navy-700">All Products</a>
@@ -241,12 +250,9 @@
         {% endfor %}
       </div>
       {% endfor %}
-      <a href="/manufacturing/" class="block py-2.5 text-sm text-navy-100 hover:text-white border-b border-navy-700">Manufacturing</a>
-      <a href="/about/"         class="block py-2.5 text-sm text-navy-100 hover:text-white border-b border-navy-700">About Us</a>
-      <a href="/contact/"       class="block py-2.5 text-sm text-navy-100 hover:text-white border-b border-navy-700">Contact</a>
-      <a href="tel:+917949093762" class="block py-2.5 text-sm text-green-400 font-medium">
-        <i class="ti ti-phone mr-2"></i>+91 79490 93762
-      </a>
+      <a href="/projects/"     class="block py-2.5 text-sm text-navy-100 hover:text-white border-b border-navy-700">Projects</a>
+      <a href="/about/"        class="block py-2.5 text-sm text-navy-100 hover:text-white border-b border-navy-700">About Us</a>
+      <a href="/contact/"      class="block py-2.5 text-sm text-navy-100 hover:text-white border-b border-navy-700">Contact</a>
     </div>
   </div>
 </nav>
@@ -346,7 +352,7 @@
         <h3 class="text-sm font-semibold text-white mb-4">Company</h3>
         <ul class="space-y-2 text-sm text-navy-100/70">
           <li><a href="/about/"          class="hover:text-white transition-colors">About Us</a></li>
-          <li><a href="/manufacturing/"  class="hover:text-white transition-colors">Manufacturing</a></li>
+          <li><a href="/projects/"       class="hover:text-white transition-colors">Projects</a></li>
           <li><a href="/blog/"           class="hover:text-white transition-colors">Blog & Insights</a></li>
           <li><a href="/contact/"        class="hover:text-white transition-colors">Contact Us</a></li>
           <li><a href="/sitemap.xml"     class="hover:text-white transition-colors">Sitemap</a></li>

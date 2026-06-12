@@ -1,0 +1,362 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Analytics Dashboard — VISA Admin{% endblock %}
+
+{% block extrahead %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  .visa-grid       { display:grid; gap:1.25rem; }
+  .visa-grid-4     { grid-template-columns: repeat(4,1fr); }
+  .visa-grid-2     { grid-template-columns: repeat(2,1fr); }
+  .visa-grid-3     { grid-template-columns: repeat(3,1fr); }
+  @media(max-width:900px){ .visa-grid-4,.visa-grid-3{ grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:560px){ .visa-grid-4,.visa-grid-3,.visa-grid-2{ grid-template-columns:1fr; } }
+
+  .stat-card {
+    background:#fff; border-radius:12px; padding:1.25rem 1.5rem;
+    box-shadow:0 1px 4px rgba(0,0,0,.08); border-left:4px solid #185FA5;
+    display:flex; align-items:center; gap:1rem;
+  }
+  .stat-card.green  { border-color:#16a34a; }
+  .stat-card.orange { border-color:#ea580c; }
+  .stat-card.purple { border-color:#7c3aed; }
+  .stat-card.red    { border-color:#dc2626; }
+  .stat-card.teal   { border-color:#0d9488; }
+  .stat-icon {
+    width:52px; height:52px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.4rem; flex-shrink:0; background:#E6F1FB; color:#185FA5;
+  }
+  .stat-card.green  .stat-icon { background:#dcfce7; color:#16a34a; }
+  .stat-card.orange .stat-icon { background:#ffedd5; color:#ea580c; }
+  .stat-card.purple .stat-icon { background:#ede9fe; color:#7c3aed; }
+  .stat-card.red    .stat-icon { background:#fee2e2; color:#dc2626; }
+  .stat-card.teal   .stat-icon { background:#ccfbf1; color:#0d9488; }
+  .stat-value { font-size:2rem; font-weight:700; color:#111; line-height:1; }
+  .stat-label { font-size:.75rem; color:#6b7280; margin-top:.2rem; font-weight:500; }
+  .stat-sub   { font-size:.7rem; color:#9ca3af; margin-top:.1rem; }
+
+  .chart-card {
+    background:#fff; border-radius:12px; padding:1.25rem 1.5rem;
+    box-shadow:0 1px 4px rgba(0,0,0,.08);
+  }
+  .chart-title {
+    font-size:.85rem; font-weight:700; color:#111;
+    margin-bottom:1rem; padding-bottom:.6rem;
+    border-bottom:1px solid #f3f4f6;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .chart-title i { color:#185FA5; }
+
+  .visa-table { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .visa-table th {
+    background:#f8fafc; text-align:left; padding:.6rem .8rem;
+    font-size:.7rem; font-weight:700; color:#6b7280;
+    text-transform:uppercase; letter-spacing:.04em;
+    border-bottom:1px solid #e5e7eb;
+  }
+  .visa-table td { padding:.65rem .8rem; border-bottom:1px solid #f3f4f6; color:#374151; }
+  .visa-table tr:last-child td { border-bottom:none; }
+  .visa-table tr:hover td { background:#f8fafc; }
+
+  .badge {
+    display:inline-block; padding:.2rem .6rem; border-radius:99px;
+    font-size:.68rem; font-weight:700; letter-spacing:.02em;
+  }
+  .badge-new        { background:#dbeafe; color:#1d4ed8; }
+  .badge-contacted  { background:#fef9c3; color:#854d0e; }
+  .badge-converted  { background:#dcfce7; color:#15803d; }
+  .badge-closed     { background:#f1f5f9; color:#64748b; }
+
+  .section-header {
+    font-size:1.1rem; font-weight:700; color:#111;
+    margin:1.8rem 0 .8rem; padding-bottom:.4rem;
+    border-bottom:2px solid #E6F1FB;
+    display:flex; align-items:center; gap:.5rem;
+  }
+  .section-header i { color:#185FA5; }
+
+  .progress-bar-wrap { margin-top:.4rem; }
+  .progress-bar { height:6px; border-radius:99px; background:#e5e7eb; overflow:hidden; }
+  .progress-bar-fill { height:100%; border-radius:99px; background:#185FA5; transition:width .4s; }
+
+  #content { padding:1.5rem 2rem; }
+  .breadcrumbs { margin-bottom:1rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ── Page header ── #}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem;">
+  <div>
+    <h1 style="font-size:1.5rem;font-weight:700;color:#111;margin:0;">
+      <i class="fas fa-chart-bar" style="color:#185FA5;margin-right:.5rem;"></i>Analytics Dashboard
+    </h1>
+    <p style="font-size:.8rem;color:#6b7280;margin:.2rem 0 0;">VISA Pvt. Ltd — Lead & Product Overview</p>
+  </div>
+  <a href="/admin/shared/enquiry/" style="background:#185FA5;color:#fff;padding:.5rem 1.2rem;border-radius:8px;font-size:.8rem;font-weight:600;text-decoration:none;">
+    <i class="fas fa-envelope" style="margin-right:.4rem;"></i>View All Leads
+  </a>
+</div>
+
+{# ── Summary stat cards ── #}
+<div class="visa-grid visa-grid-4" style="margin-bottom:1.5rem;">
+  <div class="stat-card">
+    <div class="stat-icon"><i class="fas fa-envelope-open-text"></i></div>
+    <div>
+      <div class="stat-value">{{ total }}</div>
+      <div class="stat-label">Total Enquiries</div>
+      <div class="stat-sub">All time</div>
+    </div>
+  </div>
+  <div class="stat-card green">
+    <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+    <div>
+      <div class="stat-value">{{ today_count }}</div>
+      <div class="stat-label">Today</div>
+      <div class="stat-sub">{{ week_count }} this week</div>
+    </div>
+  </div>
+  <div class="stat-card orange">
+    <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+    <div>
+      <div class="stat-value">{{ month_count }}</div>
+      <div class="stat-label">Last 30 Days</div>
+      <div class="stat-sub">Monthly total</div>
+    </div>
+  </div>
+  <div class="stat-card purple">
+    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+    <div>
+      <div class="stat-value">{{ conversion_rate }}%</div>
+      <div class="stat-label">Conversion Rate</div>
+      <div class="stat-sub">{{ converted }} converted</div>
+    </div>
+  </div>
+</div>
+
+<div class="visa-grid visa-grid-4" style="margin-bottom:2rem;">
+  <div class="stat-card red">
+    <div class="stat-icon"><i class="fas fa-bell"></i></div>
+    <div>
+      <div class="stat-value">{{ new_count }}</div>
+      <div class="stat-label">New (Unread)</div>
+      <div class="stat-sub">Needs attention</div>
+    </div>
+  </div>
+  <div class="stat-card teal">
+    <div class="stat-icon"><i class="fas fa-boxes"></i></div>
+    <div>
+      <div class="stat-value">{{ total_products }}</div>
+      <div class="stat-label">Active Products</div>
+      <div class="stat-sub">{{ total_cats }} categories</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon"><i class="fas fa-hand-pointer"></i></div>
+    <div>
+      <div class="stat-value">{{ week_count }}</div>
+      <div class="stat-label">This Week</div>
+      <div class="stat-sub">Last 7 days</div>
+    </div>
+  </div>
+  <div class="stat-card green">
+    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+    <div>
+      <div class="stat-value">{{ converted }}</div>
+      <div class="stat-label">Converted</div>
+      <div class="stat-sub">Closed deals</div>
+    </div>
+  </div>
+</div>
+
+{# ── Charts row 1 — Trend + Status ── #}
+<div class="section-header"><i class="fas fa-chart-line"></i> Enquiry Trends</div>
+<div class="visa-grid visa-grid-2" style="margin-bottom:1.5rem;">
+
+  <div class="chart-card">
+    <div class="chart-title"><i class="fas fa-chart-line"></i> Last 30 Days — Daily Enquiries</div>
+    <canvas id="trendChart" height="120"></canvas>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title"><i class="fas fa-chart-pie"></i> Enquiry Status Breakdown</div>
+    <canvas id="statusChart" height="120"></canvas>
+  </div>
+
+</div>
+
+{# ── Charts row 2 — Products + Source ── #}
+<div class="visa-grid visa-grid-2" style="margin-bottom:2rem;">
+
+  <div class="chart-card">
+    <div class="chart-title"><i class="fas fa-chart-bar"></i> Top 5 Products by Enquiries</div>
+    {% if prod_labels != "[]" %}
+    <canvas id="productChart" height="140"></canvas>
+    {% else %}
+    <div style="text-align:center;padding:2rem;color:#9ca3af;font-size:.85rem;">
+      <i class="fas fa-inbox" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>
+      No product-linked enquiries yet
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title"><i class="fas fa-map-marker-alt"></i> Top Cities</div>
+    <div style="padding:.5rem 0;">
+      {% for city in city_qs %}
+      <div style="margin-bottom:.8rem;">
+        <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.25rem;">
+          <span style="font-weight:600;color:#374151;">{{ city.city }}</span>
+          <span style="color:#6b7280;">{{ city.count }} leads</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-bar-fill" style="width:{% widthratio city.count month_count 100 %}%;"></div>
+        </div>
+      </div>
+      {% empty %}
+      <div style="text-align:center;padding:1.5rem;color:#9ca3af;font-size:.85rem;">No city data yet</div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+
+{# ── Recent enquiries table ── #}
+<div class="section-header"><i class="fas fa-clock"></i> Recent Enquiries</div>
+<div class="chart-card" style="margin-bottom:2rem;overflow-x:auto;">
+  <table class="visa-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Company</th>
+        <th>Phone</th>
+        <th>Product</th>
+        <th>City</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in recent %}
+      <tr>
+        <td style="color:#9ca3af;font-size:.75rem;">{{ e.id }}</td>
+        <td style="font-weight:600;">{{ e.name }}</td>
+        <td>{{ e.company|default:"—" }}</td>
+        <td><a href="tel:{{ e.phone }}" style="color:#185FA5;">{{ e.phone }}</a></td>
+        <td>{{ e.product.name|default:e.product_name|default:"General" }}</td>
+        <td>{{ e.city|default:"—" }}</td>
+        <td>
+          <span class="badge badge-{{ e.status }}">
+            {{ e.get_status_display }}
+          </span>
+        </td>
+        <td style="color:#6b7280;font-size:.75rem;">{{ e.created_at|date:"d M, H:i" }}</td>
+        <td>
+          <a href="/admin/shared/enquiry/{{ e.id }}/change/"
+             style="background:#f1f5f9;color:#185FA5;padding:.25rem .7rem;border-radius:6px;font-size:.75rem;font-weight:600;text-decoration:none;">
+            Edit
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="9" style="text-align:center;padding:2rem;color:#9ca3af;">
+          No enquiries yet
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{# ── Charts JS ── #}
+<script>
+const BLUE   = '#185FA5';
+const GREEN  = '#16a34a';
+const ORANGE = '#ea580c';
+const PURPLE = '#7c3aed';
+const RED    = '#dc2626';
+const TEAL   = '#0d9488';
+const GRAY   = '#e5e7eb';
+
+// Trend line chart
+new Chart(document.getElementById('trendChart'), {
+  type: 'line',
+  data: {
+    labels: {{ trend_labels|safe }},
+    datasets: [{
+      label: 'Enquiries',
+      data:  {{ trend_data|safe }},
+      borderColor: BLUE,
+      backgroundColor: 'rgba(24,95,165,0.08)',
+      borderWidth: 2.5,
+      tension: 0.4,
+      fill: true,
+      pointRadius: 3,
+      pointBackgroundColor: BLUE,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 11 } }, grid: { color: '#f3f4f6' } },
+      x: { ticks: { font: { size: 10 }, maxTicksLimit: 10 }, grid: { display: false } }
+    }
+  }
+});
+
+// Status donut chart
+new Chart(document.getElementById('statusChart'), {
+  type: 'doughnut',
+  data: {
+    labels: {{ status_labels|safe }},
+    datasets: [{
+      data: {{ status_data|safe }},
+      backgroundColor: [BLUE, ORANGE, GREEN, GRAY],
+      borderWidth: 2,
+      borderColor: '#fff',
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '65%',
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } }
+    }
+  }
+});
+
+// Top products bar chart
+{% if prod_labels != "[]" %}
+new Chart(document.getElementById('productChart'), {
+  type: 'bar',
+  data: {
+    labels: {{ prod_labels|safe }},
+    datasets: [{
+      label: 'Enquiries',
+      data:  {{ prod_data|safe }},
+      backgroundColor: [BLUE, TEAL, PURPLE, ORANGE, GREEN],
+      borderRadius: 6,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true,
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 11 } }, grid: { color: '#f3f4f6' } },
+      y: { ticks: { font: { size: 11 } }, grid: { display: false } }
+    }
+  }
+});
+{% endif %}
+</script>
+
+{% endblock %}

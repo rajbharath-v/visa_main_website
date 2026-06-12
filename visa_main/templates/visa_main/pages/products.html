@@ -96,14 +96,14 @@
         <div class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-navy-200 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
 
           <a href="/products/{{ product.slug }}/" class="block">
-            <div class="aspect-[4/3] bg-gray-50 overflow-hidden relative">
+            <div class="bg-white flex items-center justify-center p-4 border-b border-gray-100 relative" style="height:180px;">
               {% if product.primary_image %}
               <img src="{{ product.primary_image.image.url }}"
                    alt="{{ product.primary_image.alt_text }}"
-                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                   class="max-h-36 w-full object-contain group-hover:scale-105 transition-transform duration-500"
                    loading="lazy">
               {% else %}
-              <div class="w-full h-full flex flex-col items-center justify-center gap-2">
+              <div class="flex flex-col items-center justify-center gap-2">
                 <div class="w-14 h-14 rounded-xl bg-navy-100 flex items-center justify-center">
                   <i class="ti ti-package text-navy-600 text-2xl"></i>
                 </div>
