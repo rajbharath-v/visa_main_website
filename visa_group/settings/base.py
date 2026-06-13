@@ -164,6 +164,16 @@ JAZZMIN_SETTINGS = {
         {"name": "View Site",   "url": "/",  "new_window": True, "icon": "fas fa-external-link-alt"},
         {"model": "shared.Enquiry"},
     ],
+    "custom_links": {
+        "shared": [
+            {
+                "name": "Analytics Dashboard",
+                "url": "/admin/analytics/",
+                "icon": "fas fa-chart-bar",
+                "permissions": ["auth.view_user"],
+            }
+        ]
+    },
     "usermenu_links": [
         {"name": "View Site", "url": "/", "new_window": True},
     ],
