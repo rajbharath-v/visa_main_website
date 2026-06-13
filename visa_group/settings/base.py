@@ -23,6 +23,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
+    'cloudinary_storage',
+    'cloudinary',
     # VISA apps
     'shared',
     'visa_main',
@@ -111,6 +113,15 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Cloudinary — permanent image storage for production
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME', 'dyhaocbiu'),
+    'API_KEY':    os.getenv('CLOUDINARY_API_KEY', '595497222666167'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET', ''),
+}
+if os.getenv('CLOUDINARY_API_SECRET', ''):
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
