@@ -126,7 +126,7 @@ STORAGES = {
         'BACKEND': 'cloudinary.storage.MediaCloudinaryStorage',
     },
     'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        'BACKEND': 'visa_group.storage.StaticStorage',
     },
 }
 
