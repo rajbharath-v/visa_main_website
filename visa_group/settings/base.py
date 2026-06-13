@@ -134,8 +134,8 @@ JAZZMIN_SETTINGS = {
     "site_brand":        "VISA",
     "site_logo":         "visa/img/logo.png",
     "site_logo_classes": "img-circle elevation-3",
-    "login_logo":        None,
-    "login_logo_dark":   None,
+    "login_logo":        "visa/img/logo.png",
+    "login_logo_dark":   "visa/img/logo.png",
     "site_icon":         "visa/img/logo.png",
     "welcome_sign":      "Welcome to VISA Admin Panel",
     "copyright":         "VISA Pvt. Ltd, Chennai",
@@ -176,6 +176,7 @@ JAZZMIN_SETTINGS = {
     "changeform_format":     "horizontal_tabs",
     "changeform_format_overrides": {"auth.user": "collapsible"},
     "language_chooser":      False,
+    "custom_css":            "visa/css/admin_custom.css",
 }
 
 JAZZMIN_UI_TWEAKS = {
