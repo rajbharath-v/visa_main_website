@@ -7,19 +7,10 @@ from .models import ProductDivision, ProductCategory, Product, ProductImage, Enq
 
 
 class ProductImageInline(admin.TabularInline):
-    model   = ProductImage
-    extra   = 3
-    fields  = ['image', 'alt_text', 'is_primary', 'order', 'preview']
-    readonly_fields = ['preview']
-
-    def preview(self, obj):
-        if obj.image:
-            return format_html(
-                '<img src="{}" style="height:64px;width:64px;object-fit:cover;border-radius:6px;"/>',
-                obj.image.url
-            )
-        return '—'
-    preview.short_description = 'Preview'
+    model      = ProductImage
+    extra      = 3
+    can_delete = True
+    fields     = ['image', 'is_primary', 'order']
 
 
 @admin.register(ProductDivision)
