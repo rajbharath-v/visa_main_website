@@ -7,4 +7,3 @@ whitenoise
 django-compressor
 gunicorn
 cloudinary
-django-cloudinary-storage

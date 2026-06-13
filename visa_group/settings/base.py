@@ -21,7 +21,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary_storage',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'cloudinary',
@@ -113,17 +112,18 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Cloudinary — permanent image storage
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME', 'dyhaocbiu'),
-    'API_KEY':    os.getenv('CLOUDINARY_API_KEY', '595497222666167'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET', ''),
-}
+# Cloudinary — permanent image storage (uses cloudinary SDK directly, Django 5+ compatible)
+import cloudinary
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME', 'dyhaocbiu'),
+    api_key=os.getenv('CLOUDINARY_API_KEY', '595497222666167'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET', ''),
+    secure=True,
+)
 
-# Django 4.2+ uses STORAGES dict (DEFAULT_FILE_STORAGE is removed in Django 5+)
 STORAGES = {
     'default': {
-        'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
+        'BACKEND': 'cloudinary.storage.MediaCloudinaryStorage',
     },
     'staticfiles': {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
