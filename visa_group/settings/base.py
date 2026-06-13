@@ -123,7 +123,7 @@ cloudinary.config(
 
 STORAGES = {
     'default': {
-        'BACKEND': 'cloudinary.storage.MediaCloudinaryStorage',
+        'BACKEND': 'visa_group.storage.CloudinaryMediaStorage',
     },
     'staticfiles': {
         'BACKEND': 'visa_group.storage.StaticStorage',
