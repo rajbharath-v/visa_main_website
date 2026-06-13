@@ -21,9 +21,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
-    'cloudinary_storage',
     'cloudinary',
     # VISA apps
     'shared',
@@ -109,19 +109,26 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Cloudinary — permanent image storage for production
+# Cloudinary — permanent image storage
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME', 'dyhaocbiu'),
     'API_KEY':    os.getenv('CLOUDINARY_API_KEY', '595497222666167'),
     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET', ''),
 }
-if os.getenv('CLOUDINARY_API_SECRET', ''):
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Django 4.2+ uses STORAGES dict (DEFAULT_FILE_STORAGE is removed in Django 5+)
+STORAGES = {
+    'default': {
+        'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
