@@ -1,0 +1,118 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}{{ meta_title|default:"HART Communicator — VISA Pvt. Ltd" }}{% endblock %}</title>
+<meta name="description" content="{{ meta_desc|default:'Multi-functional HART Handheld Communicator by VISA Pvt. Ltd Chennai.' }}">
+<link rel="icon" type="image/png" href="{% static 'visa/img/logo.png' %}">
+<link rel="stylesheet" href="{% static 'visa/css/tailwind.min.css' %}">
+<style>
+  body{background:#111827;color:#f9fafb;font-family:system-ui,sans-serif}
+  .btn-orange{background:#f97316;color:#fff;padding:.75rem 1.75rem;border-radius:.5rem;font-weight:700;display:inline-block;transition:background .2s;text-decoration:none}
+  .btn-orange:hover{background:#ea580c}
+  .btn-outline{border:2px solid #f97316;color:#f97316;padding:.65rem 1.5rem;border-radius:.5rem;font-weight:700;display:inline-block;transition:all .2s;text-decoration:none}
+  .btn-outline:hover{background:#f97316;color:#fff}
+  .card{background:#1f2937;border:1px solid #374151;border-radius:.75rem;overflow:hidden}
+  .orange-glow{box-shadow:0 0 40px rgba(249,115,22,.15)}
+  input,select,textarea{background:#1f2937!important;border:1px solid #4b5563!important;color:#f9fafb!important;border-radius:.5rem;padding:.6rem .9rem;width:100%}
+  input:focus,select:focus,textarea:focus{outline:none!important;border-color:#f97316!important;box-shadow:0 0 0 2px rgba(249,115,22,.2)!important}
+  label{color:#d1d5db;font-size:.875rem;margin-bottom:.25rem;display:block}
+</style>
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav style="background:#0d1117;border-bottom:1px solid #374151" class="sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="{% url 'hart_home' %}" class="flex items-center gap-3">
+        <img src="{% static 'visa/img/logo.png' %}" alt="VISA" class="h-9 w-9">
+        <div>
+          <div class="text-white font-bold leading-tight">HART Communicator</div>
+          <div style="color:#f97316;font-size:.7rem">VISA Pvt. Ltd, Chennai</div>
+        </div>
+      </a>
+
+      <div class="hidden md:flex items-center gap-8">
+        <a href="{% url 'hart_home' %}" class="text-gray-300 hover:text-orange-400 transition-colors text-sm font-medium">Home</a>
+        <a href="{% url 'hart_products' %}" class="text-gray-300 hover:text-orange-400 transition-colors text-sm font-medium">Products</a>
+        <a href="{% url 'hart_contact' %}" class="text-gray-300 hover:text-orange-400 transition-colors text-sm font-medium">Contact</a>
+        <a href="{% url 'hart_contact' %}" class="btn-orange text-sm">Get a Quote</a>
+      </div>
+
+      <button id="nav-toggle" class="md:hidden text-gray-300 hover:text-white p-2">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="mobile-nav" class="hidden md:hidden pb-4 border-t border-gray-800 pt-3 mt-0">
+      <a href="{% url 'hart_home' %}" class="block py-2 text-gray-300 hover:text-orange-400 text-sm">Home</a>
+      <a href="{% url 'hart_products' %}" class="block py-2 text-gray-300 hover:text-orange-400 text-sm">Products</a>
+      <a href="{% url 'hart_contact' %}" class="block py-2 text-gray-300 hover:text-orange-400 text-sm">Contact</a>
+      <a href="{% url 'hart_contact' %}" class="btn-orange text-sm mt-3 inline-block">Get a Quote</a>
+    </div>
+  </div>
+</nav>
+
+{% if messages %}
+<div class="max-w-7xl mx-auto px-4 pt-4">
+  {% for msg in messages %}
+  <div class="p-4 rounded-lg mb-2 {% if msg.tags == 'success' %}bg-green-900 border border-green-700 text-green-300{% else %}bg-red-900 border border-red-700 text-red-300{% endif %}">{{ msg }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+<!-- FOOTER -->
+<footer style="background:#0d1117;border-top:1px solid #374151" class="mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <img src="{% static 'visa/img/logo.png' %}" alt="VISA" class="h-10 w-10">
+          <div>
+            <div class="text-white font-bold">HART Communicator</div>
+            <div class="text-gray-400 text-xs">VISA Pvt. Ltd</div>
+          </div>
+        </div>
+        <p class="text-gray-400 text-sm leading-relaxed">Intrinsically safe, explosion proof HART Handheld Communicator for hazardous industrial environments.</p>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+        <ul class="space-y-2 text-sm text-gray-400">
+          <li><a href="{% url 'hart_home' %}" class="hover:text-orange-400 transition-colors">Home</a></li>
+          <li><a href="{% url 'hart_products' %}" class="hover:text-orange-400 transition-colors">Products</a></li>
+          <li><a href="{% url 'hart_contact' %}" class="hover:text-orange-400 transition-colors">Get a Quote</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold mb-4">Contact</h4>
+        <div class="text-sm text-gray-400 space-y-1">
+          <p>Virtual Instrumentation & Software Applications Pvt. Ltd</p>
+          <p>15/16/17 Vision Tower, Yogam Garden,</p>
+          <p>Brindhavan Nagar, Valasaravakkam,</p>
+          <p>Chennai — 600 087, Tamil Nadu</p>
+          <p class="mt-2"><a href="tel:+917949093762" class="hover:text-orange-400">+91 79490 93762</a></p>
+          <p><a href="mailto:sales@visapvtltd.net" class="hover:text-orange-400">sales@visapvtltd.net</a></p>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid #374151" class="mt-10 pt-6 text-center text-gray-500 text-sm">
+      Copyright &copy; {% now "Y" %} VISA Pvt. Ltd, Chennai. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('nav-toggle').addEventListener('click',function(){
+  document.getElementById('mobile-nav').classList.toggle('hidden');
+});
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

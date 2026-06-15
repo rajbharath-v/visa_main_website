@@ -5,6 +5,10 @@ from .base import *
 ALLOWED_HOSTS = [
     'visapvtltd.net',
     'www.visapvtltd.net',
+    'hartcommunicator.in',
+    'www.hartcommunicator.in',
+    'peristalticpump.in',
+    'www.peristalticpump.in',
     'localhost',
     '127.0.0.1',
     'web-production-55759.up.railway.app',

@@ -1,0 +1,235 @@
+{% extends "hart_site/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- HERO -->
+<section style="background:linear-gradient(135deg,#0d1117 0%,#1a1f2e 100%);padding:5rem 0 4rem">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <div class="inline-flex items-center gap-2 mb-6 px-4 py-1 rounded-full text-sm font-medium" style="background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.3);color:#fb923c">
+          Intrinsically Safe &bull; IP67 &bull; Zone 1 Hazardous Areas
+        </div>
+        <h1 class="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+          Multi-functional<br>
+          <span style="color:#f97316">HART Handheld</span><br>
+          Communicator
+        </h1>
+        <p class="text-gray-300 text-lg mb-8 leading-relaxed">
+          Based on DD analysis, supports private menus of all HART instruments.
+          Built-in 24V/250Ω resistor and 0–22 mA current signal generator.
+          Free DD database updates.
+        </p>
+        <div class="flex flex-wrap gap-4 mb-10">
+          <a href="{% url 'hart_products' %}" class="btn-orange">View Products</a>
+          <a href="{% url 'hart_contact' %}" class="btn-outline">Get a Quote</a>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div class="text-center p-3 rounded-lg" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2)">
+            <div class="text-2xl font-bold" style="color:#f97316">IP67</div>
+            <div class="text-gray-400 text-xs mt-1">Protection</div>
+          </div>
+          <div class="text-center p-3 rounded-lg" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2)">
+            <div class="text-2xl font-bold" style="color:#f97316">Zone 1</div>
+            <div class="text-gray-400 text-xs mt-1">Ex Proof</div>
+          </div>
+          <div class="text-center p-3 rounded-lg" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2)">
+            <div class="text-2xl font-bold" style="color:#f97316">300h</div>
+            <div class="text-gray-400 text-xs mt-1">Standby</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero product image -->
+      <div class="flex justify-center">
+        {% if products %}
+          {% with products.0 as p %}
+          {% if p.primary_image %}
+          <img src="{{ p.primary_image.image.url }}" alt="{{ p.name }}" class="max-h-96 object-contain" style="filter:drop-shadow(0 0 40px rgba(249,115,22,.3))">
+          {% else %}
+          <div class="w-64 h-80 rounded-2xl flex items-center justify-center" style="background:#1f2937;border:1px solid #374151">
+            <svg class="w-24 h-24" style="color:#f97316;opacity:.3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          {% endif %}
+          {% endwith %}
+        {% else %}
+        <div class="w-64 h-80 rounded-2xl flex items-center justify-center" style="background:#1f2937;border:1px solid #374151">
+          <svg class="w-24 h-24" style="color:#f97316;opacity:.3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEY FEATURES -->
+<section class="py-16" style="background:#161b22">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl font-bold text-white text-center mb-3">Why SK-660?</h2>
+    <p class="text-gray-400 text-center mb-10">Built for the harshest industrial environments</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for icon, title, desc in features_list %}
+      <div class="card p-6 text-center">
+        <div class="text-4xl mb-4">{{ icon }}</div>
+        <h3 class="text-white font-semibold mb-2">{{ title }}</h3>
+        <p class="text-gray-400 text-sm">{{ desc }}</p>
+      </div>
+      {% empty %}
+      <!-- Static features from brochure -->
+      <div class="card p-6 text-center">
+        <div class="text-3xl mb-3">🛡️</div>
+        <h3 class="text-white font-semibold mb-2">Intrinsically Safe</h3>
+        <p class="text-gray-400 text-sm">Explosion proof, certified for Zone 1 hazardous areas. Ex ib IICT4 Gb rated.</p>
+      </div>
+      <div class="card p-6 text-center">
+        <div class="text-3xl mb-3">📡</div>
+        <h3 class="text-white font-semibold mb-2">All HART Instruments</h3>
+        <p class="text-gray-400 text-sm">Based on DD parsing — supports private menus of all HART instrument models.</p>
+      </div>
+      <div class="card p-6 text-center">
+        <div class="text-3xl mb-3">🌐</div>
+        <h3 class="text-white font-semibold mb-2">Remote Debugging</h3>
+        <p class="text-gray-400 text-sm">Internet remote debugging — diagnose instruments from anywhere in the world.</p>
+      </div>
+      <div class="card p-6 text-center">
+        <div class="text-3xl mb-3">🔋</div>
+        <h3 class="text-white font-semibold mb-2">Long Battery Life</h3>
+        <p class="text-gray-400 text-sm">4200 mAh polymer battery. 300+ hours standby. 12+ hours continuous use.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+{% if products %}
+<section class="py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl font-bold text-white text-center mb-3">Our Products</h2>
+    <p class="text-gray-400 text-center mb-10">SK-660 Series HART Handheld Communicators</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for product in products %}
+      <div class="card group hover:border-orange-500 transition-all duration-300">
+        <div class="relative overflow-hidden" style="height:220px;background:#111827">
+          {% if product.primary_image %}
+          <img src="{{ product.primary_image.image.url }}"
+               alt="{{ product.name }}"
+               class="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300">
+          {% else %}
+          <div class="w-full h-full flex items-center justify-center">
+            <svg class="w-16 h-16 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          {% endif %}
+        </div>
+        <div class="p-5">
+          <div class="text-xs text-orange-400 font-medium mb-1">{{ product.category.name }}</div>
+          <h3 class="text-white font-semibold text-lg mb-2">{{ product.name }}</h3>
+          <p class="text-gray-400 text-sm mb-4">{{ product.short_desc|truncatechars:90 }}</p>
+          <a href="{% url 'hart_product_detail' product.slug %}" class="btn-orange text-sm w-full text-center block">View Details</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- SPECS HIGHLIGHT -->
+<section class="py-16" style="background:#161b22">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <h2 class="text-2xl font-bold text-white mb-6">Technical Highlights</h2>
+        <div class="space-y-4">
+          {% for label, value in spec_items %}
+          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
+            <span class="text-gray-400 text-sm">{{ label }}</span>
+            <span class="text-white text-sm font-medium">{{ value }}</span>
+          </div>
+          {% empty %}
+          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
+            <span class="text-gray-400 text-sm">Processor</span>
+            <span class="text-white text-sm font-medium">Cortex-A53 Octa-Core 2.0GHz</span>
+          </div>
+          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
+            <span class="text-gray-400 text-sm">RAM + Storage</span>
+            <span class="text-white text-sm font-medium">4 GB + 64 GB</span>
+          </div>
+          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
+            <span class="text-gray-400 text-sm">Display</span>
+            <span class="text-white text-sm font-medium">5.5" Capacitive 1280×720</span>
+          </div>
+          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
+            <span class="text-gray-400 text-sm">Protection</span>
+            <span class="text-white text-sm font-medium">IP67 / Ex ib IICT4 Gb</span>
+          </div>
+          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
+            <span class="text-gray-400 text-sm">Battery</span>
+            <span class="text-white text-sm font-medium">4200 mAh &bull; 300h standby</span>
+          </div>
+          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
+            <span class="text-gray-400 text-sm">Connectivity</span>
+            <span class="text-white text-sm font-medium">BT 5.0 &bull; Wi-Fi 2.4G/5G &bull; USB-C</span>
+          </div>
+          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
+            <span class="text-gray-400 text-sm">Operating Temp</span>
+            <span class="text-white text-sm font-medium">-20°C to +50°C</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="card p-8 orange-glow">
+        <h3 class="text-white font-bold text-xl mb-4">Get a Quote</h3>
+        <p class="text-gray-400 text-sm mb-6">Contact us for pricing, availability and technical support.</p>
+        <form method="post" action="{% url 'hart_submit_enquiry' %}">
+          {% csrf_token %}
+          <input type="hidden" name="product_name" value="HART Communicator SK-660">
+          <div class="space-y-4">
+            <div>
+              <label>Your Name *</label>
+              <input type="text" name="name" required placeholder="Full name">
+            </div>
+            <div>
+              <label>Phone *</label>
+              <input type="tel" name="phone" required placeholder="+91 XXXXX XXXXX">
+            </div>
+            <div>
+              <label>Email</label>
+              <input type="email" name="email" placeholder="email@company.com">
+            </div>
+            <div>
+              <label>Company</label>
+              <input type="text" name="company" placeholder="Company name">
+            </div>
+            <div>
+              <label>Message</label>
+              <textarea name="message" rows="3" placeholder="Tell us your requirement..."></textarea>
+            </div>
+            <button type="submit" class="btn-orange w-full text-center">Send Enquiry</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section style="background:linear-gradient(135deg,#7c2d12,#ea580c)" class="py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl font-bold text-white mb-4">Ready to Order?</h2>
+    <p class="text-orange-100 text-lg mb-8">Get the SK-660 HART Communicator delivered to your facility. Free technical support included.</p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="{% url 'hart_contact' %}" class="bg-white text-orange-600 font-bold px-8 py-3 rounded-lg hover:bg-orange-50 transition-colors">Contact Us</a>
+      <a href="https://wa.me/917949093762?text=Hi%2C+I%27m+interested+in+the+HART+Communicator+SK-660" target="_blank" class="bg-green-500 text-white font-bold px-8 py-3 rounded-lg hover:bg-green-600 transition-colors">WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

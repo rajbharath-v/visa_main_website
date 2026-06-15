@@ -1,0 +1,132 @@
+{% extends "hart_site/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<section style="background:#161b22;padding:3rem 0 2rem">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-bold text-white mb-2">SK-660 Series</h1>
+    <p class="text-gray-400">Multi-functional HART Handheld Communicators</p>
+  </div>
+</section>
+
+<!-- PRODUCTS GRID -->
+<section class="py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {% if products %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for product in products %}
+      <div class="card group hover:border-orange-500 transition-all duration-300">
+        <div class="relative overflow-hidden" style="height:260px;background:#111827">
+          {% if product.primary_image %}
+          <img src="{{ product.primary_image.image.url }}"
+               alt="{{ product.name }}"
+               class="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-300">
+          {% else %}
+          <div class="w-full h-full flex flex-col items-center justify-center gap-2">
+            <svg class="w-16 h-16 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+            <span class="text-gray-600 text-sm">No image yet</span>
+          </div>
+          {% endif %}
+          <div class="absolute top-3 left-3">
+            <span class="text-xs font-bold px-2 py-1 rounded" style="background:#f97316;color:#fff">{{ product.get_stock_status_display }}</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <div style="color:#fb923c" class="text-xs font-semibold uppercase tracking-wider mb-2">{{ product.category.name }}</div>
+          <h2 class="text-white font-bold text-xl mb-3">{{ product.name }}</h2>
+          <p class="text-gray-400 text-sm mb-4 leading-relaxed">{{ product.short_desc|truncatechars:120 }}</p>
+
+          {% if product.get_applications_list %}
+          <div class="flex flex-wrap gap-2 mb-5">
+            {% for app in product.get_applications_list|slice:":3" %}
+            <span class="text-xs px-2 py-1 rounded" style="background:#1f2937;border:1px solid #374151;color:#9ca3af">{{ app }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <a href="{% url 'hart_product_detail' product.slug %}" class="btn-orange w-full text-center block text-sm">View Full Specs</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-20">
+      <svg class="w-16 h-16 text-gray-700 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+      </svg>
+      <p class="text-gray-500 text-lg">Products coming soon.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="py-12" style="background:#161b22">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl font-bold text-white text-center mb-8">Model Comparison</h2>
+    <div class="card overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr style="background:#111827;border-bottom:2px solid #f97316">
+            <th class="text-left px-6 py-4 text-gray-300 font-semibold">Feature</th>
+            <th class="text-center px-6 py-4" style="color:#f97316;font-weight:700">SK-660</th>
+            <th class="text-center px-6 py-4" style="color:#f97316;font-weight:700">SK-660F</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for feature, sk660, sk660f in comparison_rows %}
+          <tr style="border-bottom:1px solid #374151">
+            <td class="px-6 py-3 text-gray-400">{{ feature }}</td>
+            <td class="px-6 py-3 text-center text-white">{{ sk660 }}</td>
+            <td class="px-6 py-3 text-center text-white">{{ sk660f }}</td>
+          </tr>
+          {% empty %}
+          <tr style="border-bottom:1px solid #374151">
+            <td class="px-6 py-3 text-gray-400">HART Communication</td>
+            <td class="px-6 py-3 text-center text-green-400">✓</td>
+            <td class="px-6 py-3 text-center text-green-400">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #374151">
+            <td class="px-6 py-3 text-gray-400">Foundation Fieldbus (FF)</td>
+            <td class="px-6 py-3 text-center text-red-400">✗</td>
+            <td class="px-6 py-3 text-center text-green-400">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #374151">
+            <td class="px-6 py-3 text-gray-400">Explosion Proof (IP67)</td>
+            <td class="px-6 py-3 text-center text-green-400">✓</td>
+            <td class="px-6 py-3 text-center text-green-400">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #374151">
+            <td class="px-6 py-3 text-gray-400">Remote Debugging</td>
+            <td class="px-6 py-3 text-center text-green-400">✓</td>
+            <td class="px-6 py-3 text-center text-green-400">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #374151">
+            <td class="px-6 py-3 text-gray-400">Built-in 24V / 250Ω</td>
+            <td class="px-6 py-3 text-center text-green-400">✓</td>
+            <td class="px-6 py-3 text-center text-green-400">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #374151">
+            <td class="px-6 py-3 text-gray-400">0–22 mA Current Generator</td>
+            <td class="px-6 py-3 text-center text-green-400">✓</td>
+            <td class="px-6 py-3 text-center text-green-400">✓</td>
+          </tr>
+          <tr>
+            <td class="px-6 py-3 text-gray-400">Processor / RAM</td>
+            <td class="px-6 py-3 text-center text-white" colspan="2">Cortex-A53 Octa-Core · 4GB+64GB</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-center mt-8">
+      <a href="{% url 'hart_contact' %}" class="btn-orange">Request a Quote</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
