@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bad Request — VISA Pvt. Ltd</title>
+<link rel="stylesheet" href="{% static 'visa/css/tailwind.min.css' %}">
+<style>
+  body{margin:0;font-family:system-ui,sans-serif;background:#021D38;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem}
+  .code{font-size:8rem;font-weight:900;color:rgba(255,255,255,.08);line-height:1;margin-bottom:-2rem}
+  .title{font-size:2rem;font-weight:700;margin-bottom:1rem}
+  .desc{color:rgba(255,255,255,.6);margin-bottom:2rem;max-width:400px}
+  .btn{background:#185FA5;color:#fff;padding:.75rem 2rem;border-radius:.5rem;text-decoration:none;font-weight:600;display:inline-block}
+  .btn:hover{background:#378ADD}
+</style>
+</head>
+<body>
+  <div class="code">400</div>
+  <div class="title">Bad Request</div>
+  <p class="desc">The request could not be understood. Please try again.</p>
+  <a href="/" class="btn">Go to Homepage</a>
+</body>
+</html>
