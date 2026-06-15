@@ -12,9 +12,10 @@ class CloudinaryMediaStorage(Storage):
 
     def _save(self, name, content):
         name = name.replace('\\', '/')
+        public_id = name.rsplit('.', 1)[0]
         cloudinary.uploader.upload(
             content,
-            public_id=name.rsplit('.', 1)[0],
+            public_id=public_id,
             resource_type='auto',
             overwrite=True,
         )
@@ -22,7 +23,9 @@ class CloudinaryMediaStorage(Storage):
 
     def url(self, name):
         name = name.replace('\\', '/')
-        url, _ = cloudinary.utils.cloudinary_url(name, resource_type='image')
+        # Strip extension — Cloudinary stores by public_id without extension
+        public_id = name.rsplit('.', 1)[0] if '.' in name.split('/')[-1] else name
+        url, _ = cloudinary.utils.cloudinary_url(public_id, resource_type='image', secure=True)
         return url
 
     def exists(self, name):
