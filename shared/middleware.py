@@ -7,6 +7,8 @@ class SiteRouterMiddleware:
         'www.peristalticpump.in':  'pump_site',
         'hartcommunicator.in':     'hart_site',
         'www.hartcommunicator.in': 'hart_site',
+        'localhost':               'hart_site',  # LOCAL TESTING ONLY
+        '127.0.0.1':              'hart_site',  # LOCAL TESTING ONLY
     }
     URLCONF_MAP = {
         'pump_site': 'pump_site.urls',

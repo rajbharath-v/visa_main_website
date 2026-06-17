@@ -116,6 +116,23 @@
             </a>
           </div>
         </div>
+
+        <!-- BROCHURE DOWNLOAD — dynamic: shows for any product with a PDF uploaded -->
+        {% if product.pdf_brochure %}
+        <div style="margin-top:1rem;background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);border-radius:.75rem;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+          <div>
+            <div style="color:#fb923c;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.2rem">Product Brochure</div>
+            <div style="color:#f1f5f9;font-weight:600;font-size:.9rem">{{ product.name }} — Technical Datasheet</div>
+            <div style="color:#94a3b8;font-size:.75rem;margin-top:.15rem">Specs, dimensions &amp; connection diagrams</div>
+          </div>
+          <a href="{{ product.pdf_brochure.url }}" target="_blank" download="{{ product.slug }}_brochure.pdf"
+             style="background:#f97316;color:#fff;padding:.55rem 1.1rem;border-radius:.5rem;font-weight:700;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;font-size:.82rem;white-space:nowrap">
+            <svg style="width:15px;height:15px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Download PDF
+          </a>
+        </div>
+        {% endif %}
+
       </div>
     </div>
 

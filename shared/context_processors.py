@@ -8,7 +8,9 @@ def global_context(request):
         'divisions':       ProductDivision.objects.filter(is_active=True).prefetch_related(
                                'categories__products'
                            ),
-        'whatsapp_number': getattr(settings, 'WHATSAPP_NUMBER', '917949093762'),
+        'whatsapp_number':    getattr(settings, 'WHATSAPP_NUMBER', '917949093762'),
+        'sk660_brochure_url':  getattr(settings, 'SK660_BROCHURE_URL',  ''),
+        'sk660f_brochure_url': getattr(settings, 'SK660F_BROCHURE_URL', ''),
         'company': {
             'name':    'Virtual Instrumentation & Software Applications Pvt. Ltd',
             'short':   'VISA Pvt. Ltd',

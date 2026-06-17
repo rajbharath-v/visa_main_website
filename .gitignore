@@ -29,6 +29,7 @@ env/
 
 # Node
 node_modules/
+static/visa/css/tailwind.min.css
 
 # VS Code
 .vscode/

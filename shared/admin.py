@@ -42,12 +42,16 @@ class ProductAdmin(admin.ModelAdmin):
                      'is_featured', 'is_active']
     search_fields = ['name', 'description', 'short_desc']
     prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['created_at', 'updated_at', 'pdf_brochure_link']
     fieldsets = [
         ('Basic information', {
             'fields': ['category', 'name', 'slug', 'short_desc',
                        'description', 'applications', 'price_label',
                        'stock_status', 'is_featured', 'is_active']
+        }),
+        ('Brochure PDF', {
+            'fields': ['pdf_brochure', 'pdf_brochure_link'],
+            'description': 'Upload a PDF brochure — it will appear as a Download button on the product page.'
         }),
         ('Specifications', {
             'fields': ['specifications'],
@@ -76,6 +80,15 @@ class ProductAdmin(admin.ModelAdmin):
     def division_name(self, obj):
         return obj.category.division.name
     division_name.short_description = 'Division'
+
+    def pdf_brochure_link(self, obj):
+        if obj.pdf_brochure:
+            return format_html(
+                '<a href="{}" target="_blank" style="color:#185FA5;font-weight:600">📄 View current PDF</a>',
+                obj.pdf_brochure.url
+            )
+        return '— No PDF uploaded yet'
+    pdf_brochure_link.short_description = 'Current PDF'
 
     def enquiry_count(self, obj):
         count = obj.enquiries.count()

@@ -1,7 +1,10 @@
 """shared/emails.py — send enquiry notification emails"""
+import logging
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
+
+logger = logging.getLogger(__name__)
 
 
 def send_enquiry_notification(enquiry):
@@ -36,9 +39,12 @@ View all leads: https://www.visapvtltd.net/admin/shared/enquiry/
             message=message,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[settings.ENQUIRY_EMAIL],
-            fail_silently=True,
+            fail_silently=False,
         )
-        # Auto-reply to customer
+    except Exception as e:
+        logger.error('Failed to send enquiry notification to sales team: %s', e)
+
+    try:
         send_mail(
             subject='Thank you for contacting VISA Pvt. Ltd',
             message=f"""Dear {enquiry.name},
@@ -59,7 +65,7 @@ Web: www.visapvtltd.net
 """,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[enquiry.email],
-            fail_silently=True,
+            fail_silently=False,
         )
-    except Exception:
-        pass
+    except Exception as e:
+        logger.error('Failed to send auto-reply to customer %s: %s', enquiry.email, e)

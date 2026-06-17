@@ -1,0 +1,36 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ meta_title }}</title>
+<meta name="description" content="{{ meta_desc }}">
+<link rel="icon" type="image/png" href="{% static 'visa/img/logo.png' %}">
+<link rel="stylesheet" href="{% static 'visa/css/tailwind.min.css' %}">
+<style>
+  body{margin:0;background:#021D38;color:#fff;font-family:system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem}
+  .logo{width:80px;height:80px;margin-bottom:2rem;opacity:.9}
+  .badge{display:inline-block;background:rgba(24,95,165,.3);border:1px solid rgba(24,95,165,.6);color:#60a5fa;padding:.35rem 1rem;border-radius:999px;font-size:.8rem;font-weight:600;margin-bottom:1.5rem}
+  h1{font-size:2.5rem;font-weight:800;margin-bottom:1rem}
+  p{color:rgba(255,255,255,.6);max-width:420px;line-height:1.7;margin-bottom:2rem}
+  .contact{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center}
+  .btn{padding:.7rem 1.5rem;border-radius:.5rem;font-weight:600;text-decoration:none;font-size:.9rem}
+  .btn-primary{background:#185FA5;color:#fff}
+  .btn-primary:hover{background:#378ADD}
+  .btn-wa{background:#22c55e;color:#fff}
+  .btn-wa:hover{background:#16a34a}
+</style>
+</head>
+<body>
+  <img src="{% static 'visa/img/logo.png' %}" alt="VISA" class="logo">
+  <div class="badge">Coming Soon</div>
+  <h1>Peristaltic Pump</h1>
+  <p>Our new website for industrial peristaltic pumps is under construction. Contact us directly for pump enquiries.</p>
+  <div class="contact">
+    <a href="tel:+917949093762" class="btn btn-primary">+91 79490 93762</a>
+    <a href="https://wa.me/917949093762?text=Hi%2C+I%27m+interested+in+Peristaltic+Pumps" target="_blank" class="btn btn-wa">WhatsApp</a>
+    <a href="mailto:sales@visapvtltd.net" class="btn btn-primary">Email Us</a>
+  </div>
+  <p style="margin-top:2rem;font-size:.8rem;color:rgba(255,255,255,.3)">Virtual Instrumentation &amp; Software Applications Pvt. Ltd, Chennai</p>
+</body>
+</html>

@@ -1,138 +1,425 @@
 {% extends "hart_site/base.html" %}
 {% load static %}
 
+{% block extra_head %}
+<style>
+/* Hero circuit pattern */
+.hero-bg{
+  background:
+    radial-gradient(ellipse 80% 60% at 60% 40%, rgba(249,115,22,.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(59,130,246,.04) 0%, transparent 60%),
+    linear-gradient(160deg,#080c14 0%,#0d1520 50%,#080c14 100%);
+  position:relative;overflow:hidden
+}
+.hero-bg::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(249,115,22,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(249,115,22,.04) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 70% 70% at 60% 40%,black 0%,transparent 80%)
+}
+
+/* Cert badge */
+.cert-badge{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);
+  color:#fb923c;font-size:.72rem;font-weight:700;letter-spacing:.06em;
+  padding:.3rem .75rem;border-radius:.375rem
+}
+
+/* Trust ticker */
+.trust-ticker{display:flex;gap:2.5rem;animation:ticker 20s linear infinite;width:max-content}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.trust-ticker-wrap{overflow:hidden;mask-image:linear-gradient(90deg,transparent,black 10%,black 90%,transparent)}
+
+/* Feature icon */
+.feat-icon{width:48px;height:48px;border-radius:.625rem;display:flex;align-items:center;justify-content:center;
+  background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);color:#f97316;flex-shrink:0}
+
+/* Industry card */
+.ind-card{
+  background:rgba(15,21,32,.6);border:1px solid #1e2a3a;border-radius:.75rem;
+  padding:1.5rem 1.25rem;text-align:center;transition:all .25s;cursor:default
+}
+.ind-card:hover{border-color:rgba(249,115,22,.4);background:rgba(249,115,22,.05);transform:translateY(-3px)}
+.ind-icon{width:52px;height:52px;border-radius:50%;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;color:#f97316}
+
+/* Spec row */
+.spec-row{display:flex;justify-content:space-between;align-items:center;padding:.75rem 0;border-bottom:1px solid #1e2a3a}
+.spec-row:last-child{border-bottom:none}
+.spec-group-label{background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);color:#fb923c;font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:.2rem .6rem;border-radius:.25rem;margin-top:1.5rem;margin-bottom:.25rem;display:inline-block}
+
+/* Brochure card */
+.brochure-card{
+  background:linear-gradient(135deg,rgba(15,21,32,.9),rgba(20,28,44,.9));
+  border:1px solid #1e2a3a;border-radius:1rem;padding:2rem;
+  transition:all .3s;position:relative;overflow:hidden
+}
+.brochure-card::before{
+  content:'';position:absolute;inset:0;border-radius:1rem;
+  background:linear-gradient(135deg,rgba(249,115,22,.06),transparent);
+  opacity:0;transition:opacity .3s
+}
+.brochure-card:hover{border-color:rgba(249,115,22,.4);transform:translateY(-3px);box-shadow:0 20px 60px rgba(249,115,22,.12)}
+.brochure-card:hover::before{opacity:1}
+
+/* Stats counter */
+.stat-block{text-align:center;padding:1rem}
+.stat-num{font-size:2.25rem;font-weight:900;color:#f97316;line-height:1}
+.stat-label{font-size:.75rem;color:#94a3b8;margin-top:.35rem;letter-spacing:.04em}
+
+/* Product card */
+.product-card{background:#0f1520;border:1px solid #1e2a3a;border-radius:.875rem;overflow:hidden;transition:all .3s}
+.product-card:hover{border-color:rgba(249,115,22,.4);transform:translateY(-4px);box-shadow:0 20px 60px rgba(249,115,22,.12)}
+.product-img-wrap{height:220px;background:#080c14;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.product-img-wrap img{height:100%;width:100%;object-fit:contain;padding:1rem;transition:transform .4s}
+.product-card:hover .product-img-wrap img{transform:scale(1.06)}
+
+/* Fix SVG sizes — Tailwind w-* classes not in local CSS */
+.feat-icon svg{width:24px;height:24px}
+.ind-icon svg{width:24px;height:24px}
+.section-tag svg{width:14px;height:14px}
+
+/* Responsive hero */
+@media(max-width:768px){
+  .hero-grid{grid-template-columns:1fr!important}
+  .hero-img-col{order:-1;margin-bottom:1.5rem}
+  .hero-stats{grid-template-columns:repeat(2,1fr)!important}
+}
+/* Carousel */
+.hero-slide{display:none}
+.hero-slide.active{display:block}
+.carousel-dot{width:8px;height:8px;border-radius:50%;background:rgba(249,115,22,.3);border:none;cursor:pointer;padding:0;transition:all .2s}
+.carousel-dot.active{background:#f97316;transform:scale(1.3)}
+.carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(8,12,20,.75);border:1px solid rgba(249,115,22,.4);color:#f97316;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;z-index:10;font-size:1.4rem;line-height:1;backdrop-filter:blur(6px)}
+.carousel-arrow:hover{background:rgba(249,115,22,.25);border-color:#f97316;transform:translateY(-50%) scale(1.1)}
+
+/* Compare table */
+.compare-tbl{width:100%;border-collapse:separate;border-spacing:0}
+.compare-tbl th{background:rgba(249,115,22,.1);color:#fb923c;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.75rem 1rem;text-align:left}
+.compare-tbl th:first-child{border-radius:.5rem 0 0 0}
+.compare-tbl th:last-child{border-radius:0 .5rem 0 0}
+.compare-tbl td{padding:.7rem 1rem;font-size:.875rem;border-bottom:1px solid #1e2a3a;vertical-align:middle}
+.compare-tbl tr:last-child td{border-bottom:none}
+.compare-tbl td:first-child{color:#94a3b8}
+.compare-tbl td:not(:first-child){color:#f1f5f9;font-weight:500}
+.check{color:#22c55e;font-size:1rem}
+.cross{color:#ef4444;font-size:1rem}
+</style>
+{% endblock %}
+
 {% block content %}
 
-<!-- HERO -->
-<section style="background:linear-gradient(135deg,#0d1117 0%,#1a1f2e 100%);padding:5rem 0 4rem">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<!-- ══════════════════════════════════════════
+     HERO
+════════════════════════════════════════════ -->
+<section class="hero-bg" style="padding:2.5rem 0 2.5rem">
+  <div style="max-width:1280px;margin:0 auto;padding:0 1.25rem;position:relative;z-index:1">
+    <div class="hero-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:center">
+
+      <!-- Left: text -->
       <div>
-        <div class="inline-flex items-center gap-2 mb-6 px-4 py-1 rounded-full text-sm font-medium" style="background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.3);color:#fb923c">
-          Intrinsically Safe &bull; IP67 &bull; Zone 1 Hazardous Areas
+        <!-- Cert badges -->
+        <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem">
+          <span class="cert-badge">
+            <svg style="width:13px;height:13px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            Ex ib IICT4 Gb
+          </span>
+          <span class="cert-badge">IP67</span>
+          <span class="cert-badge">Zone 1 Hazardous Area</span>
         </div>
-        <h1 class="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+
+        <h1 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:900;line-height:1.1;color:#f1f5f9;margin:0 0 1rem 0">
           Multi-functional<br>
           <span style="color:#f97316">HART Handheld</span><br>
           Communicator
         </h1>
-        <p class="text-gray-300 text-lg mb-8 leading-relaxed">
-          Based on DD analysis, supports private menus of all HART instruments.
+
+        <p style="color:#94a3b8;font-size:.95rem;line-height:1.7;margin:0 0 1.25rem 0;max-width:460px">
+          Based on DD analysis — supports private menus of all HART instruments.
           Built-in 24V/250Ω resistor and 0–22 mA current signal generator.
-          Free DD database updates.
+          Free DD database updates for life.
         </p>
-        <div class="flex flex-wrap gap-4 mb-10">
-          <a href="{% url 'hart_products' %}" class="btn-orange">View Products</a>
-          <a href="{% url 'hart_contact' %}" class="btn-outline">Get a Quote</a>
+
+        <div style="display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.5rem">
+          <a href="{% url 'hart_products' %}" class="btn-orange" style="padding:.65rem 1.4rem;font-size:.9rem">View Products</a>
+          <a href="{% url 'hart_contact' %}" class="btn-outline" style="padding:.6rem 1.3rem;font-size:.9rem">Get a Quote</a>
+          <a href="https://wa.me/917949093762?text=Hi%2C+I%27m+interested+in+the+HART+Communicator+SK-660" target="_blank" rel="noopener"
+             style="background:#22c55e;color:#fff;padding:.65rem 1.25rem;border-radius:.5rem;font-weight:700;display:inline-flex;align-items:center;gap:.45rem;text-decoration:none;font-size:.9rem;transition:background .2s"
+             onmouseover="this.style.background='#16a34a'" onmouseout="this.style.background='#22c55e'">
+            <svg style="width:15px;height:15px" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </a>
         </div>
-        <div class="grid grid-cols-3 gap-4">
-          <div class="text-center p-3 rounded-lg" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2)">
-            <div class="text-2xl font-bold" style="color:#f97316">IP67</div>
-            <div class="text-gray-400 text-xs mt-1">Protection</div>
+
+        <!-- Key stats -->
+        <div class="hero-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem">
+          <div style="background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);border-radius:.5rem;padding:.6rem .4rem;text-align:center">
+            <div style="font-size:1.25rem;font-weight:900;color:#f97316">IP67</div>
+            <div style="font-size:.6rem;color:#94a3b8;margin-top:.1rem;font-weight:600;letter-spacing:.04em">PROTECTION</div>
           </div>
-          <div class="text-center p-3 rounded-lg" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2)">
-            <div class="text-2xl font-bold" style="color:#f97316">Zone 1</div>
-            <div class="text-gray-400 text-xs mt-1">Ex Proof</div>
+          <div style="background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);border-radius:.5rem;padding:.6rem .4rem;text-align:center">
+            <div style="font-size:1.25rem;font-weight:900;color:#f97316">Zone 1</div>
+            <div style="font-size:.6rem;color:#94a3b8;margin-top:.1rem;font-weight:600;letter-spacing:.04em">EX PROOF</div>
           </div>
-          <div class="text-center p-3 rounded-lg" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2)">
-            <div class="text-2xl font-bold" style="color:#f97316">300h</div>
-            <div class="text-gray-400 text-xs mt-1">Standby</div>
+          <div style="background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);border-radius:.5rem;padding:.6rem .4rem;text-align:center">
+            <div style="font-size:1.25rem;font-weight:900;color:#f97316">300h</div>
+            <div style="font-size:.6rem;color:#94a3b8;margin-top:.1rem;font-weight:600;letter-spacing:.04em">STANDBY</div>
+          </div>
+          <div style="background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);border-radius:.5rem;padding:.6rem .4rem;text-align:center">
+            <div style="font-size:1.25rem;font-weight:900;color:#f97316">4GB</div>
+            <div style="font-size:.6rem;color:#94a3b8;margin-top:.1rem;font-weight:600;letter-spacing:.04em">RAM+64GB</div>
           </div>
         </div>
       </div>
 
-      <!-- Hero product image -->
-      <div class="flex justify-center">
+      <!-- Right: image carousel -->
+      <div class="hero-img-col" style="display:flex;justify-content:center;align-items:center">
         {% if products %}
-          {% with products.0 as p %}
-          {% if p.primary_image %}
-          <img src="{{ p.primary_image.image.url }}" alt="{{ p.name }}" class="max-h-96 object-contain" style="filter:drop-shadow(0 0 40px rgba(249,115,22,.3))">
-          {% else %}
-          <div class="w-64 h-80 rounded-2xl flex items-center justify-center" style="background:#1f2937;border:1px solid #374151">
-            <svg class="w-24 h-24" style="color:#f97316;opacity:.3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-            </svg>
+        <div id="hero-carousel" style="position:relative;width:100%">
+          <!-- Slides: all images from all hart products -->
+          {% for product in products %}{% for img in product.images.all %}
+          <div class="hero-slide" style="border-radius:.75rem;overflow:hidden;background:#080c14;position:relative">
+            <div style="position:absolute;inset:0;background:radial-gradient(circle at 60% 40%,rgba(249,115,22,.12) 0%,transparent 70%);pointer-events:none;z-index:0"></div>
+            <img src="{{ img.image.url }}" alt="{{ product.name }}"
+                 style="width:100%;height:440px;object-fit:contain;display:block;position:relative;z-index:1"
+                 loading="eager">
           </div>
-          {% endif %}
-          {% endwith %}
+          {% endfor %}{% endfor %}
+
+          <!-- Prev/Next arrows -->
+          <button class="carousel-arrow" id="hero-prev" style="left:10px;top:46%" onclick="heroPrev()" aria-label="Previous">&#8249;</button>
+          <button class="carousel-arrow" id="hero-next" style="right:10px;top:46%" onclick="heroNext()" aria-label="Next">&#8250;</button>
+
+          <!-- Dots -->
+          <div id="hero-dots" style="display:flex;justify-content:center;gap:.45rem;margin-top:.6rem;position:relative;z-index:2"></div>
+        </div>
         {% else %}
-        <div class="w-64 h-80 rounded-2xl flex items-center justify-center" style="background:#1f2937;border:1px solid #374151">
-          <svg class="w-24 h-24" style="color:#f97316;opacity:.3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-          </svg>
+        <!-- No products yet — placeholder -->
+        <div style="width:280px;height:360px;border-radius:1rem;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(15,21,32,.8);border:1px dashed rgba(249,115,22,.3);gap:1rem">
+          <svg style="width:56px;height:56px;color:#f97316;opacity:.25" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+          <p style="color:#374151;font-size:.8rem;text-align:center">Add SK-660 product<br>in admin to show image</p>
         </div>
         {% endif %}
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- KEY FEATURES -->
-<section class="py-16" style="background:#161b22">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-2xl font-bold text-white text-center mb-3">Why SK-660?</h2>
-    <p class="text-gray-400 text-center mb-10">Built for the harshest industrial environments</p>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {% for icon, title, desc in features_list %}
-      <div class="card p-6 text-center">
-        <div class="text-4xl mb-4">{{ icon }}</div>
-        <h3 class="text-white font-semibold mb-2">{{ title }}</h3>
-        <p class="text-gray-400 text-sm">{{ desc }}</p>
-      </div>
-      {% empty %}
-      <!-- Static features from brochure -->
-      <div class="card p-6 text-center">
-        <div class="text-3xl mb-3">🛡️</div>
-        <h3 class="text-white font-semibold mb-2">Intrinsically Safe</h3>
-        <p class="text-gray-400 text-sm">Explosion proof, certified for Zone 1 hazardous areas. Ex ib IICT4 Gb rated.</p>
-      </div>
-      <div class="card p-6 text-center">
-        <div class="text-3xl mb-3">📡</div>
-        <h3 class="text-white font-semibold mb-2">All HART Instruments</h3>
-        <p class="text-gray-400 text-sm">Based on DD parsing — supports private menus of all HART instrument models.</p>
-      </div>
-      <div class="card p-6 text-center">
-        <div class="text-3xl mb-3">🌐</div>
-        <h3 class="text-white font-semibold mb-2">Remote Debugging</h3>
-        <p class="text-gray-400 text-sm">Internet remote debugging — diagnose instruments from anywhere in the world.</p>
-      </div>
-      <div class="card p-6 text-center">
-        <div class="text-3xl mb-3">🔋</div>
-        <h3 class="text-white font-semibold mb-2">Long Battery Life</h3>
-        <p class="text-gray-400 text-sm">4200 mAh polymer battery. 300+ hours standby. 12+ hours continuous use.</p>
-      </div>
+<!-- ══════════════════════════════════════════
+     TRUST TICKER BAR
+════════════════════════════════════════════ -->
+<div style="background:#060a10;border-top:1px solid #1e2a3a;border-bottom:1px solid #1e2a3a;padding:.75rem 0;overflow:hidden">
+  <div class="trust-ticker-wrap">
+    <div class="trust-ticker">
+      {% for item in "x"|ljust:"2" %}
+      <span style="color:#94a3b8;font-size:.8rem;font-weight:600;letter-spacing:.06em;white-space:nowrap;display:flex;align-items:center;gap:.6rem">
+        <span style="color:#f97316">■</span> Ex ib IICT4 Gb
+        <span style="color:#f97316">■</span> IP67 Rated
+        <span style="color:#f97316">■</span> Zone 1 Hazardous Area
+        <span style="color:#f97316">■</span> Android 9.0
+        <span style="color:#f97316">■</span> Cortex-A53 Octa-Core 2.0GHz
+        <span style="color:#f97316">■</span> 4GB RAM + 64GB Storage
+        <span style="color:#f97316">■</span> 5.5" 1280×720 Display
+        <span style="color:#f97316">■</span> BT 5.0 · Wi-Fi 2.4G/5G · USB-C
+        <span style="color:#f97316">■</span> 4200mAh · 300h Standby
+        <span style="color:#f97316">■</span> -20°C to +50°C
+        <span style="color:#f97316">■</span> Free DD Database Updates &nbsp;&nbsp;&nbsp;
+      </span>
       {% endfor %}
     </div>
   </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     KEY FEATURES
+════════════════════════════════════════════ -->
+<section style="background:#0d1117;padding:5rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <div class="section-tag" style="margin-bottom:.75rem">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        Why SK-660
+      </div>
+      <h2 class="section-title">Built for the Harshest<br>Industrial Environments</h2>
+      <p class="section-sub mx-auto">Every feature engineered for reliability in hazardous, demanding field conditions.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+      <!-- Feature 1 -->
+      <div class="card p-6 flex gap-4">
+        <div class="feat-icon">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <div>
+          <h3 style="color:#f1f5f9;font-weight:700;margin-bottom:.35rem">Intrinsically Safe</h3>
+          <p style="color:#94a3b8;font-size:.875rem;line-height:1.6">Explosion proof, certified Ex ib IICT4 Gb. Safe for Zone 1 hazardous areas in oil refineries, chemical plants, and pharma facilities.</p>
+        </div>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="card p-6 flex gap-4">
+        <div class="feat-icon">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/><circle cx="12" cy="12" r="9"/></svg>
+        </div>
+        <div>
+          <h3 style="color:#f1f5f9;font-weight:700;margin-bottom:.35rem">IP67 Waterproof</h3>
+          <p style="color:#94a3b8;font-size:.875rem;line-height:1.6">Industrial-grade waterproof, dustproof & shockproof design. Double-color injection molding with silicone outer shell for anti-drop protection.</p>
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="card p-6 flex gap-4">
+        <div class="feat-icon">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.14 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
+        </div>
+        <div>
+          <h3 style="color:#f1f5f9;font-weight:700;margin-bottom:.35rem">All HART Instruments</h3>
+          <p style="color:#94a3b8;font-size:.875rem;line-height:1.6">Based on DD parsing — supports private menus and detailed settings of all HART instrument brands and models. Latest DD database included.</p>
+        </div>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="card p-6 flex gap-4">
+        <div class="feat-icon">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+        </div>
+        <div>
+          <h3 style="color:#f1f5f9;font-weight:700;margin-bottom:.35rem">Internet Remote Debug</h3>
+          <p style="color:#94a3b8;font-size:.875rem;line-height:1.6">Diagnose and configure HART instruments remotely via internet. Wi-Fi 2.4G/5G dual-band and Bluetooth 5.0 for flexible connectivity.</p>
+        </div>
+      </div>
+
+      <!-- Feature 5 -->
+      <div class="card p-6 flex gap-4">
+        <div class="feat-icon">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        </div>
+        <div>
+          <h3 style="color:#f1f5f9;font-weight:700;margin-bottom:.35rem">Free DD Updates</h3>
+          <p style="color:#94a3b8;font-size:.875rem;line-height:1.6">DD database updated for free throughout the product lifetime. Supports manual import of DD files. Real-time DD menu translation included.</p>
+        </div>
+      </div>
+
+      <!-- Feature 6 -->
+      <div class="card p-6 flex gap-4">
+        <div class="feat-icon">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="10" rx="2" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M22 11v2M6 11v2M10 11v2M14 11v2"/></svg>
+        </div>
+        <div>
+          <h3 style="color:#f1f5f9;font-weight:700;margin-bottom:.35rem">300h Battery Life</h3>
+          <p style="color:#94a3b8;font-size:.875rem;line-height:1.6">4200mAh polymer battery. Over 300 hours standby, 12+ hours continuous use. Built-in 24V/250Ω resistor with software-controlled switch.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </section>
 
-<!-- PRODUCTS -->
-{% if products %}
-<section class="py-16">
+<!-- ══════════════════════════════════════════
+     INDUSTRIES WE SERVE
+════════════════════════════════════════════ -->
+<section style="background:var(--bg-deep);padding:5rem 0">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-2xl font-bold text-white text-center mb-3">Our Products</h2>
-    <p class="text-gray-400 text-center mb-10">SK-660 Series HART Handheld Communicators</p>
+    <div class="text-center mb-12">
+      <div class="section-tag">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        Industries
+      </div>
+      <h2 class="section-title">Trusted Across Industries</h2>
+      <p class="section-sub mx-auto">The SK-660 is deployed in the most demanding industrial environments across India.</p>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+
+      <div class="ind-card">
+        <div class="ind-icon">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/></svg>
+        </div>
+        <div style="color:#f1f5f9;font-size:.8rem;font-weight:700">Oil &amp; Gas</div>
+        <div style="color:#94a3b8;font-size:.7rem;margin-top:.25rem">Refineries</div>
+      </div>
+
+      <div class="ind-card">
+        <div class="ind-icon">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+        </div>
+        <div style="color:#f1f5f9;font-size:.8rem;font-weight:700">Petrochemical</div>
+        <div style="color:#94a3b8;font-size:.7rem;margin-top:.25rem">Chemical Plants</div>
+      </div>
+
+      <div class="ind-card">
+        <div class="ind-icon">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+        </div>
+        <div style="color:#f1f5f9;font-size:.8rem;font-weight:700">Pharma</div>
+        <div style="color:#94a3b8;font-size:.7rem;margin-top:.25rem">Manufacturing</div>
+      </div>
+
+      <div class="ind-card">
+        <div class="ind-icon">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <div style="color:#f1f5f9;font-size:.8rem;font-weight:700">Power Plants</div>
+        <div style="color:#94a3b8;font-size:.7rem;margin-top:.25rem">Utilities</div>
+      </div>
+
+      <div class="ind-card">
+        <div class="ind-icon">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </div>
+        <div style="color:#f1f5f9;font-size:.8rem;font-weight:700">Paper Mills</div>
+        <div style="color:#94a3b8;font-size:.7rem;margin-top:.25rem">Pulp &amp; Paper</div>
+      </div>
+
+      <div class="ind-card">
+        <div class="ind-icon">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        </div>
+        <div style="color:#f1f5f9;font-size:.8rem;font-weight:700">Water Treatment</div>
+        <div style="color:#94a3b8;font-size:.7rem;margin-top:.25rem">Utilities</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     PRODUCTS
+════════════════════════════════════════════ -->
+{% if products %}
+<section style="background:#0d1117;padding:5rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <div class="section-tag">Products</div>
+      <h2 class="section-title">SK-660 Series</h2>
+      <p class="section-sub mx-auto">Choose the model that fits your field communication requirements.</p>
+    </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for product in products %}
-      <div class="card group hover:border-orange-500 transition-all duration-300">
-        <div class="relative overflow-hidden" style="height:220px;background:#111827">
+      <div class="product-card">
+        <div class="product-img-wrap">
           {% if product.primary_image %}
-          <img src="{{ product.primary_image.image.url }}"
-               alt="{{ product.name }}"
-               class="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300">
+          <img src="{{ product.primary_image.image.url }}" alt="{{ product.name }}" loading="lazy">
           {% else %}
-          <div class="w-full h-full flex items-center justify-center">
-            <svg class="w-16 h-16 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-            </svg>
-          </div>
+          <svg class="w-16 h-16" style="color:#374151" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
           {% endif %}
+          <div style="position:absolute;top:.75rem;left:.75rem">
+            <span style="background:rgba(249,115,22,.2);border:1px solid rgba(249,115,22,.4);color:#fb923c;font-size:.65rem;font-weight:700;padding:.2rem .5rem;border-radius:.25rem">
+              {{ product.category.name|default:"HART Communicator" }}
+            </span>
+          </div>
         </div>
         <div class="p-5">
-          <div class="text-xs text-orange-400 font-medium mb-1">{{ product.category.name }}</div>
-          <h3 class="text-white font-semibold text-lg mb-2">{{ product.name }}</h3>
-          <p class="text-gray-400 text-sm mb-4">{{ product.short_desc|truncatechars:90 }}</p>
-          <a href="{% url 'hart_product_detail' product.slug %}" class="btn-orange text-sm w-full text-center block">View Details</a>
+          <h3 style="color:#f1f5f9;font-weight:800;font-size:1.1rem;margin-bottom:.5rem">{{ product.name }}</h3>
+          <p style="color:#94a3b8;font-size:.875rem;line-height:1.6;margin-bottom:1.25rem">{{ product.short_desc|truncatechars:100 }}</p>
+          <div class="flex gap-2">
+            <a href="{% url 'hart_product_detail' product.slug %}" class="btn-orange text-sm flex-1 text-center" style="padding:.6rem 1rem">View Details</a>
+            <a href="{% url 'hart_contact' %}" class="btn-outline text-sm" style="padding:.55rem 1rem">Quote</a>
+          </div>
         </div>
       </div>
       {% endfor %}
@@ -141,95 +428,286 @@
 </section>
 {% endif %}
 
-<!-- SPECS HIGHLIGHT -->
-<section class="py-16" style="background:#161b22">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-      <div>
-        <h2 class="text-2xl font-bold text-white mb-6">Technical Highlights</h2>
-        <div class="space-y-4">
-          {% for label, value in spec_items %}
-          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
-            <span class="text-gray-400 text-sm">{{ label }}</span>
-            <span class="text-white text-sm font-medium">{{ value }}</span>
+<!-- ══════════════════════════════════════════
+     MODEL COMPARISON
+════════════════════════════════════════════ -->
+<section style="background:var(--bg-deep);padding:5rem 0">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <div class="section-tag">Compare</div>
+      <h2 class="section-title">SK-660 vs SK-660F</h2>
+      <p class="section-sub mx-auto">Both models share the same rugged hardware. The SK-660F adds Foundation Fieldbus support.</p>
+    </div>
+    <div style="background:#0f1520;border:1px solid #1e2a3a;border-radius:1rem;overflow:hidden">
+      <table class="compare-tbl">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th style="text-align:center">SK-660</th>
+            <th style="text-align:center;color:#60a5fa;background:rgba(59,130,246,.08)">SK-660F</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>HART Communication</td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center;background:rgba(59,130,246,.04)"><span class="check">✓</span></td></tr>
+          <tr><td>Foundation Fieldbus (FF)</td><td style="text-align:center"><span class="cross">✗</span></td><td style="text-align:center;background:rgba(59,130,246,.04)"><span class="check" style="color:#60a5fa">✓</span> <span style="font-size:.7rem;color:#60a5fa">Exclusive</span></td></tr>
+          <tr><td>DD-based Configuration</td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center;background:rgba(59,130,246,.04)"><span class="check">✓</span></td></tr>
+          <tr><td>Internet Remote Debugging</td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center;background:rgba(59,130,246,.04)"><span class="check">✓</span></td></tr>
+          <tr><td>Built-in 24V/250Ω Resistor</td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center;background:rgba(59,130,246,.04)"><span class="check">✓</span></td></tr>
+          <tr><td>0–22 mA Current Generator</td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center;background:rgba(59,130,246,.04)"><span class="check">✓</span></td></tr>
+          <tr><td>IP67 / Ex ib IICT4 Gb</td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center;background:rgba(59,130,246,.04)"><span class="check">✓</span></td></tr>
+          <tr><td>Free DD Database Updates</td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center;background:rgba(59,130,246,.04)"><span class="check">✓</span></td></tr>
+          <tr>
+            <td></td>
+            <td style="text-align:center;padding-top:1.25rem;padding-bottom:1rem">
+              <a href="{% url 'hart_contact' %}" class="btn-outline text-sm">Get Quote</a>
+            </td>
+            <td style="text-align:center;padding-top:1.25rem;padding-bottom:1rem;background:rgba(59,130,246,.04)">
+              <a href="{% url 'hart_contact' %}" class="btn-orange text-sm">Get Quote</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     BROCHURE DOWNLOAD
+════════════════════════════════════════════ -->
+<section style="background:#0d1117;padding:5rem 0">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <div class="section-tag">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        Downloads
+      </div>
+      <h2 class="section-title">Product Brochures</h2>
+      <p class="section-sub mx-auto">Download complete technical specifications, connection diagrams, and product details.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <div class="brochure-card">
+        <div class="flex items-start gap-4">
+          <div style="width:52px;height:52px;border-radius:.625rem;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg style="width:24px;height:24px;color:#f97316" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           </div>
-          {% empty %}
-          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
-            <span class="text-gray-400 text-sm">Processor</span>
-            <span class="text-white text-sm font-medium">Cortex-A53 Octa-Core 2.0GHz</span>
+          <div class="flex-1">
+            <div style="color:#f97316;font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.35rem">HART Only</div>
+            <h3 style="color:#f1f5f9;font-weight:800;font-size:1.1rem;margin-bottom:.35rem">SK-660</h3>
+            <p style="color:#94a3b8;font-size:.8rem;line-height:1.6;margin-bottom:1.25rem">HART Handheld Communicator. DD-based, IP67, Ex ib IICT4 Gb. Full technical parameters, dimensions &amp; connection diagrams.</p>
+            <a href="{% if sk660_brochure_url %}{{ sk660_brochure_url }}{% else %}{% static 'hart/pdf/sk660_brochure.pdf' %}{% endif %}" target="_blank" download="SK-660_Brochure.pdf"
+               class="btn-orange text-sm inline-flex items-center gap-2" style="padding:.6rem 1.25rem">
+              <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              Download PDF
+            </a>
           </div>
-          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
-            <span class="text-gray-400 text-sm">RAM + Storage</span>
-            <span class="text-white text-sm font-medium">4 GB + 64 GB</span>
-          </div>
-          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
-            <span class="text-gray-400 text-sm">Display</span>
-            <span class="text-white text-sm font-medium">5.5" Capacitive 1280×720</span>
-          </div>
-          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
-            <span class="text-gray-400 text-sm">Protection</span>
-            <span class="text-white text-sm font-medium">IP67 / Ex ib IICT4 Gb</span>
-          </div>
-          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
-            <span class="text-gray-400 text-sm">Battery</span>
-            <span class="text-white text-sm font-medium">4200 mAh &bull; 300h standby</span>
-          </div>
-          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
-            <span class="text-gray-400 text-sm">Connectivity</span>
-            <span class="text-white text-sm font-medium">BT 5.0 &bull; Wi-Fi 2.4G/5G &bull; USB-C</span>
-          </div>
-          <div class="flex justify-between py-3" style="border-bottom:1px solid #374151">
-            <span class="text-gray-400 text-sm">Operating Temp</span>
-            <span class="text-white text-sm font-medium">-20°C to +50°C</span>
-          </div>
-          {% endfor %}
         </div>
       </div>
-      <div class="card p-8 orange-glow">
-        <h3 class="text-white font-bold text-xl mb-4">Get a Quote</h3>
-        <p class="text-gray-400 text-sm mb-6">Contact us for pricing, availability and technical support.</p>
-        <form method="post" action="{% url 'hart_submit_enquiry' %}">
-          {% csrf_token %}
-          <input type="hidden" name="product_name" value="HART Communicator SK-660">
-          <div class="space-y-4">
-            <div>
-              <label>Your Name *</label>
-              <input type="text" name="name" required placeholder="Full name">
-            </div>
-            <div>
-              <label>Phone *</label>
-              <input type="tel" name="phone" required placeholder="+91 XXXXX XXXXX">
-            </div>
-            <div>
-              <label>Email</label>
-              <input type="email" name="email" placeholder="email@company.com">
-            </div>
-            <div>
-              <label>Company</label>
-              <input type="text" name="company" placeholder="Company name">
-            </div>
-            <div>
-              <label>Message</label>
-              <textarea name="message" rows="3" placeholder="Tell us your requirement..."></textarea>
-            </div>
-            <button type="submit" class="btn-orange w-full text-center">Send Enquiry</button>
+
+      <div class="brochure-card">
+        <div class="flex items-start gap-4">
+          <div style="width:52px;height:52px;border-radius:.625rem;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg style="width:24px;height:24px;color:#60a5fa" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           </div>
-        </form>
+          <div class="flex-1">
+            <div style="color:#60a5fa;font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.35rem">HART + FF Fieldbus</div>
+            <h3 style="color:#f1f5f9;font-weight:800;font-size:1.1rem;margin-bottom:.35rem">SK-660F</h3>
+            <p style="color:#94a3b8;font-size:.8rem;line-height:1.6;margin-bottom:1.25rem">HART &amp; Foundation Fieldbus Communicator. All SK-660 features plus full FF bus support. Ideal for mixed-protocol installations.</p>
+            <a href="{% if sk660f_brochure_url %}{{ sk660f_brochure_url }}{% else %}{% static 'hart/pdf/sk660f_brochure.pdf' %}{% endif %}" target="_blank" download="SK-660F_Brochure.pdf"
+               style="background:#3b82f6;color:#fff;padding:.6rem 1.25rem;border-radius:.5rem;font-weight:700;display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;font-size:.875rem;transition:background .2s"
+               onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
+              <svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              Download PDF
+            </a>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- CTA BANNER -->
-<section style="background:linear-gradient(135deg,#7c2d12,#ea580c)" class="py-16">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <h2 class="text-3xl font-bold text-white mb-4">Ready to Order?</h2>
-    <p class="text-orange-100 text-lg mb-8">Get the SK-660 HART Communicator delivered to your facility. Free technical support included.</p>
+<!-- ══════════════════════════════════════════
+     TECHNICAL SPECS + QUOTE FORM
+════════════════════════════════════════════ -->
+<section style="background:var(--bg-deep);padding:5rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+
+      <!-- Specs -->
+      <div>
+        <div class="section-tag mb-4">Technical Parameters</div>
+        <h2 class="section-title mb-8">Full Specifications</h2>
+
+        <span class="spec-group-label">Hardware</span>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">Processor</span><span style="color:#f1f5f9;font-size:.875rem;font-weight:600">Cortex-A53 Octa-Core 2.0GHz</span></div>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">RAM + Storage</span><span style="color:#f1f5f9;font-size:.875rem;font-weight:600">4 GB + 64 GB</span></div>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">OS</span><span style="color:#f1f5f9;font-size:.875rem;font-weight:600">Android 9.0</span></div>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">Display</span><span style="color:#f1f5f9;font-size:.875rem;font-weight:600">5.5" Capacitive 1280×720</span></div>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">Dimensions</span><span style="color:#f1f5f9;font-size:.875rem;font-weight:600">168 × 84 × 17.5 mm</span></div>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">Weight</span><span style="color:#f1f5f9;font-size:.875rem;font-weight:600">300 g</span></div>
+
+        <span class="spec-group-label">Power</span>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">Battery</span><span style="color:#f1f5f9;font-size:.875rem;font-weight:600">4200 mAh Polymer</span></div>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">Standby</span><span style="color:#f1f5f9;font-size:.875rem;font-weight:600">&gt;300 hours</span></div>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">Continuous Use</span><span style="color:#f1f5f9;font-size:.875rem;font-weight:600">&gt;12 hours (no 24V out)</span></div>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">Charging</span><span style="color:#f1f5f9;font-size:.875rem;font-weight:600">USB-C · 4 hours full charge</span></div>
+
+        <span class="spec-group-label">Connectivity</span>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">Bluetooth</span><span style="color:#f1f5f9;font-size:.875rem;font-weight:600">BT 5.0 · 10m range</span></div>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">Wi-Fi</span><span style="color:#f1f5f9;font-size:.875rem;font-weight:600">2.4G/5G Dual-band · 802.11 a/b/g/n/ac</span></div>
+
+        <span class="spec-group-label">Protection</span>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">Explosion Proof</span><span style="color:#f97316;font-size:.875rem;font-weight:700">Ex ib IICT4 Gb</span></div>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">Protection Level</span><span style="color:#f97316;font-size:.875rem;font-weight:700">IP67</span></div>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">Operating Temp</span><span style="color:#f1f5f9;font-size:.875rem;font-weight:600">-20°C to +50°C</span></div>
+        <div class="spec-row"><span style="color:#94a3b8;font-size:.875rem">Humidity</span><span style="color:#f1f5f9;font-size:.875rem;font-weight:600">0%–95% (No condensation)</span></div>
+      </div>
+
+      <!-- Quote form -->
+      <div>
+        <div class="section-tag mb-4">Quick Enquiry</div>
+        <h2 class="section-title mb-2">Get a Quote</h2>
+        <p style="color:#94a3b8;font-size:.9rem;margin-bottom:1.75rem">Send us your requirement and we'll respond within 24 hours.</p>
+
+        <div style="background:#0f1520;border:1px solid rgba(249,115,22,.2);border-radius:1rem;padding:2rem;box-shadow:0 0 50px rgba(249,115,22,.08)">
+          <form method="post" action="{% url 'hart_submit_enquiry' %}">
+            {% csrf_token %}
+            <input type="hidden" name="product_name" value="HART Communicator SK-660">
+            <div class="space-y-4">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label>Name *</label>
+                  <input type="text" name="name" required placeholder="Full name">
+                </div>
+                <div>
+                  <label>Phone *</label>
+                  <input type="tel" name="phone" required placeholder="+91 XXXXX XXXXX">
+                </div>
+              </div>
+              <div>
+                <label>Email</label>
+                <input type="email" name="email" placeholder="email@company.com">
+              </div>
+              <div>
+                <label>Company</label>
+                <input type="text" name="company" placeholder="Company / Plant name">
+              </div>
+              <div>
+                <label>Product of Interest</label>
+                <select name="product_interest">
+                  <option value="SK-660">SK-660 (HART Communicator)</option>
+                  <option value="SK-660F">SK-660F (HART + FF Fieldbus)</option>
+                  <option value="Both">Both Models — Need Comparison</option>
+                </select>
+              </div>
+              <div>
+                <label>Message / Quantity</label>
+                <textarea name="message" rows="3" placeholder="Tell us your requirement, quantity needed, or any technical questions..."></textarea>
+              </div>
+              <button type="submit" class="btn-orange w-full text-center" style="border:none;cursor:pointer;font-size:.95rem">
+                Send Enquiry →
+              </button>
+              <p style="color:#64748b;font-size:.75rem;text-align:center">
+                Or call us directly:
+                <a href="tel:+917949093762" style="color:#f97316;font-weight:600">+91 79490 93762</a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     CTA BANNER
+════════════════════════════════════════════ -->
+<section style="background:linear-gradient(135deg,#7c2d12 0%,#c2410c 50%,#ea580c 100%);padding:4.5rem 0;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 60 60%22><rect width=%2260%22 height=%2260%22 fill=%22none%22/><path d=%22M0 30h60M30 0v60%22 stroke=%22rgba(255,255,255,.04)%22 stroke-width=%221%22/></svg>') repeat"></div>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" style="position:relative">
+    <h2 style="font-size:2.25rem;font-weight:900;color:#fff;margin-bottom:.75rem">Ready to Order the SK-660?</h2>
+    <p style="color:rgba(255,255,255,.8);font-size:1.05rem;margin-bottom:2.25rem;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7">
+      Get the HART Communicator delivered to your facility. Free technical support and DD database updates included.
+    </p>
     <div class="flex flex-wrap justify-center gap-4">
-      <a href="{% url 'hart_contact' %}" class="bg-white text-orange-600 font-bold px-8 py-3 rounded-lg hover:bg-orange-50 transition-colors">Contact Us</a>
-      <a href="https://wa.me/917949093762?text=Hi%2C+I%27m+interested+in+the+HART+Communicator+SK-660" target="_blank" class="bg-green-500 text-white font-bold px-8 py-3 rounded-lg hover:bg-green-600 transition-colors">WhatsApp</a>
+      <a href="{% url 'hart_contact' %}"
+         style="background:#fff;color:#c2410c;font-weight:800;padding:.85rem 2rem;border-radius:.625rem;text-decoration:none;transition:all .2s;display:inline-block"
+         onmouseover="this.style.background='#fff7ed';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#fff';this.style.transform='none'">
+        Contact Us
+      </a>
+      <a href="https://wa.me/917949093762?text=Hi%2C+I%27m+interested+in+the+HART+Communicator+SK-660" target="_blank" rel="noopener"
+         style="background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:2px solid rgba(255,255,255,.4);color:#fff;font-weight:800;padding:.85rem 2rem;border-radius:.625rem;text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;gap:.5rem"
+         onmouseover="this.style.background='rgba(255,255,255,.25)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(255,255,255,.15)';this.style.transform='none'">
+        <svg style="width:20px;height:20px" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp Us
+      </a>
     </div>
   </div>
 </section>
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function(){
+  var carousel = document.getElementById('hero-carousel');
+  if(!carousel) return;
+  var slides = carousel.querySelectorAll('.hero-slide');
+  if(slides.length === 0) return;
+
+  var dotsWrap = document.getElementById('hero-dots');
+  var current = 0;
+  var timer = null;
+
+  if(slides.length <= 1){
+    var ep = document.getElementById('hero-prev');
+    var en = document.getElementById('hero-next');
+    if(ep) ep.style.display='none';
+    if(en) en.style.display='none';
+  }
+
+  var dots = [];
+  for(var i=0;i<slides.length;i++){
+    var d = document.createElement('button');
+    d.className = 'carousel-dot';
+    d.setAttribute('aria-label','Slide '+(i+1));
+    (function(idx){ d.onclick=function(){ goTo(idx); resetTimer(); }; })(i);
+    dotsWrap.appendChild(d);
+    dots.push(d);
+  }
+
+  function goTo(n){
+    slides[current].classList.remove('active');
+    if(dots[current]) dots[current].classList.remove('active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    if(dots[current]) dots[current].classList.add('active');
+  }
+
+  function startTimer(){
+    if(slides.length <= 1) return;
+    timer = setInterval(function(){ goTo(current+1); }, 3500);
+  }
+
+  function resetTimer(){ clearInterval(timer); startTimer(); }
+
+  carousel.addEventListener('mouseenter', function(){ clearInterval(timer); });
+  carousel.addEventListener('mouseleave', startTimer);
+
+  var touchX = 0;
+  carousel.addEventListener('touchstart', function(e){ touchX = e.touches[0].clientX; },{passive:true});
+  carousel.addEventListener('touchend', function(e){
+    var dx = e.changedTouches[0].clientX - touchX;
+    if(Math.abs(dx)>40){ goTo(current+(dx<0?1:-1)); resetTimer(); }
+  },{passive:true});
+
+  goTo(0);
+  startTimer();
+
+  window.heroPrev = function(){ goTo(current-1); resetTimer(); };
+  window.heroNext = function(){ goTo(current+1); resetTimer(); };
+})();
+</script>
 {% endblock %}

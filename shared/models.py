@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.text import slugify
 from PIL import Image
 import os
+from visa_group.storage import CloudinaryRawStorage
 
 
 class ProductDivision(models.Model):
@@ -90,6 +91,13 @@ class Product(models.Model):
     meta_desc    = models.CharField(max_length=160, blank=True,
                                     help_text='Max 160 chars — shown in Google search results')
     meta_keywords = models.CharField(max_length=300, blank=True)
+    pdf_brochure  = models.FileField(
+        storage=CloudinaryRawStorage(),
+        upload_to='product_pdfs/',
+        blank=True,
+        null=True,
+        help_text='Upload product brochure PDF — shown as download button on product page'
+    )
     created_at   = models.DateTimeField(auto_now_add=True)
     updated_at   = models.DateTimeField(auto_now=True)
 

@@ -48,5 +48,46 @@ class CloudinaryMediaStorage(Storage):
         return 0
 
 
+@deconstructible
+class CloudinaryRawStorage(Storage):
+    """Cloudinary storage for non-image files (PDFs, docs) using resource_type='raw'."""
+
+    def _save(self, name, content):
+        name = name.replace('\\', '/')
+        public_id = name.rsplit('.', 1)[0]
+        cloudinary.uploader.upload(
+            content,
+            public_id=public_id,
+            resource_type='raw',
+            overwrite=True,
+        )
+        return name
+
+    def url(self, name):
+        name = name.replace('\\', '/')
+        public_id = name.rsplit('.', 1)[0] if '.' in name.split('/')[-1] else name
+        url, _ = cloudinary.utils.cloudinary_url(public_id, resource_type='raw', secure=True)
+        return url
+
+    def exists(self, name):
+        return False
+
+    def delete(self, name):
+        public_id = name.rsplit('.', 1)[0].replace('\\', '/')
+        try:
+            cloudinary.uploader.destroy(public_id, resource_type='raw')
+        except Exception:
+            pass
+
+    def _open(self, name, mode='rb'):
+        from io import BytesIO
+        import urllib.request
+        response = urllib.request.urlopen(self.url(name))
+        return BytesIO(response.read())
+
+    def size(self, name):
+        return 0
+
+
 class StaticStorage(CompressedStaticFilesStorage):
     pass

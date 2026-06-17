@@ -147,6 +147,21 @@
           </a>
         </div>
 
+        {# Brochure PDF download — only shown if PDF is uploaded for this product #}
+        {% if product.pdf_brochure %}
+        <a href="{{ product.pdf_brochure.url }}" target="_blank" download="{{ product.slug }}_brochure.pdf"
+           class="flex items-center gap-3 w-full border-2 border-dashed border-gray-200 hover:border-navy-400 rounded-xl p-4 mb-4 transition-all group text-left">
+          <div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0 group-hover:bg-red-100 transition-colors">
+            <i class="ti ti-file-type-pdf text-red-500 text-xl"></i>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-gray-800">Download Brochure</div>
+            <div class="text-xs text-gray-400">{{ product.name }} — PDF Datasheet</div>
+          </div>
+          <i class="ti ti-download ml-auto text-gray-400 group-hover:text-navy-600 transition-colors"></i>
+        </a>
+        {% endif %}
+
         {# Trust strip #}
         <div class="grid grid-cols-3 gap-3 p-4 bg-gray-50 rounded-xl border border-gray-100">
           <div class="text-center">

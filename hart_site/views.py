@@ -11,15 +11,10 @@ HART_DIVISION = 'hart-communicators'
 
 
 def _hart_products():
-    qs = Product.objects.filter(
+    return Product.objects.filter(
         is_active=True,
         category__division__slug=HART_DIVISION,
     ).select_related('category__division').prefetch_related('images')
-    if not qs.exists():
-        qs = Product.objects.filter(is_active=True).select_related(
-            'category__division'
-        ).prefetch_related('images')
-    return qs
 
 
 def home(request):

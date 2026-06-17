@@ -161,6 +161,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': False,
         },
+        'shared': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
     },
 }
 
@@ -176,6 +181,10 @@ ENQUIRY_EMAIL = os.getenv('ENQUIRY_EMAIL', 'sales@visapvtltd.net')
 
 # WhatsApp
 WHATSAPP_NUMBER = os.getenv('WHATSAPP_NUMBER', '917949093762')
+
+# Brochure PDF URLs — set to Cloudinary URL once uploaded, or leave blank to use static files
+SK660_BROCHURE_URL  = os.getenv('SK660_BROCHURE_URL',  '')
+SK660F_BROCHURE_URL = os.getenv('SK660F_BROCHURE_URL', '')
 
 # ── JAZZMIN ──────────────────────────────────────────────────────────────────
 JAZZMIN_SETTINGS = {
