@@ -50,32 +50,35 @@ class CloudinaryMediaStorage(Storage):
 
 @deconstructible
 class CloudinaryRawStorage(Storage):
-    """Cloudinary storage for non-image files (PDFs, docs) using resource_type='raw'."""
+    """Cloudinary storage for non-image files (PDFs, docs) using resource_type='raw'.
+    Unlike images, raw files keep the extension as part of the public_id."""
 
     def _save(self, name, content):
         name = name.replace('\\', '/')
-        public_id = name.rsplit('.', 1)[0]
+        # Keep extension in public_id — Cloudinary raw files require it in the URL
         cloudinary.uploader.upload(
             content,
-            public_id=public_id,
+            public_id=name,
             resource_type='raw',
             overwrite=True,
+            use_filename=True,
+            unique_filename=False,
         )
         return name
 
     def url(self, name):
         name = name.replace('\\', '/')
-        public_id = name.rsplit('.', 1)[0] if '.' in name.split('/')[-1] else name
-        url, _ = cloudinary.utils.cloudinary_url(public_id, resource_type='raw', secure=True)
+        # Keep extension — raw files are served with the full filename including .pdf
+        url, _ = cloudinary.utils.cloudinary_url(name, resource_type='raw', secure=True)
         return url
 
     def exists(self, name):
         return False
 
     def delete(self, name):
-        public_id = name.rsplit('.', 1)[0].replace('\\', '/')
+        name = name.replace('\\', '/')
         try:
-            cloudinary.uploader.destroy(public_id, resource_type='raw')
+            cloudinary.uploader.destroy(name, resource_type='raw')
         except Exception:
             pass
 
