@@ -1,0 +1,212 @@
+{% extends "pump_site/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- BREADCRUMB -->
+<div style="background:#071a09;border-bottom:1px solid var(--border);padding:.75rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center gap-2 text-sm" style="color:var(--text-muted)">
+      <a href="{% url 'pump_home' %}" style="color:var(--text-muted);text-decoration:none" onmouseover="this.style.color='#22c55e'" onmouseout="this.style.color='var(--text-muted)'">Home</a>
+      <span>/</span>
+      <a href="{% url 'pump_products' %}" style="color:var(--text-muted);text-decoration:none" onmouseover="this.style.color='#22c55e'" onmouseout="this.style.color='var(--text-muted)'">Products</a>
+      <span>/</span>
+      <span style="color:#f0fdf4">{{ product.name }}</span>
+    </div>
+  </div>
+</div>
+
+<section class="py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+
+      <!-- IMAGES -->
+      <div>
+        <div class="card overflow-hidden" style="background:#050f08">
+          {% if images %}
+            {% with images.0 as primary %}
+            <img id="main-img" src="{{ primary.image.url }}" alt="{{ product.name }}" class="w-full object-contain" style="height:420px;padding:2rem">
+            {% endwith %}
+          {% else %}
+          <div style="height:420px;display:flex;align-items:center;justify-content:center">
+            <svg style="width:80px;height:80px;color:#1a3320" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+          </div>
+          {% endif %}
+        </div>
+        {% if images|length > 1 %}
+        <div class="grid grid-cols-4 gap-3 mt-3">
+          {% for img in images %}
+          <div class="card cursor-pointer" style="transition:border-color .2s" onclick="document.getElementById('main-img').src='{{ img.image.url }}'" onmouseover="this.style.borderColor='var(--green-border)'" onmouseout="this.style.borderColor='var(--border)'">
+            <img src="{{ img.image.url }}" alt="{{ product.name }}" class="w-full object-cover" style="height:80px">
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- PRODUCT INFO -->
+      <div>
+        <div style="color:var(--green-light);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.5rem">{{ product.category.name }}</div>
+        <h1 style="font-size:2rem;font-weight:800;color:#f0fdf4;margin-bottom:.75rem">{{ product.name }}</h1>
+
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem">
+          <span style="font-size:.8rem;font-weight:700;padding:.3rem .75rem;border-radius:999px;
+            {% if product.stock_status == 'available' %}background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);color:#4ade80
+            {% elif product.stock_status == 'on_request' %}background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);color:#fbbf24
+            {% else %}background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);color:#f87171{% endif %}">
+            {{ product.get_stock_status_display }}
+          </span>
+          {% if product.price_label %}
+          <span style="color:var(--text-muted);font-size:.85rem">{{ product.price_label }}</span>
+          {% endif %}
+        </div>
+
+        <p style="color:#cbd5e1;line-height:1.7;margin-bottom:1.5rem">{{ product.short_desc }}</p>
+
+        {% if apps_list %}
+        <div style="margin-bottom:1.5rem">
+          <h3 style="color:var(--text-muted);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem">Applications</h3>
+          <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+            {% for app in apps_list %}
+            <span style="background:#071a09;border:1px solid var(--border);color:#d1d5db;font-size:.75rem;padding:.25rem .65rem;border-radius:999px">{{ app }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- ENQUIRY FORM -->
+        <div class="card" style="padding:1.5rem;margin-top:.5rem">
+          <h3 style="color:#f0fdf4;font-weight:700;font-size:1rem;margin-bottom:1rem">Request a Quote</h3>
+          <form method="post" action="{% url 'pump_submit_enquiry' %}">
+            {% csrf_token %}
+            <input type="hidden" name="product_slug" value="{{ product.slug }}">
+            <input type="hidden" name="product_name" value="{{ product.name }}">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+              <div>
+                <label>Name *</label>
+                <input type="text" name="name" required placeholder="Your name">
+              </div>
+              <div>
+                <label>Phone *</label>
+                <input type="tel" name="phone" required placeholder="+91 XXXXX XXXXX">
+              </div>
+              <div>
+                <label>Email</label>
+                <input type="email" name="email" placeholder="email@company.com">
+              </div>
+              <div>
+                <label>Company</label>
+                <input type="text" name="company" placeholder="Company name">
+              </div>
+            </div>
+            <div style="margin-bottom:.75rem">
+              <label>Quantity / Requirement</label>
+              <input type="text" name="quantity" placeholder="e.g. 2 units, flow 50 ml/min">
+            </div>
+            <div style="margin-bottom:1rem">
+              <label>Message</label>
+              <textarea name="message" rows="3" placeholder="Describe your application, fluid type, flow rate needed..."></textarea>
+            </div>
+            <button type="submit" class="btn-green w-full text-center">Send Enquiry</button>
+          </form>
+          <div style="display:flex;gap:.75rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)">
+            <a href="https://wa.me/917949093762?text=Hi%2C+I%27m+interested+in+{{ product.name|urlencode }}" target="_blank" rel="noopener"
+               style="flex:1;text-align:center;padding:.6rem;border-radius:.5rem;font-size:.85rem;font-weight:600;color:#fff;background:#16a34a;text-decoration:none">
+              WhatsApp
+            </a>
+            <a href="tel:+917949093762"
+               style="flex:1;text-align:center;padding:.6rem;border-radius:.5rem;font-size:.85rem;font-weight:600;background:#071a09;border:1px solid var(--border);color:#d1d5db;text-decoration:none">
+              Call Now
+            </a>
+          </div>
+        </div>
+
+        <!-- PDF BROCHURE -->
+        {% if product.pdf_brochure %}
+        <div style="margin-top:1rem;background:var(--green-dim);border:1px solid var(--green-border);border-radius:.75rem;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+          <div>
+            <div style="color:var(--green-light);font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.2rem">Product Brochure</div>
+            <div style="color:#f0fdf4;font-weight:600;font-size:.9rem">{{ product.name }} — Technical Datasheet</div>
+          </div>
+          <a href="{{ product.pdf_brochure.url }}" target="_blank" download="{{ product.slug }}_brochure.pdf"
+             style="background:var(--green);color:#fff;padding:.5rem 1rem;border-radius:.5rem;font-weight:700;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;font-size:.82rem;white-space:nowrap">
+            <svg style="width:15px;height:15px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Download PDF
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- TABS: Description / Specs -->
+    <div style="margin-top:3rem">
+      <div style="display:inline-flex;gap:.25rem;background:#071a09;padding:.25rem;border-radius:.6rem;margin-bottom:1.5rem">
+        <button onclick="showTab('desc')" id="tab-desc" style="background:var(--green);color:#fff;padding:.5rem 1.5rem;border-radius:.4rem;font-size:.875rem;font-weight:600;border:none;cursor:pointer;transition:all .2s">Description</button>
+        {% if specs %}<button onclick="showTab('specs')" id="tab-specs" style="background:transparent;color:var(--text-muted);padding:.5rem 1.5rem;border-radius:.4rem;font-size:.875rem;font-weight:600;border:none;cursor:pointer;transition:all .2s">Specifications</button>{% endif %}
+      </div>
+
+      <div id="pane-desc" class="card" style="padding:2rem">
+        <div style="color:#cbd5e1;line-height:1.8">{{ product.description|linebreaks }}</div>
+      </div>
+
+      {% if specs %}
+      <div id="pane-specs" class="card hidden" style="overflow:hidden">
+        <table style="width:100%;border-collapse:collapse;font-size:.875rem">
+          <thead>
+            <tr style="background:#050f08;border-bottom:1px solid var(--green-border)">
+              <th style="text-align:left;padding:.75rem 1.5rem;color:#cbd5e1;font-weight:600">Parameter</th>
+              <th style="text-align:left;padding:.75rem 1.5rem;color:#cbd5e1;font-weight:600">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for key, val in specs.items %}
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:.65rem 1.5rem;color:var(--text-muted)">{{ key }}</td>
+              <td style="padding:.65rem 1.5rem;color:#f0fdf4;font-weight:500">{{ val }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- RELATED -->
+    {% if related %}
+    <div style="margin-top:3rem">
+      <h2 style="font-size:1.25rem;font-weight:700;color:#f0fdf4;margin-bottom:1.5rem">Related Products</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {% for p in related %}
+        <a href="{% url 'pump_product_detail' p.slug %}" class="card group block" style="padding:1rem;text-decoration:none">
+          {% if p.primary_image %}
+          <img src="{{ p.primary_image.image.url }}" alt="{{ p.name }}" style="width:100%;height:110px;object-fit:contain;margin-bottom:.75rem;transition:transform .3s" class="group-hover:scale-105">
+          {% endif %}
+          <h3 style="color:#f0fdf4;font-weight:600;font-size:.9rem">{{ p.name }}</h3>
+          <p style="color:var(--text-muted);font-size:.78rem;margin-top:.3rem">{{ p.short_desc|truncatechars:60 }}</p>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+function showTab(tab) {
+  ['desc','specs'].forEach(function(t) {
+    var pane = document.getElementById('pane-' + t);
+    var btn  = document.getElementById('tab-' + t);
+    if (pane) {
+      if (t === tab) {
+        pane.classList.remove('hidden');
+        if (btn) { btn.style.background='var(--green)'; btn.style.color='#fff'; }
+      } else {
+        pane.classList.add('hidden');
+        if (btn) { btn.style.background='transparent'; btn.style.color='var(--text-muted)'; }
+      }
+    }
+  });
+}
+</script>
+
+{% endblock %}

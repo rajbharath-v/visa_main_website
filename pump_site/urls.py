@@ -1,20 +1,17 @@
-"""pump_site/urls.py — peristalticpump.in (coming soon)"""
+"""pump_site/urls.py — peristalticpump.in"""
 from django.contrib import admin
 from django.urls import path
-from django.shortcuts import render
 from shared.views_errors import error_400, error_403, error_404, error_500
-
-
-def coming_soon(request):
-    return render(request, 'pump_site/coming_soon.html', {
-        'meta_title': 'Peristaltic Pump — VISA Pvt. Ltd Chennai',
-        'meta_desc': 'Industrial Peristaltic Pumps by VISA Pvt. Ltd, Chennai. Coming soon.',
-    })
-
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', coming_soon, name='pump_home'),
+    path('admin/',                        admin.site.urls),
+    path('',                              views.home,           name='pump_home'),
+    path('products/',                     views.products,       name='pump_products'),
+    path('products/<slug:slug>/',         views.product_detail, name='pump_product_detail'),
+    path('about/',                        views.about,          name='pump_about'),
+    path('contact/',                      views.contact,        name='pump_contact'),
+    path('enquiry/submit/',               views.submit_enquiry, name='pump_submit_enquiry'),
 ]
 
 handler400 = error_400
