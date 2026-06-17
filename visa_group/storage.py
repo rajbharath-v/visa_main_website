@@ -60,9 +60,10 @@ class CloudinaryRawStorage(Storage):
             content,
             public_id=name,
             resource_type='raw',
+            type='upload',
+            access_mode='public',
             overwrite=True,
-            use_filename=True,
-            unique_filename=False,
+            invalidate=True,
         )
         return name
 
