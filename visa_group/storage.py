@@ -55,13 +55,10 @@ class CloudinaryRawStorage(Storage):
 
     def _save(self, name, content):
         name = name.replace('\\', '/')
-        # Keep extension in public_id — Cloudinary raw files require it in the URL
         cloudinary.uploader.upload(
             content,
             public_id=name,
             resource_type='raw',
-            type='upload',
-            access_mode='public',
             overwrite=True,
             invalidate=True,
         )
