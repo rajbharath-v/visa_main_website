@@ -55,6 +55,42 @@ def product_detail(request, slug):
     })
 
 
+def robots_txt(request):
+    from django.http import HttpResponse
+    content = "User-agent: *\nAllow: /\nSitemap: https://hartcommunicator.in/sitemap.xml\n"
+    return HttpResponse(content, content_type='text/plain')
+
+
+def sitemap_xml(request):
+    from django.http import HttpResponse
+    from shared.models import Product
+    products = Product.objects.filter(is_active=True, category__division__slug='hart-communicators')
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for url in ['', 'products/', 'about/', 'contact/']:
+        lines.append(f'  <url><loc>https://hartcommunicator.in/{url}</loc><changefreq>weekly</changefreq><priority>{"1.0" if url == "" else "0.8"}</priority></url>')
+    for p in products:
+        lines.append(f'  <url><loc>https://hartcommunicator.in/products/{p.slug}/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>')
+    lines.append('</urlset>')
+    return HttpResponse('\n'.join(lines), content_type='application/xml')
+
+
+def about(request):
+    strengths = [
+        {'title': 'Intrinsically Safe',   'desc': 'SK-660 certified Ex ib IICT4 Gb — safe for Zone 1 hazardous areas in oil & gas, pharma, and chemical plants.'},
+        {'title': 'Android-Based',        'desc': 'Modern Android 9.0 platform with large touchscreen. Easy to use, no proprietary hardware dependency.'},
+        {'title': 'Free DD Library',      'desc': 'Complete HART Device Description library included. Free updates for life — no annual subscription fees.'},
+        {'title': 'IP67 Rated',           'desc': 'Fully dust-tight and waterproof. Built for harsh field conditions including rain, dust, and humidity.'},
+        {'title': 'Pan India Support',    'desc': 'Sales and technical support available across India. Fast delivery from our Chennai warehouse.'},
+        {'title': 'Competitive Pricing',  'desc': 'Best price guarantee on SK-660 & SK-660F. Get a direct quote from manufacturer — no middleman markup.'},
+    ]
+    return render(request, 'hart_site/pages/about.html', {
+        'strengths':  strengths,
+        'meta_title': 'About VISA Pvt. Ltd — HART Communicator Manufacturer Chennai',
+        'meta_desc':  'VISA Pvt. Ltd is a Chennai-based manufacturer of HART Communicators and industrial instruments. 20+ years experience. Authorised supplier across India.',
+    })
+
+
 def contact(request):
     form = EnquiryForm()
     return render(request, 'hart_site/pages/contact.html', {

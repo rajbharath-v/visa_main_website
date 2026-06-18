@@ -55,6 +55,25 @@ def product_detail(request, slug):
     })
 
 
+def robots_txt(request):
+    from django.http import HttpResponse
+    content = "User-agent: *\nAllow: /\nSitemap: https://peristalticpump.in/sitemap.xml\n"
+    return HttpResponse(content, content_type='text/plain')
+
+
+def sitemap_xml(request):
+    from django.http import HttpResponse
+    products = _pump_products()
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for url in ['', 'products/', 'about/', 'contact/']:
+        lines.append(f'  <url><loc>https://peristalticpump.in/{url}</loc><changefreq>weekly</changefreq><priority>{"1.0" if url == "" else "0.8"}</priority></url>')
+    for p in products:
+        lines.append(f'  <url><loc>https://peristalticpump.in/products/{p.slug}/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>')
+    lines.append('</urlset>')
+    return HttpResponse('\n'.join(lines), content_type='application/xml')
+
+
 def about(request):
     strengths = [
         {'title': 'In-house Manufacturing', 'desc': 'All pumps designed and manufactured at our Chennai facility — quality control at every stage.'},

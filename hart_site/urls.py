@@ -11,8 +11,11 @@ urlpatterns = [
     path('',                              views.home,           name='hart_home'),
     path('products/',                     views.products,       name='hart_products'),
     path('products/<slug:slug>/',         views.product_detail, name='hart_product_detail'),
+    path('about/',                        views.about,          name='hart_about'),
     path('contact/',                      views.contact,        name='hart_contact'),
     path('enquiry/submit/',               views.submit_enquiry, name='hart_submit_enquiry'),
+    path('robots.txt',                    views.robots_txt,     name='hart_robots'),
+    path('sitemap.xml',                   views.sitemap_xml,    name='hart_sitemap'),
 ]
 
 # Error handlers must be defined in the urlconf that Django is using for the request

@@ -12,6 +12,8 @@ urlpatterns = [
     path('about/',                        views.about,          name='pump_about'),
     path('contact/',                      views.contact,        name='pump_contact'),
     path('enquiry/submit/',               views.submit_enquiry, name='pump_submit_enquiry'),
+    path('robots.txt',                    views.robots_txt,     name='pump_robots'),
+    path('sitemap.xml',                   views.sitemap_xml,    name='pump_sitemap'),
 ]
 
 handler400 = error_400
