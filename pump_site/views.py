@@ -24,6 +24,7 @@ def home(request):
         'products':        products,
         'form':            form,
         'apps_list_home':  ['Pharmaceutical', 'Chemical Industry', 'Food & Beverage', 'Water Treatment', 'Laboratory', 'Environmental'],
+        'badges':          ['ISO Certified', 'Made in India', '20+ Years', 'Pharma Grade', 'Easy Maintenance'],
         'meta_title': 'Peristaltic Pump Manufacturer in Chennai — VISA Pvt. Ltd',
         'meta_desc':  'Industrial Peristaltic Pumps by VISA Pvt. Ltd, Chennai. LabQ & Low-Cost models. Precise flow control for pharma, chemical, lab & food industries. Get best quote.',
     })
