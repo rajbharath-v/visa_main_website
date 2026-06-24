@@ -3,13 +3,13 @@
 
 class SiteRouterMiddleware:
     SITE_MAP = {
-        'peristalticpump.in':      'pump_site',
-        'www.peristalticpump.in':  'pump_site',
-        'hartcommunicator.in':     'hart_site',
-        'www.hartcommunicator.in': 'hart_site',
-        'localhost':               'hart_site',  # LOCAL TESTING ONLY
-        '127.0.0.1':              'hart_site',  # LOCAL TESTING ONLY
-    }
+    'peristalticspump.com':         'pump_site',
+    'www.peristalticspump.com':     'pump_site',
+    'hart475communicator.com':     'hart_site',
+    'www.hart475communicator.com': 'hart_site',
+    'localhost':                   'hart_site',  # LOCAL TESTING ONLY
+    '127.0.0.1':                   'hart_site',  # LOCAL TESTING ONLY
+}
     URLCONF_MAP = {
         'pump_site': 'pump_site.urls',
         'hart_site': 'hart_site.urls',
