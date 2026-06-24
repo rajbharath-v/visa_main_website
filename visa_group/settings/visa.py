@@ -5,21 +5,25 @@ from .base import *
 ALLOWED_HOSTS = [
     'visapvtltd.net',
     'www.visapvtltd.net',
+    'visapvtltd.co.in',
+    'www.visapvtltd.co.in',
     'hartcommunicator.in',
     'www.hartcommunicator.in',
+    'hart475communicator.com',
+    'www.hart475communicator.com',
     'peristalticpump.in',
     'www.peristalticpump.in',
+    'peristalticspump.com',
+    'www.peristalticspump.com',
+    '163.128.113.15',
     'localhost',
     '127.0.0.1',
-    'web-production-55759.up.railway.app',
-    '.railway.app',
 ]
 
-# Allow any domain/IP set via env var (Railway domain or VPS IP)
-for _extra in [os.getenv('RAILWAY_PUBLIC_DOMAIN', ''), os.getenv('VPS_IP', '')]:
-    _extra = _extra.strip()
-    if _extra:
-        ALLOWED_HOSTS.append(_extra)
+# Allow VPS IP override via env var
+_vps_ip = os.getenv('VPS_IP', '').strip()
+if _vps_ip:
+    ALLOWED_HOSTS.append(_vps_ip)
 
 SITE_ID = 1
 CURRENT_SITE = 'visa_main'
