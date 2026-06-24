@@ -15,10 +15,11 @@ ALLOWED_HOSTS = [
     '.railway.app',
 ]
 
-# Allow any domain set via env var (useful for custom Railway domains)
-_extra_host = os.getenv('RAILWAY_PUBLIC_DOMAIN', '').strip()
-if _extra_host:
-    ALLOWED_HOSTS.append(_extra_host)
+# Allow any domain/IP set via env var (Railway domain or VPS IP)
+for _extra in [os.getenv('RAILWAY_PUBLIC_DOMAIN', ''), os.getenv('VPS_IP', '')]:
+    _extra = _extra.strip()
+    if _extra:
+        ALLOWED_HOSTS.append(_extra)
 
 SITE_ID = 1
 CURRENT_SITE = 'visa_main'
