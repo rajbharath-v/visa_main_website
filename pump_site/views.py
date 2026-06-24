@@ -95,7 +95,7 @@ def contact(request):
     return render(request, 'pump_site/pages/contact.html', {
         'form':       form,
         'meta_title': 'Contact — Peristaltic Pump Enquiry | VISA Pvt. Ltd Chennai',
-        'meta_desc':  'Get a quote for peristaltic pumps from VISA Pvt. Ltd, Chennai. Phone: +91 79490 93762. Email: sales@visapvtltd.net.',
+        'meta_desc':  'Get a quote for peristaltic pumps from VISA Pvt. Ltd, Chennai. Phone: +91 94453 50717. Email: support@visapvtltd.co.in.',
     })
 
 

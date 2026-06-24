@@ -10,8 +10,8 @@ def organization_schema():
         "alternateName": "VISA Pvt. Ltd",
         "url": "https://www.visapvtltd.net",
         "logo": "https://www.visapvtltd.net/static/visa/img/logo.png",
-        "telephone": "+917949093762",
-        "email": "sales@visapvtltd.net",
+        "telephone": "+919445350717",
+        "email": "support@visapvtltd.co.in",
         "address": {
             "@type": "PostalAddress",
             "streetAddress": "15/16/17 Vision Tower, Yogam Garden, Brindhavan Nagar",

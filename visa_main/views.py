@@ -189,7 +189,7 @@ def contact(request):
     return render(request, 'visa_main/pages/contact.html', {
         'form':       form,
         'meta_title': 'Contact VISA Pvt. Ltd — Get a Quote | Chennai',
-        'meta_desc':  'Contact VISA Pvt. Ltd for peristaltic pumps, flow meters & process control instruments. Phone: +91 79490 93762. Chennai, India.',
+        'meta_desc':  'Contact VISA Pvt. Ltd for peristaltic pumps, flow meters & process control instruments. Phone: +91 94453 50717. Chennai, India.',
     })
 
 

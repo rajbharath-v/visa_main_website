@@ -1,20 +1,13 @@
 """visa_group/settings/visa.py — visapvtltd.net"""
 import os
 from .base import *
-
 ALLOWED_HOSTS = [
-    'visapvtltd.net',
-    'www.visapvtltd.net',
-    'hartcommunicator.in',
-    'www.hartcommunicator.in',
-    'peristalticpump.in',
-    'www.peristalticpump.in',
+    'visapvtltd.co.in',
+    'www.visapvtltd.co.in',
+    '163.128.113.15',
     'localhost',
     '127.0.0.1',
-    'web-production-55759.up.railway.app',
-    '.railway.app',
 ]
-
 # Allow any domain set via env var (useful for custom Railway domains)
 _extra_host = os.getenv('RAILWAY_PUBLIC_DOMAIN', '').strip()
 if _extra_host:
