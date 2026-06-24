@@ -53,14 +53,14 @@ Thank you for your enquiry regarding {product_name}.
 
 Our team will get back to you within 24 hours.
 
-For urgent queries, please call us at +91 79490 93762 or WhatsApp us.
+For urgent queries, please call us at +91 94453 50717 or WhatsApp us.
 
 Best regards,
 VISA Pvt. Ltd — Sales Team
 Virtual Instrumentation & Software Applications Pvt. Ltd
 Valasaravakkam, Chennai — 600 087
-Phone: +91 79490 93762
-Email: sales@visapvtltd.net
+Phone: +91 94453 50717
+Email: support@visapvtltd.co.in
 Web: www.visapvtltd.net
 """,
             from_email=settings.DEFAULT_FROM_EMAIL,

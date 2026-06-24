@@ -177,10 +177,10 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@visapvtltd.net')
-ENQUIRY_EMAIL = os.getenv('ENQUIRY_EMAIL', 'sales@visapvtltd.net')
+ENQUIRY_EMAIL = os.getenv('ENQUIRY_EMAIL', 'support@visapvtltd.co.in')
 
 # WhatsApp
-WHATSAPP_NUMBER = os.getenv('WHATSAPP_NUMBER', '917949093762')
+WHATSAPP_NUMBER = os.getenv('WHATSAPP_NUMBER', '919445350717')
 
 # Brochure PDF URLs — set to Cloudinary URL once uploaded, or leave blank to use static files
 SK660_BROCHURE_URL  = os.getenv('SK660_BROCHURE_URL',  '')

@@ -96,7 +96,7 @@ def contact(request):
     return render(request, 'hart_site/pages/contact.html', {
         'form':       form,
         'meta_title': 'Contact — HART Communicator | VISA Pvt. Ltd Chennai',
-        'meta_desc':  'Get a quote for SK-660 HART Communicator. Contact VISA Pvt. Ltd, Chennai. Phone: +91 79490 93762.',
+        'meta_desc':  'Get a quote for SK-660 HART Communicator. Contact VISA Pvt. Ltd, Chennai. Phone: +91 94453 50717.',
     })
 
 
