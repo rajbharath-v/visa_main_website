@@ -22,14 +22,21 @@
 
       <!-- IMAGES -->
       <div>
-        <div class="card overflow-hidden" style="background:#111827">
+        <!-- Main image with arrows -->
+        <div class="card overflow-hidden relative" style="background:#111827;height:420px">
           {% if images %}
-            {% with images.0 as primary %}
-            <img id="main-img" src="{{ primary.image.url }}" alt="{{ product.name }}"
-                 class="w-full object-contain" style="height:420px;padding:2rem">
-            {% endwith %}
+            <img id="main-img" src="{{ images.0.image.url }}" alt="{{ product.name }}"
+                 class="w-full h-full object-contain" style="padding:2rem;transition:opacity .15s ease">
+            {% if images|length > 1 %}
+            <button onclick="prevImg()" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center transition-all z-10" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2)">
+              <i class="ti ti-chevron-left text-white text-lg"></i>
+            </button>
+            <button onclick="nextImg()" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center transition-all z-10" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2)">
+              <i class="ti ti-chevron-right text-white text-lg"></i>
+            </button>
+            {% endif %}
           {% else %}
-          <div class="flex items-center justify-center" style="height:420px">
+          <div class="flex items-center justify-center h-full">
             <svg class="w-20 h-20 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
             </svg>
@@ -37,15 +44,43 @@
           {% endif %}
         </div>
 
+        <!-- Thumbnails -->
         {% if images|length > 1 %}
-        <div class="grid grid-cols-4 gap-3 mt-3">
+        <div class="grid grid-cols-5 gap-2 mt-3">
           {% for img in images %}
-          <div class="card cursor-pointer hover:border-orange-500 transition-all" onclick="document.getElementById('main-img').src='{{ img.image.url }}'">
-            <img src="{{ img.image.url }}" alt="{{ product.name }}" class="w-full object-cover" style="height:80px">
-          </div>
+          <button onclick="goTo({{ forloop.counter0 }})" id="thumb-{{ forloop.counter0 }}"
+                  class="aspect-square rounded-xl overflow-hidden border-2 transition-all p-1"
+                  style="background:#1f2937;{% if forloop.first %}border-color:#f97316{% else %}border-color:#374151{% endif %}">
+            <img src="{{ img.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain" loading="lazy">
+          </button>
           {% endfor %}
         </div>
         {% endif %}
+
+        <!-- Share -->
+        <div class="flex items-center gap-3 mt-4 pt-4 flex-wrap" style="border-top:1px solid #374151">
+          <span class="text-sm font-medium text-gray-400">Share:</span>
+          <a href="https://wa.me/?text={{ product.name|urlencode }}%20https://hart475communicator.com/products/{{ product.slug }}/" target="_blank"
+             class="w-10 h-10 rounded-xl flex items-center justify-center transition-all" style="background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3)" title="WhatsApp">
+            <i class="ti ti-brand-whatsapp text-green-400 text-xl"></i>
+          </a>
+          <a href="mailto:?subject={{ product.name|urlencode }}&body=https://hart475communicator.com/products/{{ product.slug }}/"
+             class="w-10 h-10 rounded-xl flex items-center justify-center transition-all" style="background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3)" title="Email">
+            <i class="ti ti-mail text-blue-400 text-xl"></i>
+          </a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u=https://hart475communicator.com/products/{{ product.slug }}/" target="_blank"
+             class="w-10 h-10 rounded-xl flex items-center justify-center transition-all" style="background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3)" title="Facebook">
+            <i class="ti ti-brand-facebook text-indigo-400 text-xl"></i>
+          </a>
+          <a href="https://www.instagram.com/" target="_blank"
+             class="w-10 h-10 rounded-xl flex items-center justify-center transition-all" style="background:rgba(225,48,108,.15);border:1px solid rgba(225,48,108,.3)" title="Instagram">
+            <i class="ti ti-brand-instagram text-pink-400 text-xl"></i>
+          </a>
+          <button onclick="copyHartLink('https://hart475communicator.com/products/{{ product.slug }}/')" id="hart-copy-btn"
+             class="w-10 h-10 rounded-xl flex items-center justify-center transition-all" style="background:#1f2937;border:1px solid #374151" title="Copy Link">
+            <i class="ti ti-link text-gray-400 text-xl"></i>
+          </button>
+        </div>
       </div>
 
       <!-- PRODUCT INFO -->
@@ -209,6 +244,40 @@ function showTab(tab) {
       }
     }
   });
+}
+
+// Image slider
+const hartImgs = [{% for img in images %}'{{ img.image.url }}'{% if not forloop.last %},{% endif %}{% endfor %}];
+let hartIdx = 0;
+let hartTimer = null;
+
+function goTo(index) {
+  if (!hartImgs.length) return;
+  hartIdx = (index + hartImgs.length) % hartImgs.length;
+  const img = document.getElementById('main-img');
+  if (!img) return;
+  img.style.opacity = '0';
+  setTimeout(() => { img.src = hartImgs[hartIdx]; img.style.opacity = '1'; }, 150);
+  document.querySelectorAll('[id^="thumb-"]').forEach((b, i) => {
+    b.style.borderColor = i === hartIdx ? '#f97316' : '#374151';
+  });
+  clearInterval(hartTimer);
+  hartTimer = setInterval(() => goTo(hartIdx + 1), 3000);
+}
+
+function prevImg() { goTo(hartIdx - 1); }
+function nextImg() { goTo(hartIdx + 1); }
+
+function copyHartLink(url) {
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('hart-copy-btn');
+    btn.innerHTML = '<i class="ti ti-check text-green-400 text-xl"></i>';
+    setTimeout(() => { btn.innerHTML = '<i class="ti ti-link text-gray-400 text-xl"></i>'; }, 2000);
+  });
+}
+
+if (hartImgs.length > 1) {
+  hartTimer = setInterval(() => goTo(hartIdx + 1), 3000);
 }
 </script>
 {% endblock %}
