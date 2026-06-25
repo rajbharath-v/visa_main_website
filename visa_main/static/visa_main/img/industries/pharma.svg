@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f2744"/>
+      <stop offset="100%" style="stop-color:#1a3a5c"/>
+    </linearGradient>
+    <linearGradient id="tube" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#60a5fa"/>
+      <stop offset="100%" style="stop-color:#2563eb"/>
+    </linearGradient>
+    <linearGradient id="liquid" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#34d399"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <!-- Grid lines -->
+  <line x1="0" y1="60" x2="400" y2="60" stroke="#ffffff08" stroke-width="1"/>
+  <line x1="0" y1="120" x2="400" y2="120" stroke="#ffffff08" stroke-width="1"/>
+  <line x1="0" y1="180" x2="400" y2="180" stroke="#ffffff08" stroke-width="1"/>
+  <line x1="0" y1="240" x2="400" y2="240" stroke="#ffffff08" stroke-width="1"/>
+
+  <!-- Conveyor belt -->
+  <rect x="20" y="210" width="360" height="14" rx="4" fill="#1e3a5f"/>
+  <rect x="20" y="218" width="360" height="6" rx="3" fill="#0f2744" opacity="0.6"/>
+  <!-- Belt dots -->
+  <circle cx="60" cy="217" r="3" fill="#334155"/>
+  <circle cx="120" cy="217" r="3" fill="#334155"/>
+  <circle cx="180" cy="217" r="3" fill="#334155"/>
+  <circle cx="240" cy="217" r="3" fill="#334155"/>
+  <circle cx="300" cy="217" r="3" fill="#334155"/>
+  <circle cx="360" cy="217" r="3" fill="#334155"/>
+
+  <!-- Vials on belt -->
+  <!-- Vial 1 -->
+  <rect x="55" y="180" width="22" height="32" rx="4" fill="url(#tube)" opacity="0.9"/>
+  <rect x="58" y="195" width="16" height="14" rx="2" fill="url(#liquid)"/>
+  <rect x="62" y="176" width="14" height="6" rx="2" fill="#93c5fd"/>
+  <!-- Vial 2 -->
+  <rect x="115" y="183" width="22" height="29" rx="4" fill="url(#tube)" opacity="0.9"/>
+  <rect x="118" y="198" width="16" height="11" rx="2" fill="url(#liquid)"/>
+  <rect x="122" y="179" width="14" height="6" rx="2" fill="#93c5fd"/>
+  <!-- Vial 3 -->
+  <rect x="175" y="178" width="22" height="34" rx="4" fill="url(#tube)" opacity="0.9"/>
+  <rect x="178" y="193" width="16" height="16" rx="2" fill="url(#liquid)"/>
+  <rect x="182" y="174" width="14" height="6" rx="2" fill="#93c5fd"/>
+  <!-- Vial 4 -->
+  <rect x="235" y="182" width="22" height="30" rx="4" fill="url(#tube)" opacity="0.9"/>
+  <rect x="238" y="197" width="16" height="12" rx="2" fill="url(#liquid)"/>
+  <rect x="242" y="178" width="14" height="6" rx="2" fill="#93c5fd"/>
+
+  <!-- Filling machine arm -->
+  <rect x="160" y="80" width="80" height="8" rx="4" fill="#334155"/>
+  <!-- Arm vertical -->
+  <rect x="174" y="88" width="8" height="60" rx="3" fill="#475569"/>
+  <rect x="218" y="88" width="8" height="60" rx="3" fill="#475569"/>
+  <!-- Nozzles -->
+  <rect x="172" y="145" width="12" height="22" rx="3" fill="#60a5fa"/>
+  <circle cx="178" cy="168" r="4" fill="#34d399"/>
+  <rect x="216" y="145" width="12" height="22" rx="3" fill="#60a5fa"/>
+  <circle cx="222" cy="168" r="4" fill="#34d399"/>
+
+  <!-- Liquid drops -->
+  <ellipse cx="178" cy="176" rx="3" ry="4" fill="#34d399" opacity="0.8"/>
+  <ellipse cx="222" cy="174" rx="3" ry="4" fill="#34d399" opacity="0.6"/>
+
+  <!-- Main tank -->
+  <rect x="290" y="60" width="70" height="120" rx="8" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="298" y="100" width="54" height="70" rx="4" fill="#0ea5e9" opacity="0.25"/>
+  <rect x="298" y="130" width="54" height="40" rx="4" fill="#0ea5e9" opacity="0.4"/>
+  <!-- Tank pipe -->
+  <rect x="278" y="105" width="14" height="6" rx="2" fill="#475569"/>
+  <rect x="160" y="105" width="120" height="6" rx="2" fill="#334155"/>
+  <!-- Tank label -->
+  <text x="325" y="88" text-anchor="middle" font-size="9" fill="#93c5fd" font-family="monospace">API</text>
+  <text x="325" y="98" text-anchor="middle" font-size="7" fill="#64748b" font-family="monospace">TANK</text>
+
+  <!-- Control panel -->
+  <rect x="30" y="90" width="100" height="80" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <circle cx="55" cy="110" r="8" fill="#ef4444" opacity="0.8"/>
+  <circle cx="80" cy="110" r="8" fill="#f59e0b" opacity="0.8"/>
+  <circle cx="105" cy="110" r="8" fill="#22c55e" opacity="0.8"/>
+  <!-- Screen -->
+  <rect x="42" y="126" width="76" height="34" rx="3" fill="#0f172a"/>
+  <rect x="46" y="130" width="40" height="4" rx="1" fill="#34d399" opacity="0.7"/>
+  <rect x="46" y="137" width="60" height="4" rx="1" fill="#60a5fa" opacity="0.5"/>
+  <rect x="46" y="144" width="30" height="4" rx="1" fill="#f59e0b" opacity="0.5"/>
+  <rect x="46" y="151" width="50" height="4" rx="1" fill="#34d399" opacity="0.4"/>
+
+  <!-- Particles / glowing dots -->
+  <circle cx="150" cy="50" r="2" fill="#60a5fa" opacity="0.5"/>
+  <circle cx="250" cy="40" r="1.5" fill="#34d399" opacity="0.4"/>
+  <circle cx="350" cy="55" r="2" fill="#60a5fa" opacity="0.3"/>
+  <circle cx="80" cy="45" r="1.5" fill="#f59e0b" opacity="0.4"/>
+
+  <!-- Bottom label -->
+  <text x="200" y="270" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="sans-serif" letter-spacing="2">PHARMACEUTICAL</text>
+</svg>

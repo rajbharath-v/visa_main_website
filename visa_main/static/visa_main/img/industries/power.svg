@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0f1e"/>
+      <stop offset="100%" style="stop-color:#111827"/>
+    </linearGradient>
+    <linearGradient id="turbine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fbbf24"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+    <linearGradient id="steam" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#e2e8f0" stop-opacity="0.3"/>
+      <stop offset="100%" style="stop-color:#e2e8f0" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="coreglow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#fbbf24" stop-opacity="0.4"/>
+      <stop offset="100%" style="stop-color:#fbbf24" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+
+  <!-- Grid -->
+  <line x1="0" y1="75" x2="400" y2="75" stroke="#ffffff04" stroke-width="1"/>
+  <line x1="0" y1="150" x2="400" y2="150" stroke="#ffffff04" stroke-width="1"/>
+  <line x1="0" y1="225" x2="400" y2="225" stroke="#ffffff04" stroke-width="1"/>
+
+  <!-- Cooling towers left -->
+  <!-- Tower 1 -->
+  <path d="M25 228 Q30 130 50 95 Q70 130 75 228 Z" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+  <path d="M35 228 Q38 160 50 135 Q62 160 65 228 Z" fill="#0f172a" opacity="0.6"/>
+  <ellipse cx="50" cy="93" rx="26" ry="8" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+  <!-- Steam from tower 1 -->
+  <path d="M44 85 Q40 70 44 55 Q48 40 44 25" stroke="#94a3b8" stroke-width="2" fill="none" opacity="0.3"/>
+  <path d="M50 83 Q46 68 50 53 Q54 38 50 23" stroke="#94a3b8" stroke-width="2.5" fill="none" opacity="0.4"/>
+  <path d="M56 85 Q52 70 56 55 Q60 40 56 25" stroke="#94a3b8" stroke-width="2" fill="none" opacity="0.3"/>
+
+  <!-- Tower 2 -->
+  <path d="M80 228 Q85 135 105 100 Q125 135 130 228 Z" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+  <path d="M90 228 Q93 165 105 140 Q117 165 120 228 Z" fill="#0f172a" opacity="0.6"/>
+  <ellipse cx="105" cy="98" rx="26" ry="8" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+  <!-- Steam from tower 2 -->
+  <path d="M99 90 Q95 75 99 60 Q103 45 99 30" stroke="#94a3b8" stroke-width="2" fill="none" opacity="0.3"/>
+  <path d="M105 88 Q101 73 105 58 Q109 43 105 28" stroke="#94a3b8" stroke-width="2.5" fill="none" opacity="0.4"/>
+  <path d="M111 90 Q107 75 111 60 Q115 45 111 30" stroke="#94a3b8" stroke-width="2" fill="none" opacity="0.3"/>
+
+  <!-- Boiler / pressure vessel -->
+  <rect x="155" y="100" width="80" height="130" rx="10" fill="#111827" stroke="#fbbf24" stroke-width="1.5"/>
+  <ellipse cx="195" cy="100" rx="40" ry="12" fill="#1f2937" stroke="#fbbf24" stroke-width="1.5"/>
+  <ellipse cx="195" cy="230" rx="40" ry="12" fill="#1f2937" stroke="#fbbf24" stroke-width="1.5"/>
+  <!-- Heating coils -->
+  <path d="M167 155 Q185 148 203 155 Q221 162 239 155" stroke="#f97316" stroke-width="2" fill="none" opacity="0.7"/>
+  <path d="M167 168 Q185 161 203 168 Q221 175 239 168" stroke="#f97316" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M167 181 Q185 174 203 181 Q221 188 239 181" stroke="#f97316" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <!-- Pressure gauge -->
+  <circle cx="195" cy="128" r="16" fill="#0f172a" stroke="#fbbf24" stroke-width="1.5"/>
+  <circle cx="195" cy="128" r="10" fill="#1f2937"/>
+  <line x1="195" y1="128" x2="201" y2="120" stroke="#fbbf24" stroke-width="2"/>
+  <circle cx="195" cy="128" r="2" fill="#fbbf24"/>
+  <!-- Pipe steam out -->
+  <rect x="188" y="68" width="14" height="34" rx="4" fill="#374151"/>
+  <!-- Pipe water in -->
+  <rect x="130" y="178" width="27" height="8" rx="3" fill="#374151"/>
+  <!-- Pipe steam out right -->
+  <rect x="233" y="130" width="30" height="8" rx="3" fill="#374151"/>
+
+  <!-- Turbine center -->
+  <circle cx="310" cy="150" r="55" fill="#111827" stroke="#fbbf24" stroke-width="2"/>
+  <circle cx="310" cy="150" r="40" fill="#0f172a"/>
+  <!-- Turbine blades -->
+  <g transform="rotate(0, 310, 150)">
+    <path d="M310 150 L320 110 Q325 100 315 105 Z" fill="#fbbf24" opacity="0.8"/>
+    <path d="M310 150 L348 162 Q358 165 352 155 Z" fill="#fbbf24" opacity="0.8"/>
+    <path d="M310 150 L302 190 Q298 202 308 197 Z" fill="#fbbf24" opacity="0.8"/>
+    <path d="M310 150 L272 138 Q262 135 268 145 Z" fill="#fbbf24" opacity="0.8"/>
+    <path d="M310 150 L338 118 Q345 108 338 115 Z" fill="#d97706" opacity="0.7"/>
+    <path d="M310 150 L342 182 Q349 190 342 184 Z" fill="#d97706" opacity="0.7"/>
+    <path d="M310 150 L278 182 Q272 190 278 183 Z" fill="#d97706" opacity="0.7"/>
+    <path d="M310 150 L278 118 Q272 110 279 116 Z" fill="#d97706" opacity="0.7"/>
+  </g>
+  <!-- Turbine glow -->
+  <circle cx="310" cy="150" r="55" fill="url(#coreglow)"/>
+  <!-- Turbine hub -->
+  <circle cx="310" cy="150" r="18" fill="#1f2937" stroke="#fbbf24" stroke-width="2"/>
+  <circle cx="310" cy="150" r="8" fill="#fbbf24" opacity="0.6"/>
+  <!-- Shaft -->
+  <rect x="355" y="146" width="35" height="8" rx="3" fill="#374151"/>
+  <!-- Generator box -->
+  <rect x="358" y="125" width="32" height="50" rx="5" fill="#1f2937" stroke="#fbbf24" stroke-width="1"/>
+  <text x="374" y="147" text-anchor="middle" font-size="7" fill="#fbbf24" font-family="monospace">GEN</text>
+  <!-- Lightning bolt -->
+  <path d="M370 154 L366 164 L372 164 L368 174 L376 162 L370 162 Z" fill="#fbbf24" opacity="0.8"/>
+
+  <!-- Power line pylons -->
+  <line x1="20" y1="248" x2="20" y2="270" stroke="#374151" stroke-width="2"/>
+  <line x1="14" y1="252" x2="26" y2="252" stroke="#374151" stroke-width="2"/>
+  <line x1="16" y1="257" x2="24" y2="257" stroke="#374151" stroke-width="1.5"/>
+  <path d="M14 252 Q17 260 20 270" stroke="#94a3b8" stroke-width="1" fill="none" opacity="0.4"/>
+  <path d="M26 252 Q23 260 20 270" stroke="#94a3b8" stroke-width="1" fill="none" opacity="0.4"/>
+
+  <!-- Stars -->
+  <circle cx="145" cy="35" r="1.5" fill="#fbbf24" opacity="0.4"/>
+  <circle cx="240" cy="50" r="1" fill="#fbbf24" opacity="0.3"/>
+  <circle cx="380" cy="30" r="1.5" fill="#94a3b8" opacity="0.3"/>
+
+  <text x="200" y="275" text-anchor="middle" font-size="11" fill="#fbbf24" font-family="sans-serif" letter-spacing="2">POWER PLANTS</text>
+</svg>

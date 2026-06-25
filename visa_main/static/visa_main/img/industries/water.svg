@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0c2340"/>
+      <stop offset="100%" style="stop-color:#0a3d62"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#38bdf8"/>
+      <stop offset="100%" style="stop-color:#0284c7"/>
+    </linearGradient>
+    <linearGradient id="clean" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#7dd3fc"/>
+      <stop offset="100%" style="stop-color:#0ea5e9"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+
+  <!-- Stars/particles bg -->
+  <circle cx="50" cy="30" r="1.5" fill="#7dd3fc" opacity="0.3"/>
+  <circle cx="150" cy="20" r="1" fill="#38bdf8" opacity="0.4"/>
+  <circle cx="300" cy="25" r="1.5" fill="#7dd3fc" opacity="0.3"/>
+  <circle cx="370" cy="15" r="1" fill="#38bdf8" opacity="0.2"/>
+
+  <!-- Intake pipe from top left -->
+  <rect x="20" y="40" width="60" height="12" rx="4" fill="#164e63"/>
+  <rect x="20" y="38" width="60" height="4" rx="2" fill="#0284c7" opacity="0.5"/>
+  <rect x="78" y="30" width="12" height="30" rx="4" fill="#164e63"/>
+
+  <!-- Sedimentation tank -->
+  <rect x="30" y="80" width="100" height="110" rx="8" fill="#0c2f4a" stroke="#0284c7" stroke-width="1.5"/>
+  <rect x="38" y="130" width="84" height="55" rx="4" fill="#1e40af" opacity="0.15"/>
+  <rect x="38" y="155" width="84" height="30" rx="4" fill="#0284c7" opacity="0.2"/>
+  <!-- Sediment layer -->
+  <rect x="38" y="178" width="84" height="8" rx="2" fill="#78350f" opacity="0.4"/>
+  <!-- Rake arm -->
+  <line x1="80" y1="80" x2="80" y2="185" stroke="#164e63" stroke-width="2"/>
+  <line x1="45" y1="165" x2="115" y2="165" stroke="#38bdf8" stroke-width="2.5" opacity="0.6"/>
+  <!-- Label -->
+  <text x="80" y="100" text-anchor="middle" font-size="8" fill="#7dd3fc" font-family="monospace">SEDIMENT</text>
+
+  <!-- Filter tower -->
+  <rect x="162" y="65" width="76" height="140" rx="8" fill="#0c2f4a" stroke="#38bdf8" stroke-width="1.5"/>
+  <!-- Filter layers -->
+  <rect x="170" y="90" width="60" height="12" rx="2" fill="#374151" opacity="0.8"/>
+  <text x="200" y="99" text-anchor="middle" font-size="6" fill="#94a3b8" font-family="monospace">GRAVEL</text>
+  <rect x="170" y="106" width="60" height="12" rx="2" fill="#4b5563" opacity="0.7"/>
+  <text x="200" y="115" text-anchor="middle" font-size="6" fill="#94a3b8" font-family="monospace">SAND</text>
+  <rect x="170" y="122" width="60" height="12" rx="2" fill="#1e3a4a" opacity="0.8"/>
+  <text x="200" y="131" text-anchor="middle" font-size="6" fill="#7dd3fc" font-family="monospace">CARBON</text>
+  <rect x="170" y="138" width="60" height="12" rx="2" fill="#0c2f4a" opacity="0.9"/>
+  <text x="200" y="147" text-anchor="middle" font-size="6" fill="#38bdf8" font-family="monospace">MEMBRANE</text>
+  <!-- Water flow -->
+  <rect x="178" y="152" width="44" height="40" rx="2" fill="url(#clean)" opacity="0.15"/>
+  <!-- Pipe top -->
+  <rect x="193" y="40" width="14" height="27" rx="4" fill="#164e63"/>
+  <!-- Pipe bottom out -->
+  <rect x="193" y="203" width="14" height="24" rx="4" fill="#164e63"/>
+  <rect x="170" y="80" width="60" height="10" rx="3" fill="#0c4a6e"/>
+  <!-- Label -->
+  <text x="200" y="78" text-anchor="middle" font-size="8" fill="#7dd3fc" font-family="monospace">FILTRATION</text>
+
+  <!-- Connecting pipe sedimentation to filter -->
+  <rect x="128" y="140" width="36" height="8" rx="3" fill="#164e63"/>
+
+  <!-- Clean water tank right -->
+  <rect x="275" y="80" width="100" height="130" rx="8" fill="#0c2f4a" stroke="#38bdf8" stroke-width="2"/>
+  <!-- Water level animated look -->
+  <rect x="283" y="140" width="84" height="64" rx="4" fill="url(#water)" opacity="0.25"/>
+  <rect x="283" y="160" width="84" height="44" rx="4" fill="url(#clean)" opacity="0.2"/>
+  <!-- Wave top of water -->
+  <path d="M283 142 Q300 136 317 142 Q334 148 351 142 Q360 138 367 142" stroke="#7dd3fc" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <!-- Level gauge -->
+  <rect x="367" y="85" width="8" height="120" rx="3" fill="#0a1929"/>
+  <rect x="367" y="145" width="8" height="60" rx="3" fill="#0284c7" opacity="0.7"/>
+  <!-- Meter marks -->
+  <line x1="367" y1="95" x2="375" y2="95" stroke="#38bdf8" stroke-width="1"/>
+  <line x1="367" y1="115" x2="375" y2="115" stroke="#38bdf8" stroke-width="1"/>
+  <line x1="367" y1="135" x2="375" y2="135" stroke="#38bdf8" stroke-width="1"/>
+  <line x1="367" y1="155" x2="375" y2="155" stroke="#38bdf8" stroke-width="1"/>
+  <!-- Label -->
+  <text x="320" y="100" text-anchor="middle" font-size="8" fill="#7dd3fc" font-family="monospace">CLEAN WATER</text>
+  <text x="320" y="112" text-anchor="middle" font-size="7" fill="#0ea5e9" font-family="monospace">RESERVOIR</text>
+
+  <!-- Pipe filter to clean tank -->
+  <rect x="238" y="140" width="39" height="8" rx="3" fill="#164e63"/>
+
+  <!-- Flow arrows -->
+  <polygon points="140,141 152,137 152,145" fill="#38bdf8" opacity="0.7"/>
+  <polygon points="250,141 262,137 262,145" fill="#38bdf8" opacity="0.7"/>
+
+  <!-- Bottom pump -->
+  <circle cx="200" cy="240" r="22" fill="#0c2f4a" stroke="#0284c7" stroke-width="1.5"/>
+  <circle cx="200" cy="240" r="12" fill="#0a3d62"/>
+  <circle cx="200" cy="240" r="5" fill="#38bdf8" opacity="0.6"/>
+  <!-- Pump blades -->
+  <line x1="200" y1="228" x2="200" y2="252" stroke="#38bdf8" stroke-width="2" opacity="0.5"/>
+  <line x1="188" y1="240" x2="212" y2="240" stroke="#38bdf8" stroke-width="2" opacity="0.5"/>
+  <line x1="192" y1="232" x2="208" y2="248" stroke="#38bdf8" stroke-width="1.5" opacity="0.4"/>
+  <line x1="192" y1="248" x2="208" y2="232" stroke="#38bdf8" stroke-width="1.5" opacity="0.4"/>
+  <text x="200" y="272" text-anchor="middle" font-size="7" fill="#7dd3fc" font-family="monospace">PUMP</text>
+
+  <text x="200" y="292" text-anchor="middle" font-size="11" fill="#7dd3fc" font-family="sans-serif" letter-spacing="2">WATER TREATMENT</text>
+</svg>
