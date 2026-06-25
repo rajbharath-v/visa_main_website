@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#052e16"/>
+      <stop offset="100%" style="stop-color:#0a3d1a"/>
+    </linearGradient>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0c4a2e" stop-opacity="0.6"/>
+      <stop offset="100%" style="stop-color:#052e16" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#22d3ee"/>
+      <stop offset="100%" style="stop-color:#0891b2"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4ade80"/>
+      <stop offset="100%" style="stop-color:#16a34a"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <rect width="400" height="300" fill="url(#sky)"/>
+
+  <!-- Ground -->
+  <ellipse cx="200" cy="260" rx="200" ry="30" fill="#14532d" opacity="0.5"/>
+
+  <!-- Large tree left -->
+  <rect x="68" y="155" width="14" height="85" rx="4" fill="#78350f"/>
+  <!-- Canopy layers -->
+  <ellipse cx="75" cy="160" rx="42" ry="30" fill="#16a34a" opacity="0.9"/>
+  <ellipse cx="75" cy="140" rx="34" ry="26" fill="#22c55e" opacity="0.9"/>
+  <ellipse cx="75" cy="122" rx="26" ry="20" fill="#4ade80" opacity="0.8"/>
+  <!-- Leaves highlights -->
+  <ellipse cx="60" cy="148" rx="18" ry="12" fill="#4ade80" opacity="0.3"/>
+  <ellipse cx="90" cy="148" rx="16" ry="10" fill="#86efac" opacity="0.2"/>
+
+  <!-- Medium tree right -->
+  <rect x="308" y="165" width="12" height="70" rx="4" fill="#78350f"/>
+  <ellipse cx="314" cy="168" rx="35" ry="24" fill="#15803d" opacity="0.9"/>
+  <ellipse cx="314" cy="150" rx="28" ry="20" fill="#22c55e" opacity="0.9"/>
+  <ellipse cx="314" cy="135" rx="20" ry="15" fill="#4ade80" opacity="0.8"/>
+
+  <!-- Small bush left -->
+  <rect x="148" y="210" width="8" height="30" rx="3" fill="#92400e"/>
+  <ellipse cx="152" cy="212" rx="22" ry="16" fill="#16a34a" opacity="0.85"/>
+  <ellipse cx="152" cy="200" rx="16" ry="12" fill="#4ade80" opacity="0.8"/>
+
+  <!-- River / water stream center -->
+  <path d="M110 240 Q160 225 200 232 Q240 238 290 222 Q320 215 340 225" stroke="#22d3ee" stroke-width="8" fill="none" opacity="0.5" stroke-linecap="round"/>
+  <path d="M115 245 Q165 232 200 238 Q240 244 288 228" stroke="#67e8f9" stroke-width="4" fill="none" opacity="0.4" stroke-linecap="round"/>
+  <!-- Water shimmer -->
+  <line x1="150" y1="234" x2="165" y2="234" stroke="#a5f3fc" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+  <line x1="210" y1="236" x2="228" y2="235" stroke="#a5f3fc" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+  <line x1="255" y1="228" x2="270" y2="227" stroke="#a5f3fc" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
+
+  <!-- Sun / clean energy circle top right -->
+  <circle cx="330" cy="55" r="28" fill="#fbbf24" opacity="0.15"/>
+  <circle cx="330" cy="55" r="18" fill="#fde68a" opacity="0.25"/>
+  <circle cx="330" cy="55" r="10" fill="#fbbf24" opacity="0.5"/>
+  <!-- Sun rays -->
+  <line x1="330" y1="25" x2="330" y2="18" stroke="#fbbf24" stroke-width="2" opacity="0.5"/>
+  <line x1="330" y1="85" x2="330" y2="92" stroke="#fbbf24" stroke-width="2" opacity="0.5"/>
+  <line x1="300" y1="55" x2="293" y2="55" stroke="#fbbf24" stroke-width="2" opacity="0.5"/>
+  <line x1="360" y1="55" x2="367" y2="55" stroke="#fbbf24" stroke-width="2" opacity="0.5"/>
+  <line x1="309" y1="34" x2="304" y2="29" stroke="#fbbf24" stroke-width="2" opacity="0.4"/>
+  <line x1="351" y1="76" x2="356" y2="81" stroke="#fbbf24" stroke-width="2" opacity="0.4"/>
+  <line x1="351" y1="34" x2="356" y2="29" stroke="#fbbf24" stroke-width="2" opacity="0.4"/>
+  <line x1="309" y1="76" x2="304" y2="81" stroke="#fbbf24" stroke-width="2" opacity="0.4"/>
+
+  <!-- Wind turbine left top -->
+  <rect x="48" y="48" width="4" height="90" rx="2" fill="#334155"/>
+  <!-- Blades -->
+  <path d="M50 80 L38 42 Q36 38 40 40 Z" fill="#e2e8f0" opacity="0.7"/>
+  <path d="M50 80 L75 95 Q79 98 76 94 Z" fill="#e2e8f0" opacity="0.7"/>
+  <path d="M50 80 L26 95 Q22 98 25 94 Z" fill="#cbd5e1" opacity="0.6"/>
+  <circle cx="50" cy="80" r="4" fill="#64748b"/>
+
+  <!-- CO2/molecule monitor panel center -->
+  <rect x="165" y="80" width="70" height="90" rx="8" fill="#0a1f0f" stroke="#22c55e" stroke-width="1.5"/>
+  <!-- Screen -->
+  <rect x="171" y="88" width="58" height="50" rx="4" fill="#041a0a"/>
+  <!-- Graph line on screen -->
+  <polyline points="176,128 185,118 195,122 205,108 215,112 222,102" stroke="#4ade80" stroke-width="2" fill="none"/>
+  <polyline points="176,128 185,118 195,122 205,108 215,112 222,102" stroke="#4ade80" stroke-width="6" fill="none" opacity="0.1"/>
+  <!-- Grid on screen -->
+  <line x1="176" y1="118" x2="222" y2="118" stroke="#4ade80" stroke-width="0.5" opacity="0.3"/>
+  <line x1="176" y1="108" x2="222" y2="108" stroke="#4ade80" stroke-width="0.5" opacity="0.3"/>
+  <!-- Labels on panel -->
+  <text x="200" y="148" text-anchor="middle" font-size="7" fill="#4ade80" font-family="monospace">CO₂: 412ppm</text>
+  <text x="200" y="158" text-anchor="middle" font-size="7" fill="#86efac" font-family="monospace">AQI: GOOD</text>
+  <!-- LED indicators -->
+  <circle cx="175" cy="165" r="4" fill="#4ade80" opacity="0.9"/>
+  <circle cx="188" cy="165" r="4" fill="#4ade80" opacity="0.7"/>
+  <circle cx="201" cy="165" r="4" fill="#fbbf24" opacity="0.7"/>
+
+  <!-- Leaf decorative right -->
+  <path d="M240 120 Q260 90 280 105 Q260 130 240 120Z" fill="url(#leaf)" opacity="0.7"/>
+  <line x1="240" y1="120" x2="270" y2="108" stroke="#86efac" stroke-width="1" opacity="0.5"/>
+  <path d="M248 135 Q272 110 288 128 Q268 148 248 135Z" fill="url(#leaf)" opacity="0.5"/>
+
+  <!-- Birds / dashes in sky -->
+  <path d="M130 45 Q134 41 138 45" stroke="#86efac" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M155 35 Q158 31 162 35" stroke="#86efac" stroke-width="1.5" fill="none" opacity="0.4"/>
+  <path d="M112 60 Q115 57 118 60" stroke="#86efac" stroke-width="1" fill="none" opacity="0.3"/>
+
+  <!-- Soil sensor stick -->
+  <rect x="218" y="195" width="6" height="40" rx="2" fill="#475569"/>
+  <rect x="215" y="192" width="12" height="8" rx="3" fill="#1e3a2a" stroke="#4ade80" stroke-width="1"/>
+  <circle cx="221" cy="196" r="2" fill="#4ade80" opacity="0.8"/>
+</svg>
