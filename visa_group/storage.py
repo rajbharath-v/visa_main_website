@@ -13,8 +13,11 @@ class CloudinaryMediaStorage(Storage):
     def _save(self, name, content):
         name = name.replace('\\', '/')
         public_id = name.rsplit('.', 1)[0]
+        if hasattr(content, 'seek'):
+            content.seek(0)
+        data = content.read() if hasattr(content, 'read') else content
         cloudinary.uploader.upload(
-            content,
+            data,
             public_id=public_id,
             resource_type='auto',
             overwrite=True,
@@ -55,13 +58,18 @@ class CloudinaryRawStorage(Storage):
 
     def _save(self, name, content):
         name = name.replace('\\', '/')
-        cloudinary.uploader.upload(
-            content,
+        if hasattr(content, 'seek'):
+            content.seek(0)
+        data = content.read() if hasattr(content, 'read') else content
+        result = cloudinary.uploader.upload(
+            data,
             public_id=name,
             resource_type='raw',
             overwrite=True,
             invalidate=True,
         )
+        if not result.get('public_id'):
+            raise ValueError(f"Cloudinary raw upload failed for {name}: {result}")
         return name
 
     def url(self, name):
