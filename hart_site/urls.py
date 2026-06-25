@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.urls import path
 from shared.views_admin import analytics_dashboard
 from shared.views_errors import error_400, error_403, error_404, error_500
+from shared.views_download import download_pdf
 from . import views
 
 urlpatterns = [
@@ -16,6 +17,7 @@ urlpatterns = [
     path('enquiry/submit/',               views.submit_enquiry, name='hart_submit_enquiry'),
     path('robots.txt',                    views.robots_txt,     name='hart_robots'),
     path('sitemap.xml',                   views.sitemap_xml,    name='hart_sitemap'),
+    path('download/pdf/<slug:slug>/',     download_pdf,         name='hart_download_pdf'),
 ]
 
 # Error handlers must be defined in the urlconf that Django is using for the request

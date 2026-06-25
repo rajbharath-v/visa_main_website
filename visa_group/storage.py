@@ -75,8 +75,7 @@ class CloudinaryRawStorage(Storage):
     def url(self, name):
         name = name.replace('\\', '/')
         # Keep extension — raw files are served with the full filename including .pdf
-        # flags='attachment' forces Content-Disposition: attachment so browser downloads instead of opening inline
-        url, _ = cloudinary.utils.cloudinary_url(name, resource_type='raw', secure=True, flags='attachment')
+        url, _ = cloudinary.utils.cloudinary_url(name, resource_type='raw', secure=True)
         return url
 
     def exists(self, name):

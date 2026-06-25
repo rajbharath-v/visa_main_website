@@ -2,6 +2,7 @@
 from django.contrib import admin
 from django.urls import path
 from shared.views_errors import error_400, error_403, error_404, error_500
+from shared.views_download import download_pdf
 from . import views
 
 urlpatterns = [
@@ -14,6 +15,7 @@ urlpatterns = [
     path('enquiry/submit/',               views.submit_enquiry, name='pump_submit_enquiry'),
     path('robots.txt',                    views.robots_txt,     name='pump_robots'),
     path('sitemap.xml',                   views.sitemap_xml,    name='pump_sitemap'),
+    path('download/pdf/<slug:slug>/',     download_pdf,         name='pump_download_pdf'),
 ]
 
 handler400 = error_400

@@ -1,6 +1,7 @@
 """visa_main/urls.py"""
 from django.urls import path
 from django.contrib.sitemaps.views import sitemap
+from shared.views_download import download_pdf
 from . import views
 from .sitemaps import ProductSitemap, CategorySitemap, StaticSitemap
 
@@ -24,4 +25,5 @@ urlpatterns = [
     path('sitemap.xml',              sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt',               views.robots_txt,       name='robots_txt'),
+    path('download/pdf/<slug:slug>/', download_pdf,          name='download_pdf'),
 ]
