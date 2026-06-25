@@ -33,11 +33,11 @@
                id="main-image">
           {# Prev / Next arrows #}
           {% if images.count > 1 %}
-          <button onclick="prevImage()" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center transition-all z-10">
-            <i class="ti ti-chevron-left text-navy-700 text-lg"></i>
+          <button onclick="prevImage()" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.85);box-shadow:0 1px 4px rgba(0,0,0,.15);cursor:pointer;z-index:10;border:none;transition:background .2s">
+            <i class="ti ti-chevron-left" style="color:#1e3a5f;font-size:1.1rem"></i>
           </button>
-          <button onclick="nextImage()" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center transition-all z-10">
-            <i class="ti ti-chevron-right text-navy-700 text-lg"></i>
+          <button onclick="nextImage()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.85);box-shadow:0 1px 4px rgba(0,0,0,.15);cursor:pointer;z-index:10;border:none;transition:background .2s">
+            <i class="ti ti-chevron-right" style="color:#1e3a5f;font-size:1.1rem"></i>
           </button>
           {% endif %}
           {% else %}
