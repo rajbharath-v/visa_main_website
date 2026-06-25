@@ -95,5 +95,4 @@
   <circle cx="80" cy="45" r="1.5" fill="#f59e0b" opacity="0.4"/>
 
   <!-- Bottom label -->
-  <text x="200" y="270" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="sans-serif" letter-spacing="2">PHARMACEUTICAL</text>
 </svg>
