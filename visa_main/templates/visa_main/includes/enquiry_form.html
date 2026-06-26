@@ -1,47 +1,32 @@
 {% load static %}
-<form method="POST" action="/enquiry/submit/" class="enquiry-form space-y-4">
+<form method="POST" action="/enquiry/submit/" class="enquiry-form space-y-3">
   {% csrf_token %}
   {% if product_slug %}<input type="hidden" name="product_slug" value="{{ product_slug }}">{% endif %}
+  {% if product_name_val %}<input type="hidden" name="product_name" value="{{ product_name_val }}">{% endif %}
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
     <div>
-      <label class="block text-xs font-medium text-gray-600 mb-1">Full Name *</label>
+      <label class="block text-xs font-medium text-gray-600 mb-1">Name *</label>
       {{ form.name }}
-    </div>
-    <div>
-      <label class="block text-xs font-medium text-gray-600 mb-1">Company</label>
-      {{ form.company }}
     </div>
     <div>
       <label class="block text-xs font-medium text-gray-600 mb-1">Phone *</label>
       {{ form.phone }}
     </div>
-    <div>
-      <label class="block text-xs font-medium text-gray-600 mb-1">Email *</label>
-      {{ form.email }}
-    </div>
-    <div>
-      <label class="block text-xs font-medium text-gray-600 mb-1">City</label>
-      {{ form.city }}
-    </div>
-    <div>
-      <label class="block text-xs font-medium text-gray-600 mb-1">Product Required</label>
-      {{ form.product_name }}
-    </div>
   </div>
 
   <div>
-    <label class="block text-xs font-medium text-gray-600 mb-1">Quantity</label>
-    {{ form.quantity }}
+    <label class="block text-xs font-medium text-gray-600 mb-1">Email <span class="text-gray-400">(optional)</span></label>
+    {{ form.email }}
   </div>
 
   <div>
-    <label class="block text-xs font-medium text-gray-600 mb-1">Message *</label>
+    <label class="block text-xs font-medium text-gray-600 mb-1">Message <span class="text-gray-400">(optional)</span></label>
     {{ form.message }}
   </div>
 
   <button type="submit"
-          class="w-full bg-navy-600 hover:bg-navy-500 text-white font-semibold py-3.5 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm">
+          class="w-full bg-navy-600 hover:bg-navy-500 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm">
     <i class="ti ti-send"></i>
     Send Enquiry
   </button>

@@ -181,7 +181,7 @@ class Enquiry(models.Model):
     name        = models.CharField(max_length=100)
     company     = models.CharField(max_length=150, blank=True)
     phone       = models.CharField(max_length=20)
-    email       = models.EmailField()
+    email       = models.EmailField(blank=True)
     city        = models.CharField(max_length=100, blank=True)
     country     = models.CharField(max_length=100, default='India')
 
@@ -190,7 +190,7 @@ class Enquiry(models.Model):
                                     null=True, blank=True, related_name='enquiries')
     product_name = models.CharField(max_length=200, blank=True,
                                     help_text='Filled if product not in DB')
-    message     = models.TextField()
+    message     = models.TextField(blank=True, default='')
     quantity    = models.CharField(max_length=50, blank=True)
 
     # Meta

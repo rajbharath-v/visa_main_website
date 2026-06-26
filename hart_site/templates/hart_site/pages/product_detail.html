@@ -117,7 +117,7 @@
             {% csrf_token %}
             <input type="hidden" name="product_slug" value="{{ product.slug }}">
             <input type="hidden" name="product_name" value="{{ product.name }}">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
               <div>
                 <label>Name *</label>
                 <input type="text" name="name" required placeholder="Your name">
@@ -126,18 +126,14 @@
                 <label>Phone *</label>
                 <input type="tel" name="phone" required placeholder="+91 XXXXX XXXXX">
               </div>
-              <div>
-                <label>Email</label>
-                <input type="email" name="email" placeholder="email@company.com">
-              </div>
-              <div>
-                <label>Company</label>
-                <input type="text" name="company" placeholder="Company name">
-              </div>
             </div>
-            <div class="mb-4">
-              <label>Message</label>
-              <textarea name="message" rows="3" placeholder="Your requirement or quantity needed..."></textarea>
+            <div class="mb-3">
+              <label>Email <span style="color:#6b7280;font-size:.75rem">(optional)</span></label>
+              <input type="email" name="email" placeholder="email@company.com">
+            </div>
+            <div class="mb-3">
+              <label>Message <span style="color:#6b7280;font-size:.75rem">(optional)</span></label>
+              <textarea name="message" rows="2" placeholder="Any specific requirement?"></textarea>
             </div>
             <button type="submit" class="btn-orange w-full text-center">Send Enquiry</button>
           </form>
