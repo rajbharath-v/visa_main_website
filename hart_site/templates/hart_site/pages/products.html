@@ -17,7 +17,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {% for product in products %}
       <div class="card group hover:border-orange-500 transition-all duration-300">
-        <div class="relative overflow-hidden" style="height:260px;background:#111827">
+        <a href="{% url 'hart_product_detail' product.slug %}" class="block relative overflow-hidden" style="height:260px;background:#111827">
           {% if product.primary_image %}
           <img src="{{ product.primary_image.image.url }}"
                alt="{{ product.name }}"
@@ -33,7 +33,7 @@
           <div class="absolute top-3 left-3">
             <span class="text-xs font-bold px-2 py-1 rounded" style="background:#f97316;color:#fff">{{ product.get_stock_status_display }}</span>
           </div>
-        </div>
+        </a>
         <div class="p-6">
           <div style="color:#fb923c" class="text-xs font-semibold uppercase tracking-wider mb-2">{{ product.category.name }}</div>
           <h2 class="text-white font-bold text-xl mb-3">{{ product.name }}</h2>

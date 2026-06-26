@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
 from django.contrib import messages
+from django.db.models import Prefetch
 from shared.models import ProductDivision, ProductCategory, Product, Enquiry, BlogPost
 from shared.forms import EnquiryForm
 from shared.seo import organization_schema, website_schema, product_schema, breadcrumb_schema
@@ -12,9 +13,23 @@ from shared.emails import send_enquiry_notification
 # ─── HOMEPAGE ───────────────────────────────────────────────────────────────
 
 def home(request):
-    featured   = Product.objects.filter(is_featured=True, is_active=True).select_related(
-                     'category__division'
-                 ).prefetch_related('images')[:8]
+    featured = Product.objects.filter(is_featured=True, is_active=True).select_related(
+        'category__division'
+    ).prefetch_related('images')[:8]
+
+    categories_qs = ProductCategory.objects.filter(is_active=True).select_related(
+        'division'
+    ).prefetch_related(
+        Prefetch(
+            'products',
+            queryset=Product.objects.filter(is_active=True).select_related(
+                'category__division'
+            ).prefetch_related('images'),
+            to_attr='active_products',
+        )
+    )
+    categories_with_products = [c for c in categories_qs if c.active_products]
+
     divisions  = ProductDivision.objects.filter(is_active=True).prefetch_related(
                      'categories'
                  )
@@ -26,7 +41,8 @@ def home(request):
     }
     form = EnquiryForm()
     return render(request, 'visa_main/pages/home.html', {
-        'featured':   featured,
+        'featured':                 featured,
+        'categories_with_products': categories_with_products,
         'divisions':  divisions,
         'stats':      stats,
         'form':       form,
