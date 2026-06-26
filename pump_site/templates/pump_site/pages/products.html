@@ -41,16 +41,6 @@
           <h2 style="color:#f0fdf4;font-weight:700;font-size:1.1rem;margin-bottom:.5rem">{{ product.name }}</h2>
           <p style="color:var(--text-muted);font-size:.85rem;line-height:1.6;margin-bottom:1rem;flex:1">{{ product.short_desc }}</p>
 
-          {% if product.specifications %}
-          <div style="background:#080810;border:1px solid var(--border);border-radius:.5rem;padding:.75rem;margin-bottom:1rem">
-            {% for key, val in product.specifications.items|slice:":3" %}
-            <div style="display:flex;justify-content:space-between;align-items:center;{% if not forloop.last %}border-bottom:1px solid var(--border);padding-bottom:.4rem;margin-bottom:.4rem{% endif %}">
-              <span style="color:var(--text-muted);font-size:.75rem">{{ key }}</span>
-              <span style="color:#f0fdf4;font-size:.75rem;font-weight:600">{{ val }}</span>
-            </div>
-            {% endfor %}
-          </div>
-          {% endif %}
 
           <!-- Status + CTA -->
           <div style="display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap">
