@@ -24,37 +24,21 @@
             {% csrf_token %}
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <div>
-                <label>Full Name *</label>
-                <input type="text" name="name" required placeholder="Your full name">
+                <label>Name *</label>
+                <input type="text" name="name" required placeholder="Your name">
               </div>
               <div>
-                <label>Phone Number *</label>
+                <label>Phone *</label>
                 <input type="tel" name="phone" required placeholder="+91 XXXXX XXXXX">
-              </div>
-              <div>
-                <label>Email Address *</label>
-                <input type="email" name="email" required placeholder="email@company.com">
-              </div>
-              <div>
-                <label>Company Name</label>
-                <input type="text" name="company" placeholder="Your company name">
-              </div>
-              <div>
-                <label>City</label>
-                <input type="text" name="city" placeholder="City">
-              </div>
-              <div>
-                <label>Pump Model (if known)</label>
-                <input type="text" name="product_name" placeholder="e.g. LabQ, Low Cost, Custom">
               </div>
             </div>
             <div style="margin-bottom:1rem">
-              <label>Quantity Required</label>
-              <input type="text" name="quantity" placeholder="e.g. 2 units, 5 units">
+              <label>Email <span style="color:var(--text-muted);font-size:.75rem">(optional)</span></label>
+              <input type="email" name="email" placeholder="email@company.com">
             </div>
             <div style="margin-bottom:1.5rem">
-              <label>Describe Your Requirement *</label>
-              <textarea name="message" rows="5" required placeholder="Please describe your application, fluid type, flow rate (ml/min), pressure requirements, tubing material preference, or any other specific needs..."></textarea>
+              <label>Message <span style="color:var(--text-muted);font-size:.75rem">(optional)</span></label>
+              <textarea name="message" rows="4" placeholder="Any specific requirement?"></textarea>
             </div>
             <button type="submit" class="btn-green w-full text-center" style="font-size:1rem;padding:.85rem">
               Send Enquiry
