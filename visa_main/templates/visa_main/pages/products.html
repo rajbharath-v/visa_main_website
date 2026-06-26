@@ -134,12 +134,9 @@
 
             {% if product.specifications %}
             <div class="flex flex-wrap gap-1 mb-3">
-              {% for key, val in product.specifications.items|slice:":4" %}
+              {% for key, val in product.specifications.items|slice:":3" %}
               <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">{{ val }}</span>
               {% endfor %}
-              {% with spec_total=product.specifications|length %}
-              {% if spec_total > 4 %}<span class="text-[10px] bg-navy-100 text-navy-600 px-2 py-0.5 rounded-full">+{{ spec_total|add:"-4" }} more</span>{% endif %}
-              {% endwith %}
             </div>
             {% else %}
             <div class="mb-3"></div>
