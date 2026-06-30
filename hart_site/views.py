@@ -57,7 +57,7 @@ def product_detail(request, slug):
 
 def robots_txt(request):
     from django.http import HttpResponse
-    content = "User-agent: *\nAllow: /\nSitemap: https://hartcommunicator.in/sitemap.xml\n"
+    content = "User-agent: *\nAllow: /\nSitemap: https://hart475communicator.com/sitemap.xml\n"
     return HttpResponse(content, content_type='text/plain')
 
 
@@ -65,12 +65,13 @@ def sitemap_xml(request):
     from django.http import HttpResponse
     from shared.models import Product
     products = Product.objects.filter(is_active=True, category__division__slug='hart-communicators')
+    base = 'https://hart475communicator.com'
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for url in ['', 'products/', 'about/', 'contact/']:
-        lines.append(f'  <url><loc>https://hartcommunicator.in/{url}</loc><changefreq>weekly</changefreq><priority>{"1.0" if url == "" else "0.8"}</priority></url>')
+        lines.append(f'  <url><loc>{base}/{url}</loc><changefreq>weekly</changefreq><priority>{"1.0" if url == "" else "0.8"}</priority></url>')
     for p in products:
-        lines.append(f'  <url><loc>https://hartcommunicator.in/products/{p.slug}/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>')
+        lines.append(f'  <url><loc>{base}/products/{p.slug}/</loc><changefreq>monthly</changefreq><priority>0.9</priority><lastmod>{p.updated_at.date()}</lastmod></url>')
     lines.append('</urlset>')
     return HttpResponse('\n'.join(lines), content_type='application/xml')
 
