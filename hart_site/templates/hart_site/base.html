@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% block title %}{{ meta_title|default:"HART Communicator — VISA Pvt. Ltd" }}{% endblock %}</title>
 <meta name="description" content="{{ meta_desc|default:'Multi-functional HART Handheld Communicator by VISA Pvt. Ltd Chennai. IP67, Zone 1, Ex ib IICT4 Gb rated.' }}">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="{{ meta_title|default:'HART 475 Communicator — VISA Pvt. Ltd' }}">
+<meta property="og:description" content="{{ meta_desc|default:'Multi-functional HART Handheld Communicator. IP67, Zone 1 rated. By VISA Pvt. Ltd, Chennai.' }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hart475communicator.com{{ request.path }}">
+<meta property="og:site_name" content="HART 475 Communicator">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ meta_title|default:'HART 475 Communicator — VISA Pvt. Ltd' }}">
+<meta name="twitter:description" content="{{ meta_desc|default:'Multi-functional HART Handheld Communicator. IP67, Zone 1 rated.' }}">
+<link rel="canonical" href="https://hart475communicator.com{{ request.path }}">
 <link rel="icon" type="image/svg+xml" href="{% static 'visa/img/favicon-hart.svg' %}">
 <link rel="apple-touch-icon" href="{% static 'visa/img/favicon-hart.svg' %}">
 <link rel="stylesheet" href="{% static 'visa/css/tailwind.min.css' %}">
