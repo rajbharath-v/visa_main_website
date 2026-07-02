@@ -6,6 +6,7 @@ from django.contrib import messages
 from shared.models import Product, Enquiry
 from shared.forms import EnquiryForm
 from shared.emails import send_enquiry_notification
+from shared.seo import hart_organization_schema
 
 HART_DIVISION = 'hart-communicators'
 
@@ -25,6 +26,7 @@ def home(request):
         'form':       form,
         'meta_title': 'HART Communicator SK-660 — VISA Pvt. Ltd Chennai',
         'meta_desc':  'Multi-functional HART Handheld Communicator. Intrinsically safe, IP67, explosion proof. SK-660 & SK-660F. Free DD database updates. VISA Pvt. Ltd Chennai.',
+        'org_schema': hart_organization_schema(),
     })
 
 

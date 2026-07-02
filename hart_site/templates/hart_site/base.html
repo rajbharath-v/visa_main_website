@@ -72,6 +72,7 @@
   .underline-orange::after{content:'';position:absolute;bottom:-4px;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--orange),transparent);border-radius:2px}
 </style>
 {% block extra_head %}{% endblock %}
+{% if org_schema %}<script type="application/ld+json">{{ org_schema|safe }}</script>{% endif %}
 </head>
 <body>
 

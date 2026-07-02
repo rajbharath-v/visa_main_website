@@ -19,6 +19,6 @@ def global_context(request):
             'address': '15/16/17 Vision Tower, Yogam Garden, Brindhavan Nagar, Valasaravakkam, Chennai — 600 087',
             'gst':     '33AABCV2361D1ZT',
             'cin':     'U72200TN1999PTC042478',
-            'url':     'https://www.visapvtltd.net',
+            'url':     'https://www.visapvtltd.co.in',
         },
     }

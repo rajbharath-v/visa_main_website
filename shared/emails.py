@@ -30,7 +30,7 @@ Message:
 {enquiry.message}
 
 ---
-View all leads: https://www.visapvtltd.net/admin/shared/enquiry/
+View all leads: https://www.visapvtltd.co.in/admin/shared/enquiry/
     """.strip()
 
     try:
@@ -61,7 +61,7 @@ Virtual Instrumentation & Software Applications Pvt. Ltd
 Valasaravakkam, Chennai — 600 087
 Phone: +91 94453 50717
 Email: support@visapvtltd.co.in
-Web: www.visapvtltd.net
+Web: www.visapvtltd.co.in
 """,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[enquiry.email],
