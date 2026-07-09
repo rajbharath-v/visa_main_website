@@ -1,4 +1,4 @@
-"""hart_site/views.py — hartcommunicator.in"""
+"""hart_site/views.py — hart475communicator.com"""
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
@@ -6,9 +6,52 @@ from django.contrib import messages
 from shared.models import Product, Enquiry
 from shared.forms import EnquiryForm
 from shared.emails import send_enquiry_notification
-from shared.seo import hart_organization_schema
+from shared.seo import hart_organization_schema, product_schema, breadcrumb_schema
 
 HART_DIVISION = 'hart-communicators'
+
+
+def _hart_faq_schema():
+    import json
+    faqs = [
+        {
+            "question": "What is a HART Communicator?",
+            "answer": "A HART Communicator is a handheld device used to configure, calibrate, and troubleshoot HART-enabled field instruments like transmitters, positioners, and flowmeters. The SK-660 supports all HART instruments using DD (Device Description) files."
+        },
+        {
+            "question": "What is the price of SK-660 HART Communicator in India?",
+            "answer": "The SK-660 HART Communicator is competitively priced for the Indian market. Contact VISA Pvt. Ltd Chennai at +91 94453 50717 for the latest price and bulk discounts."
+        },
+        {
+            "question": "Is SK-660 intrinsically safe for hazardous areas?",
+            "answer": "Yes, the SK-660 is certified Ex ib IICT4 Gb, making it safe for Zone 1 hazardous areas including oil & gas, chemical, and pharmaceutical plants."
+        },
+        {
+            "question": "Does SK-660 support all HART instruments?",
+            "answer": "Yes, the SK-660 supports all HART instruments using the universal DD (Device Description) library. It includes free lifetime DD database updates with no annual subscription fee."
+        },
+        {
+            "question": "What is the difference between SK-660 and SK-660F?",
+            "answer": "The SK-660F is the ATEX/IECEx certified variant of the SK-660, suitable for international hazardous area certifications. Both models share the same Android-based platform, IP67 rating, and HART functionality."
+        },
+        {
+            "question": "Where can I buy HART Communicator in Chennai?",
+            "answer": "You can buy the SK-660 HART Communicator directly from VISA Pvt. Ltd, located in Valasaravakkam, Chennai. Call +91 94453 50717 or visit hart475communicator.com to get a quote."
+        },
+    ]
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": faq["question"],
+                "acceptedAnswer": {"@type": "Answer", "text": faq["answer"]}
+            }
+            for faq in faqs
+        ]
+    }
+    return json.dumps(schema)
 
 
 def _hart_products():
@@ -24,9 +67,10 @@ def home(request):
     return render(request, 'hart_site/pages/home.html', {
         'products':   products,
         'form':       form,
-        'meta_title': 'HART Communicator SK-660 — VISA Pvt. Ltd Chennai',
-        'meta_desc':  'Multi-functional HART Handheld Communicator. Intrinsically safe, IP67, explosion proof. SK-660 & SK-660F. Free DD database updates. VISA Pvt. Ltd Chennai.',
+        'meta_title': 'HART Communicator SK-660 Manufacturer India — Buy Online | VISA Pvt. Ltd',
+        'meta_desc':  'Buy SK-660 HART Communicator — Intrinsically safe, IP67, Zone 1 rated. Android-based handheld HART communicator manufacturer in Chennai, India. Free DD updates. Get quote.',
         'org_schema': hart_organization_schema(),
+        'faq_schema': _hart_faq_schema(),
     })
 
 
@@ -45,15 +89,23 @@ def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, is_active=True)
     related = _hart_products().exclude(id=product.id)[:3]
     form = EnquiryForm(initial={'product_name': product.name})
+    base_url = f'{request.scheme}://{request.get_host()}'
+    breadcrumbs = [
+        ('Home',     f'{base_url}/'),
+        ('Products', f'{base_url}/products/'),
+        (product.name, None),
+    ]
     return render(request, 'hart_site/pages/product_detail.html', {
-        'product':    product,
-        'related':    related,
-        'form':       form,
-        'images':     product.images.all(),
-        'specs':      product.specifications,
-        'apps_list':  product.get_applications_list(),
-        'meta_title': product.meta_title or f'{product.name} — HART Communicator | VISA Pvt. Ltd',
-        'meta_desc':  product.meta_desc or product.short_desc,
+        'product':     product,
+        'related':     related,
+        'form':        form,
+        'images':      product.images.all(),
+        'specs':       product.specifications,
+        'apps_list':   product.get_applications_list(),
+        'meta_title':  product.meta_title or f'{product.name} — HART Communicator Price India | VISA Pvt. Ltd',
+        'meta_desc':   product.meta_desc or product.short_desc,
+        'prod_schema': product_schema(product, request),
+        'bc_schema':   breadcrumb_schema(breadcrumbs),
     })
 
 
@@ -103,13 +155,27 @@ def contact(request):
     })
 
 
+def _is_rate_limited(ip):
+    from django.utils import timezone
+    from datetime import timedelta
+    cutoff = timezone.now() - timedelta(hours=1)
+    return Enquiry.objects.filter(ip_address=ip, created_at__gte=cutoff).count() >= 3
+
+
 @require_POST
 def submit_enquiry(request):
+    ip = request.META.get('REMOTE_ADDR')
+    if _is_rate_limited(ip):
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'message': 'Too many submissions. Please try again later.'}, status=429)
+        messages.error(request, 'Too many submissions. Please try again later.')
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+
     form = EnquiryForm(request.POST)
     if form.is_valid():
         enquiry            = form.save(commit=False)
         enquiry.source     = 'hart_site'
-        enquiry.ip_address = request.META.get('REMOTE_ADDR')
+        enquiry.ip_address = ip
         product_slug       = request.POST.get('product_slug')
         if product_slug:
             try:

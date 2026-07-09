@@ -157,14 +157,29 @@ def category_page(request, slug):
 
 # ─── ENQUIRY ────────────────────────────────────────────────────────────────
 
+def _is_rate_limited(ip):
+    """Block IPs that submit more than 3 enquiries in the last hour."""
+    from django.utils import timezone
+    from datetime import timedelta
+    cutoff = timezone.now() - timedelta(hours=1)
+    count = Enquiry.objects.filter(ip_address=ip, created_at__gte=cutoff).count()
+    return count >= 3
+
+
 @require_POST
 def submit_enquiry(request):
+    ip = request.META.get('REMOTE_ADDR')
+    if _is_rate_limited(ip):
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'message': 'Too many submissions. Please try again later.'}, status=429)
+        messages.error(request, 'Too many submissions. Please try again later.')
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+
     form = EnquiryForm(request.POST)
     if form.is_valid():
         enquiry             = form.save(commit=False)
         enquiry.source      = 'visa_main'
-        enquiry.ip_address  = request.META.get('REMOTE_ADDR')
-        # Link product if slug passed
+        enquiry.ip_address  = ip
         product_slug = request.POST.get('product_slug')
         if product_slug:
             try:

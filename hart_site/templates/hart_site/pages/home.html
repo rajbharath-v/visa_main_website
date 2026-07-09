@@ -131,9 +131,8 @@
         </div>
 
         <h1 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:900;line-height:1.1;color:#f1f5f9;margin:0 0 1rem 0">
-          Multi-functional<br>
-          <span style="color:#f97316">HART Handheld</span><br>
-          Communicator
+          SK-660 <span style="color:#f97316">HART Communicator</span><br>
+          Manufacturer in India
         </h1>
 
         <p style="color:#94a3b8;font-size:.95rem;line-height:1.7;margin:0 0 1.25rem 0;max-width:460px">
@@ -582,7 +581,10 @@
                 </div>
                 <div>
                   <label>Phone *</label>
-                  <input type="tel" name="phone" required placeholder="+91 XXXXX XXXXX">
+                  <div style="display:flex">
+                    <span style="display:inline-flex;align-items:center;padding:0 .75rem;border:1px solid rgba(255,255,255,.1);border-right:none;border-radius:.5rem 0 0 .5rem;background:rgba(255,255,255,.05);color:var(--text-muted);font-size:.875rem;white-space:nowrap">+91</span>
+                    <input type="tel" name="phone" required placeholder="10-digit number" maxlength="10" inputmode="numeric" pattern="[6-9][0-9]{9}" style="border-radius:0 .5rem .5rem 0;flex:1" oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)">
+                  </div>
                 </div>
               </div>
               <div>

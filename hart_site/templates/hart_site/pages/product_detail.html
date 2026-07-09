@@ -124,7 +124,10 @@
               </div>
               <div>
                 <label>Phone *</label>
-                <input type="tel" name="phone" required placeholder="+91 XXXXX XXXXX">
+                <div style="display:flex">
+                  <span style="display:inline-flex;align-items:center;padding:0 .75rem;border:1px solid rgba(255,255,255,.1);border-right:none;border-radius:.5rem 0 0 .5rem;background:rgba(255,255,255,.05);color:var(--text-muted);font-size:.875rem;white-space:nowrap">+91</span>
+                  <input type="tel" name="phone" required placeholder="10-digit number" maxlength="10" inputmode="numeric" pattern="[6-9][0-9]{9}" style="border-radius:0 .5rem .5rem 0;flex:1" oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)">
+                </div>
               </div>
             </div>
             <div class="mb-3">
