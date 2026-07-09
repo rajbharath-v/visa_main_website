@@ -13,11 +13,23 @@
     <div>
       <label class="block text-xs font-medium text-gray-600 mb-1">Phone *</label>
       <div class="flex">
-        <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-200 bg-gray-50 text-gray-600 text-sm font-medium">+91</span>
-        <input type="tel" name="phone" required placeholder="10-digit number"
-               maxlength="10" inputmode="numeric" pattern="[6-9][0-9]{9}"
+        <select id="cc_main" class="px-2 py-3 rounded-l-lg border border-r-0 border-gray-200 bg-gray-50 text-gray-700 text-sm focus:outline-none focus:border-blue-500" style="min-width:80px">
+          <option value="+91" selected>🇮🇳 +91</option>
+          <option value="+1">🇺🇸 +1</option>
+          <option value="+44">🇬🇧 +44</option>
+          <option value="+61">🇦🇺 +61</option>
+          <option value="+971">🇦🇪 +971</option>
+          <option value="+966">🇸🇦 +966</option>
+          <option value="+65">🇸🇬 +65</option>
+          <option value="+60">🇲🇾 +60</option>
+          <option value="+49">🇩🇪 +49</option>
+          <option value="+33">🇫🇷 +33</option>
+        </select>
+        <input type="tel" id="ph_main" required placeholder="Phone number"
+               inputmode="numeric"
                class="flex-1 px-4 py-3 rounded-r-lg border border-gray-200 focus:outline-none focus:border-blue-500 text-sm bg-white text-gray-900"
-               oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)">
+               oninput="this.value=this.value.replace(/\D/g,'')">
+        <input type="hidden" name="phone" id="phone_main">
       </div>
     </div>
   </div>
@@ -45,3 +57,13 @@
     Your information is secure and will not be shared.
   </p>
 </form>
+<script>
+document.querySelectorAll('.enquiry-form').forEach(function(form){
+  form.addEventListener('submit', function(){
+    var cc  = form.querySelector('[id^="cc_"]');
+    var ph  = form.querySelector('[id^="ph_"]');
+    var hid = form.querySelector('[id^="phone_"]');
+    if(cc && ph && hid) hid.value = cc.value + ph.value;
+  });
+});
+</script>

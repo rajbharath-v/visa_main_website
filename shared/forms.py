@@ -40,14 +40,10 @@ class EnquiryForm(forms.ModelForm):
 
     def clean_phone(self):
         phone = self.cleaned_data.get('phone', '').strip()
-        # Strip country code if user typed +91 or 0 prefix
-        phone = re.sub(r'^(\+91|91|0)', '', phone).strip()
         digits = re.sub(r'\D', '', phone)
-        if len(digits) != 10:
-            raise forms.ValidationError('Enter a valid 10-digit Indian mobile number.')
-        if not re.match(r'^[6-9]', digits):
-            raise forms.ValidationError('Mobile number must start with 6, 7, 8, or 9.')
-        return '+91' + digits
+        if len(digits) < 7 or len(digits) > 15:
+            raise forms.ValidationError('Enter a valid phone number (7–15 digits).')
+        return phone
 
     def clean(self):
         cleaned = super().clean()

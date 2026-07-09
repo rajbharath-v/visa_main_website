@@ -240,5 +240,15 @@
 })();
 </script>
 {% block extra_js %}{% endblock %}
+<script>
+document.querySelectorAll('form').forEach(function(form){
+  form.addEventListener('submit',function(){
+    var cc=form.querySelector('select[id^="cc_"]');
+    var ph=form.querySelector('input[id^="ph_"]');
+    var hid=form.querySelector('input[id^="phone_"]');
+    if(cc&&ph&&hid) hid.value=cc.value+ph.value;
+  });
+});
+</script>
 </body>
 </html>
