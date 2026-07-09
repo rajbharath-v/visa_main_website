@@ -130,17 +130,7 @@
                 {{ product.name }}
               </h3>
             </a>
-            <p class="text-xs text-gray-500 leading-relaxed mb-3 line-clamp-2">{{ product.short_desc }}</p>
-
-            {% if product.specifications %}
-            <div class="flex flex-wrap gap-1 mb-3">
-              {% for key, val in product.specifications.items|slice:":3" %}
-              <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">{{ val }}</span>
-              {% endfor %}
-            </div>
-            {% else %}
-            <div class="mb-3"></div>
-            {% endif %}
+            <p class="text-xs text-gray-500 leading-relaxed line-clamp-3 flex-1">{{ product.short_desc }}</p>
 
             <div class="flex items-center justify-between pt-3 border-t border-gray-100 mt-auto">
               <span class="text-[10px] font-semibold px-2 py-1 rounded-full
