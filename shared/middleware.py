@@ -7,8 +7,8 @@ class SiteRouterMiddleware:
     'www.peristalticspump.com':     'pump_site',
     'hart475communicator.com':     'hart_site',
     'www.hart475communicator.com': 'hart_site',
-    'localhost':                   'hart_site',  # LOCAL TESTING ONLY
-    '127.0.0.1':                   'hart_site',  # LOCAL TESTING ONLY
+    'localhost':                   'visa_main',  # LOCAL TESTING ONLY
+    '127.0.0.1':                   'visa_main',  # LOCAL TESTING ONLY
 }
     URLCONF_MAP = {
         'pump_site': 'pump_site.urls',

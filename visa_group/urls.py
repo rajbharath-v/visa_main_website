@@ -9,6 +9,7 @@ from shared.views_errors import error_400, error_403, error_404, error_500
 urlpatterns = [
     path('admin/analytics/', analytics_dashboard, name='admin_analytics'),
     path('admin/', admin.site.urls),
+    path('office/', include('office.urls')),
     path('', include('visa_main.urls')),
 ]
 
