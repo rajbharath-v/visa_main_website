@@ -10,6 +10,33 @@ from shared.seo import organization_schema, website_schema, product_schema, brea
 from shared.emails import send_enquiry_notification
 
 
+import json
+
+def _visa_faq_schema():
+    faqs = [
+        ("What products does VISA Pvt. Ltd manufacture?",
+         "VISA Pvt. Ltd manufactures peristaltic pumps, flow meters, pressure transmitters, temperature controllers, IoT modules, and HART communicators from our facility in Chennai, India."),
+        ("Where is VISA Pvt. Ltd located?",
+         "We are located in Valasaravakkam, Chennai, Tamil Nadu, India. We have been manufacturing precision instruments since 1989."),
+        ("Do you export process control instruments?",
+         "Yes, VISA Pvt. Ltd exports to India, Nepal, Saudi Arabia, Indonesia, and other countries. Contact us at +91 94453 50717 for export enquiries."),
+        ("What is the minimum order quantity for peristaltic pumps?",
+         "We supply single units as well as bulk orders. Contact our sales team for pricing and lead time based on your requirement."),
+        ("How long has VISA Pvt. Ltd been in business?",
+         "VISA Pvt. Ltd has been manufacturing process control instruments for over 35 years, since 1989."),
+        ("How can I get a quote for your instruments?",
+         "You can request a quote by calling +91 94453 50717, emailing us, or filling the enquiry form on our website at visapvtltd.co.in."),
+    ]
+    return json.dumps({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
+            for q, a in faqs
+        ]
+    })
+
+
 # ─── HOMEPAGE ───────────────────────────────────────────────────────────────
 
 def home(request):
@@ -50,6 +77,7 @@ def home(request):
         'meta_desc':  'Manufacturer of peristaltic pumps, flow meters, pressure transmitters & IoT modules. 35+ years. Exporting to 5 countries. Get a quote today.',
         'org_schema': organization_schema(),
         'web_schema': website_schema(),
+        'faq_schema': _visa_faq_schema(),
         'is_home':    True,
     })
 
@@ -171,7 +199,7 @@ def submit_enquiry(request):
     ip = request.META.get('REMOTE_ADDR')
     if _is_rate_limited(ip):
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({'success': False, 'message': 'Too many submissions. Please try again later.'}, status=429)
+            return      JsonResponse({'success': False, 'message': 'Too many submissions. Please try again later.'}, status=429)
         messages.error(request, 'Too many submissions. Please try again later.')
         return redirect(request.META.get('HTTP_REFERER', '/'))
 

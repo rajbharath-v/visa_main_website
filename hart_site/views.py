@@ -32,7 +32,7 @@ def _hart_faq_schema():
         },
         {
             "question": "What is the difference between SK-660 and SK-660F?",
-            "answer": "The SK-660F is the ATEX/IECEx certified variant of the SK-660, suitable for international hazardous area certifications. Both models share the same Android-based platform, IP67 rating, and HART functionality."
+            "answer": "The SK-660F adds Foundation Fieldbus (FF) communication support in addition to HART. Both models share the same Android-based platform, IP67 rating, Zone 1 certification, and full HART functionality."
         },
         {
             "question": "Where can I buy HART Communicator in Chennai?",
