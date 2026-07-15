@@ -37,7 +37,7 @@ class VoucherAdmin(admin.ModelAdmin):
             'fields': ['voucher_type', 'voucher_no', 'date', 'status'],
         }),
         ('Payment Details', {
-            'fields': ['debit_account', 'pay_to', 'account_no', 'amount', 'amount_in_words', 'towards'],
+            'fields': ['debit_account', 'pay_to', 'amount', 'amount_in_words', 'towards'],
         }),
         ('Bank / Cheque Details (Bank Voucher Only)', {
             'fields': ['chq_no', 'chq_date', 'drawn_on'],

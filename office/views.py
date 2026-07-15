@@ -95,12 +95,12 @@ def voucher_pdf(request, pk):
     elements.append(Spacer(1, 2*mm))
 
     # A/c row
-    elements.append(Table(
-        [[Paragraph('<b>A/c</b>', s_label), Paragraph(voucher.account_no or '', s_value)]],
-        colWidths=[12*mm, usable_w - 12*mm],
-        style=TableStyle([('LINEBELOW', (1,0), (1,0), 0.5, colors.black), ('BOTTOMPADDING', (0,0), (-1,-1), 4)])
-    ))
-    elements.append(Spacer(1, 2*mm))
+    # elements.append(Table(
+    #     [[Paragraph('<b>A/c</b>', s_label), Paragraph(voucher.account_no or '', s_value)]],
+    #     colWidths=[12*mm, usable_w - 12*mm],
+    #     style=TableStyle([('LINEBELOW', (1,0), (1,0), 0.5, colors.black), ('BOTTOMPADDING', (0,0), (-1,-1), 4)])
+    # ))
+    # elements.append(Spacer(1, 2*mm))
 
     # Amount row
     amt_str = f'₹ {voucher.amount:,.2f}'
