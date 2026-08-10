@@ -8,3 +8,4 @@ django-compressor
 gunicorn
 cloudinary
 reportlab
+openpyxl

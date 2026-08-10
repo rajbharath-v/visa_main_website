@@ -31,7 +31,7 @@ class VoucherAdmin(admin.ModelAdmin):
     list_filter   = ['voucher_type', 'status', 'debit_account', 'prepared_by']
     search_fields = ['voucher_no', 'pay_to', 'towards', 'chq_no']
     date_hierarchy = 'date'
-    ordering      = ['-date', '-created_at']
+    ordering      = ['voucher_type', 'voucher_no'] 
     readonly_fields = ['amount_in_words', 'created_at', 'updated_at']
 
     fieldsets = [
@@ -112,8 +112,18 @@ class VoucherAdmin(admin.ModelAdmin):
 
     def voucher_statement_view(self, request):
         cl = self.get_changelist_instance(request)
-        qs = cl.get_queryset(request)
+        qs = cl.get_queryset(request).order_by('voucher_type', 'voucher_no')
         total = sum(v.amount for v in qs)
+
+        base_params = request.GET.copy()
+        base_params.pop('voucher_type', None)
+
+        def qs_for(vtype=None):
+            params = base_params.copy()
+            if vtype:
+                params['voucher_type'] = vtype
+            return params.urlencode()
+
         context = dict(
             self.admin_site.each_context(request),
             title='Voucher Statement',
@@ -122,6 +132,10 @@ class VoucherAdmin(admin.ModelAdmin):
             count=qs.count(),
             period=self._period_label(request),
             statement_qs=request.GET.urlencode(),
+            qs_all=qs_for(),
+            qs_bank=qs_for('bank'),
+            qs_cash=qs_for('cash'),
+            current_type=request.GET.get('voucher_type', ''),
             opts=self.model._meta,
         )
         return TemplateResponse(request, 'admin/office/voucher/statement.html', context)

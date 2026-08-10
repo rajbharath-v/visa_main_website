@@ -3,12 +3,12 @@
 
 {% block content %}
 <style>
-  .stmt-wrap { max-width: 1200px; margin: 0 auto; }
+  .stmt-wrap { max-width: 1200px; margin: 20px auto; padding: 0 16px; }
   .stmt-header {
-    text-align: center; border-bottom: 2px solid #1D4ED8; padding-bottom: 12px; margin-bottom: 16px;
+    text-align: center; border-bottom: 3px solid #1D4ED8; padding-bottom: 16px; margin-bottom: 20px;
   }
-  .stmt-header h1 { font-size: 18px; margin: 0 0 4px; letter-spacing: 0.3px; }
-  .stmt-header h2 { font-size: 14px; margin: 0; font-weight: normal; color: #444; }
+  .stmt-header h1 { font-size: 20px; margin: 0 0 6px; letter-spacing: 0.3px; color: #111827; }
+  .stmt-header h2 { font-size: 15px; margin: 0; font-weight: 500; color: #6b7280; }
 
   .stmt-summary {
     display: flex; justify-content: space-between; align-items: center;
@@ -20,19 +20,41 @@
   .stmt-summary .total-label { font-size: 12px; color: #1e3a8a; display: block; font-weight: normal; }
 
   .stmt-actions { margin-bottom: 14px; display: flex; gap: 8px; }
-  .stmt-actions a {
-    display: inline-block; padding: 6px 14px; border-radius: 6px; color: #fff !important;
-    font-size: 12px; font-weight: 600; text-decoration: none;
+  .stmt-actions a,
+  .stmt-actions a:link,
+  .stmt-actions a:visited,
+  .stmt-actions a:hover,
+  .stmt-actions a:active {
+    display: inline-block; padding: 8px 16px; border-radius: 6px; color: #ffffff !important;
+    font-size: 13px; font-weight: 600; text-decoration: none !important;
   }
+  .stmt-actions a:hover { opacity: 0.9; }
 
-  table.stmt-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; }
-  table.stmt-table th {
-    background: #1D4ED8; color: #fff; text-align: left; padding: 8px 10px; font-size: 12px;
+  .stmt-type-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .stmt-tab,
+  .stmt-tab:link,
+  .stmt-tab:visited {
+    padding: 6px 16px; border-radius: 999px; font-size: 12px; font-weight: 600;
+    text-decoration: none !important; color: #374151 !important; background: #f3f4f6;
+    border: 1px solid #e5e7eb;
   }
-  table.stmt-table td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+  .stmt-tab.active,
+  .stmt-tab.active:link,
+  .stmt-tab.active:visited {
+    background: #1D4ED8; color: #fff !important; border-color: #1D4ED8;
+  }
+  .stmt-tab:hover:not(.active) { background: #e5e7eb; }
+
+  table.stmt-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff;
+    border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  table.stmt-table th {
+    background: #1D4ED8; color: #fff; text-align: left; padding: 10px 12px; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  table.stmt-table td { padding: 10px 12px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
   table.stmt-table tr:nth-child(even) td { background: #f9fafb; }
-  table.stmt-table td.amount { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  table.stmt-table td.towards { color: #444; max-width: 320px; }
+  table.stmt-table td.amount { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; width: 90px; }
+  table.stmt-table td.towards { color: #444; width: 34%; word-break: break-word; }
 
   .badge { padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; }
   .badge-bank { background:#dbeafe; color:#1d4ed8; }
@@ -56,6 +78,12 @@
       <span class="total-label">Total spent this period</span>
       <span class="total">&#8377; {{ total|floatformat:2|intcomma }}</span>
     </div>
+  </div>
+
+  <div class="stmt-type-tabs">
+    <a href="?{{ qs_all }}" class="stmt-tab {% if not current_type %}active{% endif %}">All</a>
+    <a href="?{{ qs_bank }}" class="stmt-tab {% if current_type == 'bank' %}active{% endif %}">🏦 Bank Only</a>
+    <a href="?{{ qs_cash }}" class="stmt-tab {% if current_type == 'cash' %}active{% endif %}">💵 Cash Only</a>
   </div>
 
   <div class="stmt-actions">
