@@ -1,0 +1,115 @@
+{% extends "admin/base_site.html" %}
+{% load humanize %}
+
+{% block content %}
+<style>
+  .stmt-wrap { max-width: 1200px; margin: 0 auto; }
+  .stmt-header {
+    text-align: center; border-bottom: 2px solid #1D4ED8; padding-bottom: 12px; margin-bottom: 16px;
+  }
+  .stmt-header h1 { font-size: 18px; margin: 0 0 4px; letter-spacing: 0.3px; }
+  .stmt-header h2 { font-size: 14px; margin: 0; font-weight: normal; color: #444; }
+
+  .stmt-summary {
+    display: flex; justify-content: space-between; align-items: center;
+    background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+    padding: 14px 20px; margin-bottom: 18px;
+  }
+  .stmt-summary .count { font-size: 14px; color: #1e3a8a; }
+  .stmt-summary .total { font-size: 22px; font-weight: 700; color: #1D4ED8; }
+  .stmt-summary .total-label { font-size: 12px; color: #1e3a8a; display: block; font-weight: normal; }
+
+  .stmt-actions { margin-bottom: 14px; display: flex; gap: 8px; }
+  .stmt-actions a {
+    display: inline-block; padding: 6px 14px; border-radius: 6px; color: #fff !important;
+    font-size: 12px; font-weight: 600; text-decoration: none;
+  }
+
+  table.stmt-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; }
+  table.stmt-table th {
+    background: #1D4ED8; color: #fff; text-align: left; padding: 8px 10px; font-size: 12px;
+  }
+  table.stmt-table td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+  table.stmt-table tr:nth-child(even) td { background: #f9fafb; }
+  table.stmt-table td.amount { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  table.stmt-table td.towards { color: #444; max-width: 320px; }
+
+  .badge { padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+  .badge-bank { background:#dbeafe; color:#1d4ed8; }
+  .badge-cash { background:#d1fae5; color:#065f46; }
+  .badge-draft { background:#fef3c7; color:#92400e; }
+  .badge-approved { background:#d1fae5; color:#065f46; }
+  .badge-cancelled { background:#fee2e2; color:#991b1b; }
+
+  .stmt-grand-row td { font-weight: 700; border-top: 2px solid #1D4ED8; background: #eff6ff !important; }
+</style>
+
+<div class="stmt-wrap">
+  <div class="stmt-header">
+    <h1>VIRTUAL INSTRUMENTATION &amp; SOFTWARE APPLICATIONS PVT. LTD.</h1>
+    <h2>Voucher Statement &mdash; {{ period }}</h2>
+  </div>
+
+  <div class="stmt-summary">
+    <div class="count">{{ count }} voucher{{ count|pluralize }}</div>
+    <div style="text-align:right;">
+      <span class="total-label">Total spent this period</span>
+      <span class="total">&#8377; {{ total|floatformat:2|intcomma }}</span>
+    </div>
+  </div>
+
+  <div class="stmt-actions">
+    <a href="{% url 'admin:office_voucher_statement_excel' %}?{{ statement_qs }}" style="background:#16a34a;">&#11015; Download Excel</a>
+    <a href="{% url 'admin:office_voucher_statement_pdf' %}?{{ statement_qs }}" style="background:#dc2626;">&#11015; Download PDF</a>
+    <a href="{% url 'admin:office_voucher_changelist' %}" style="background:#6b7280;">&larr; Back to Vouchers</a>
+  </div>
+
+  <table class="stmt-table">
+    <thead>
+      <tr>
+        <th>Voucher No</th>
+        <th>Type</th>
+        <th>Date</th>
+        <th>Pay To</th>
+        <th>Debit Account</th>
+        <th style="text-align:right;">Amount</th>
+        <th>Towards</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in vouchers %}
+      <tr>
+        <td>{{ v.voucher_no }}</td>
+        <td>
+          {% if v.voucher_type == 'bank' %}
+            <span class="badge badge-bank">&#127974; Bank</span>
+          {% else %}
+            <span class="badge badge-cash">&#128181; Cash</span>
+          {% endif %}
+        </td>
+        <td>{{ v.date|date:"d-m-Y" }}</td>
+        <td>{{ v.pay_to }}</td>
+        <td>{{ v.debit_account }}</td>
+        <td class="amount">&#8377; {{ v.amount|floatformat:2|intcomma }}</td>
+        <td class="towards">{{ v.towards }}</td>
+        <td>
+          <span class="badge badge-{{ v.status }}">{{ v.get_status_display }}</span>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="8" style="text-align:center; padding:20px; color:#888;">No vouchers found for this period.</td></tr>
+      {% endfor %}
+    </tbody>
+    {% if vouchers %}
+    <tfoot>
+      <tr class="stmt-grand-row">
+        <td colspan="5" style="text-align:right;">Grand Total</td>
+        <td class="amount">&#8377; {{ total|floatformat:2|intcomma }}</td>
+        <td colspan="2"></td>
+      </tr>
+    </tfoot>
+    {% endif %}
+  </table>
+</div>
+{% endblock %}

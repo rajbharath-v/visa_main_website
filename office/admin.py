@@ -2,7 +2,9 @@
 from django.contrib import admin
 from django.utils.html import format_html, mark_safe
 from .models import Staff, VoucherDebitAccount, Voucher
-
+from django.urls import path
+from django.template.response import TemplateResponse
+from .exports import build_excel_response, build_pdf_response
 
 @admin.register(Staff)
 class StaffAdmin(admin.ModelAdmin):
@@ -81,3 +83,53 @@ class VoucherAdmin(admin.ModelAdmin):
             return format_html('<a href="{}" target="_blank" style="background:#3b6fd4;color:#fff;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;text-decoration:none">⬇ PDF</a>', url)
         return '—'
     pdf_link.short_description = 'Download'
+
+    change_list_template = 'admin/office/voucher/change_list.html'
+
+    def get_urls(self):
+        custom = [
+            path('statement/', self.admin_site.admin_view(self.voucher_statement_view),
+                 name='office_voucher_statement'),
+            path('statement/excel/', self.admin_site.admin_view(self.voucher_statement_excel),
+                 name='office_voucher_statement_excel'),
+            path('statement/pdf/', self.admin_site.admin_view(self.voucher_statement_pdf),
+                 name='office_voucher_statement_pdf'),
+        ]
+        return custom + super().get_urls()
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['statement_qs'] = request.GET.urlencode()
+        return super().changelist_view(request, extra_context=extra_context)
+
+    def _period_label(self, request):
+        import calendar
+        year = request.GET.get('date__year')
+        month = request.GET.get('date__month')
+        if year and month:
+            return f'{calendar.month_name[int(month)]} {year}'
+        return 'All Vouchers'
+
+    def voucher_statement_view(self, request):
+        cl = self.get_changelist_instance(request)
+        qs = cl.get_queryset(request)
+        total = sum(v.amount for v in qs)
+        context = dict(
+            self.admin_site.each_context(request),
+            title='Voucher Statement',
+            vouchers=qs,
+            total=total,
+            count=qs.count(),
+            period=self._period_label(request),
+            statement_qs=request.GET.urlencode(),
+            opts=self.model._meta,
+        )
+        return TemplateResponse(request, 'admin/office/voucher/statement.html', context)
+
+    def voucher_statement_excel(self, request):
+        cl = self.get_changelist_instance(request)
+        return build_excel_response(cl.get_queryset(request), self._period_label(request))
+
+    def voucher_statement_pdf(self, request):
+        cl = self.get_changelist_instance(request)
+        return build_pdf_response(cl.get_queryset(request), self._period_label(request))

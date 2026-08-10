@@ -1,6 +1,7 @@
 """office/models.py — Voucher management for VISA Pvt. Ltd"""
 from django.db import models
 from django.utils import timezone
+import re
 
 
 class Staff(models.Model):
@@ -87,7 +88,11 @@ class Voucher(models.Model):
         if not self.voucher_no:
             prefix   = 'BV' if self.voucher_type == 'bank' else 'CV'
             last     = Voucher.objects.filter(voucher_type=self.voucher_type).order_by('id').last()
-            next_num = (int(last.voucher_no.split('-')[1]) + 1) if last and last.voucher_no else 1
+            next_num = 1
+            if last and last.voucher_no:
+                match = re.search(r'(\d+)$', last.voucher_no)
+                if match:
+                    next_num = int(match.group(1)) + 1
             self.voucher_no = f'{prefix}-{next_num:03d}'
         if self.amount and not self.amount_in_words:
             self.amount_in_words = _amount_to_words(int(self.amount)) + ' Only'

@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'pump_site',
     'hart_site',
     'office',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
