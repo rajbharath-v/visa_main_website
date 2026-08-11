@@ -1,8 +1,12 @@
 """office/views.py — PDF generation for vouchers"""
+import os
+from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
 from .models import Voucher
+
+LOGO_PATH = os.path.join(settings.BASE_DIR, 'static', 'visa', 'img', 'logo.png')
 
 
 @staff_member_required
@@ -12,7 +16,7 @@ def voucher_pdf(request, pk):
         from reportlab.lib.pagesizes import A5, landscape
         from reportlab.lib.units import mm
         from reportlab.lib import colors
-        from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, HRFlowable
+        from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, HRFlowable, Image
         from reportlab.lib.styles import ParagraphStyle
         from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
         import io
@@ -34,7 +38,7 @@ def voucher_pdf(request, pk):
         base.update(kw)
         return ParagraphStyle(name, **base)
 
-    s_company   = style('company',  fontName='Helvetica-Bold', fontSize=11, alignment=TA_CENTER, leading=15)
+    s_company   = style('company',  fontName='Helvetica-Bold', fontSize=11, alignment=TA_LEFT, leading=15)
     s_title     = style('title',    fontName='Helvetica-Bold', fontSize=10, alignment=TA_CENTER, leading=14)
     s_normal    = style('normal',   fontSize=9)
     s_label     = style('label',    fontName='Helvetica-Bold', fontSize=8)
@@ -44,12 +48,40 @@ def voucher_pdf(request, pk):
 
     elements = []
 
-    # Header
-    header_data = [[
-        Paragraph('VIRTUAL INSTRUMENTATION &amp; SOFTWARE\nAPPLICATIONS PVT. LTD.', s_company),
-        Paragraph(voucher.get_voucher_type_display().upper(), s_title),
-    ]]
-    header_table = Table(header_data, colWidths=[page_w*0.6 - 30*mm, page_w*0.4 - 0*mm])
+    # Header — logo + company name (left-aligned, two lines) + voucher type
+    company_para = Paragraph(
+        'VIRTUAL INSTRUMENTATION &amp; SOFTWARE<br/>APPLICATIONS PVT. LTD.',
+        s_company,
+    )
+
+    usable_w = page_w - 30*mm
+
+    if os.path.exists(LOGO_PATH):
+        logo = Image(LOGO_PATH, width=13*mm, height=13*mm)
+        logo_w = 16*mm
+        title_w = 50*mm
+        company_w = usable_w - logo_w - title_w
+        header_data = [[
+            logo,
+            company_para,
+            Paragraph(voucher.get_voucher_type_display().upper(), s_title),
+        ]]
+        header_table = Table(
+            header_data,
+            colWidths=[logo_w, company_w, title_w],
+        )
+    else:
+        title_w = 50*mm
+        company_w = usable_w - title_w
+        header_data = [[
+            company_para,
+            Paragraph(voucher.get_voucher_type_display().upper(), s_title),
+        ]]
+        header_table = Table(
+            header_data,
+            colWidths=[company_w, title_w],
+        )
+
     header_table.setStyle(TableStyle([
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ('LINEBELOW', (0,0), (-1,-1), 0.5, colors.black),
@@ -68,16 +100,6 @@ def voucher_pdf(request, pk):
     elements.append(meta_table)
     elements.append(Spacer(1, 3*mm))
 
-    # Field helper
-    def field_row(label, value, line_width=None):
-        val_text = value or ''
-        return [
-            Paragraph(f'<b>{label}</b>', s_label),
-            Paragraph(val_text, s_value),
-        ]
-
-    usable_w = page_w - 30*mm
-
     # Debit row
     elements.append(Table(
         [[Paragraph('<b>Debit</b>', s_label), Paragraph(str(voucher.debit_account), s_value)]],
@@ -93,14 +115,6 @@ def voucher_pdf(request, pk):
         style=TableStyle([('LINEBELOW', (1,0), (1,0), 0.5, colors.black), ('BOTTOMPADDING', (0,0), (-1,-1), 4)])
     ))
     elements.append(Spacer(1, 2*mm))
-
-    # A/c row
-    # elements.append(Table(
-    #     [[Paragraph('<b>A/c</b>', s_label), Paragraph(voucher.account_no or '', s_value)]],
-    #     colWidths=[12*mm, usable_w - 12*mm],
-    #     style=TableStyle([('LINEBELOW', (1,0), (1,0), 0.5, colors.black), ('BOTTOMPADDING', (0,0), (-1,-1), 4)])
-    # ))
-    # elements.append(Spacer(1, 2*mm))
 
     # Amount row
     amt_str = f'₹ {voucher.amount:,.2f}'

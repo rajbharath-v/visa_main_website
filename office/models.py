@@ -94,7 +94,7 @@ class Voucher(models.Model):
                 if match:
                     next_num = int(match.group(1)) + 1
             self.voucher_no = f'{prefix}-{next_num:03d}'
-        if self.amount and not self.amount_in_words:
+        if self.amount is not None:
             self.amount_in_words = _amount_to_words(int(self.amount)) + ' Only'
         super().save(*args, **kwargs)
 
