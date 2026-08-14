@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'hart_site',
     'office',
     'django.contrib.humanize',
+    'billing',
 ]
 
 MIDDLEWARE = [
@@ -244,6 +245,8 @@ JAZZMIN_SETTINGS = {
         "office.Voucher":                "fas fa-receipt",
         "office.Staff":                  "fas fa-user-tie",
         "office.VoucherDebitAccount":    "fas fa-university",
+        "billing.client": "fas fa-address-book",
+        "billing.invoice": "fas fa-file-invoice-dollar",
     },
     "default_icon_parents":  "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
@@ -253,6 +256,7 @@ JAZZMIN_SETTINGS = {
     "changeform_format_overrides": {"auth.user": "collapsible"},
     "language_chooser":      False,
     "custom_css":            "visa/css/admin_custom.css",
+    
 }
 
 JAZZMIN_UI_TWEAKS = {

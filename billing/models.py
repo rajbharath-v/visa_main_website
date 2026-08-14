@@ -1,0 +1,190 @@
+"""billing/models.py — Invoice management for VISA Pvt. Ltd (Client / Invoice / InvoiceLineItem)"""
+import re
+from decimal import Decimal, ROUND_HALF_UP
+from django.db import models
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from django.utils import timezone
+
+from office.models import _amount_to_words, Staff   # reuse existing helper + Staff
+
+
+VISA_STATE = 'tamil nadu'   # used to auto-detect intrastate vs interstate
+
+
+class Client(models.Model):
+    """Shared customer record — reusable for Invoice, and future Quotation / DC."""
+    name       = models.CharField(max_length=200)
+    address    = models.TextField()
+    phone      = models.CharField(max_length=20, blank=True)
+    gstin      = models.CharField(max_length=20, blank=True, verbose_name='GSTIN')
+    city       = models.CharField(max_length=100, blank=True)
+    state      = models.CharField(max_length=100, blank=True)
+    is_active  = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name        = 'Client'
+        verbose_name_plural = 'Clients'
+        ordering             = ['name']
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def is_same_state_as_visa(self):
+        return (self.state or '').strip().lower() in (VISA_STATE, 'tamilnadu', 'tn')
+
+
+class Invoice(models.Model):
+    TAX_TYPE_CHOICES = [
+        ('auto',       'Auto (based on client state)'),
+        ('igst',       'IGST 18%'),
+        ('cgst_sgst',  'CGST 9% + SGST 9%'),
+    ]
+    STATUS_CHOICES = [
+        ('draft',     'Draft'),
+        ('approved',  'Approved'),
+        ('cancelled', 'Cancelled'),
+    ]
+
+    # Core
+    invoice_no    = models.CharField(max_length=20, unique=True, blank=True)
+    invoice_date  = models.DateField(default=timezone.now)
+    status        = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
+
+    # Bill to
+    client        = models.ForeignKey(Client, on_delete=models.PROTECT, related_name='invoices')
+
+    # References
+    po_no         = models.CharField(max_length=100, blank=True, verbose_name='Your PO No.')
+    po_date       = models.DateField(null=True, blank=True, verbose_name='PO Date')
+    dc_no         = models.CharField(max_length=100, blank=True, verbose_name='DC No')
+    rr_lr_rpp_no  = models.CharField(max_length=100, blank=True, verbose_name='RR/LR/RPP No')
+    rr_lr_rpp_date = models.DateField(null=True, blank=True, verbose_name='RR/LR/RPP Date')
+    from_place    = models.CharField(max_length=100, default='Chennai')
+    to_place      = models.CharField(max_length=100, blank=True)
+
+    # Tax
+    tax_type      = models.CharField(max_length=10, choices=TAX_TYPE_CHOICES, default='auto')
+    igst_rate     = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('18.00'))
+    cgst_rate     = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('9.00'))
+    sgst_rate     = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('9.00'))
+
+    # Adjustments
+    p_and_f       = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'), verbose_name='Add: P & F')
+    insurance     = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    less_advance  = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'), verbose_name='Less: Advance')
+
+    # Computed / stored totals (recalculated whenever line items change)
+    subtotal       = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    taxable_value   = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    igst_amount     = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    cgst_amount     = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    sgst_amount     = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    round_off       = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
+    grand_total     = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    amount_in_words = models.CharField(max_length=300, blank=True)
+
+    # Signatures
+    prepared_by   = models.ForeignKey(Staff, null=True, blank=True, on_delete=models.SET_NULL, related_name='prepared_invoices')
+    authorized_by = models.ForeignKey(Staff, null=True, blank=True, on_delete=models.SET_NULL, related_name='authorized_invoices')
+
+    notes         = models.TextField(blank=True, help_text='Leave blank to use the standard terms.')
+
+    created_at    = models.DateTimeField(auto_now_add=True)
+    updated_at    = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name        = 'Invoice'
+        verbose_name_plural = 'Invoices'
+        ordering             = ['-invoice_date', '-created_at']
+
+    def __str__(self):
+        return f'INV-{self.invoice_no} — {self.client}'
+
+    def resolved_tax_type(self):
+        """Resolve 'auto' into an actual igst / cgst_sgst choice based on client's state."""
+        if self.tax_type == 'auto':
+            if self.client_id and self.client.is_same_state_as_visa:
+                return 'cgst_sgst'
+            return 'igst'
+        return self.tax_type
+
+    def save(self, *args, **kwargs):
+        if not self.invoice_no:
+            last = Invoice.objects.order_by('id').last()
+            next_num = 1
+            if last and last.invoice_no:
+                match = re.search(r'(\d+)$', last.invoice_no)
+                if match:
+                    next_num = int(match.group(1)) + 1
+            self.invoice_no = f'{next_num:03d}'
+        if not self.to_place and self.client_id:
+            self.to_place = self.client.city or self.client.state or ''
+        super().save(*args, **kwargs)
+
+    def recalculate_totals(self):
+        """Recompute subtotal, tax, round off and grand total from current line items."""
+        items = list(self.line_items.all())
+        subtotal = sum((item.amount for item in items), Decimal('0.00'))
+        taxable_value = subtotal + (self.p_and_f or Decimal('0.00'))
+
+        tax_type = self.resolved_tax_type()
+        if tax_type == 'igst':
+            igst_amount = (taxable_value * self.igst_rate / Decimal('100')).quantize(Decimal('0.01'))
+            cgst_amount = Decimal('0.00')
+            sgst_amount = Decimal('0.00')
+            tax_total = igst_amount
+        else:
+            cgst_amount = (taxable_value * self.cgst_rate / Decimal('100')).quantize(Decimal('0.01'))
+            sgst_amount = (taxable_value * self.sgst_rate / Decimal('100')).quantize(Decimal('0.01'))
+            igst_amount = Decimal('0.00')
+            tax_total = cgst_amount + sgst_amount
+
+        raw_total = taxable_value + tax_total + (self.insurance or Decimal('0.00')) - (self.less_advance or Decimal('0.00'))
+        rounded_total = raw_total.quantize(Decimal('1'), rounding=ROUND_HALF_UP)
+        round_off = rounded_total - raw_total
+        words = _amount_to_words(int(rounded_total)) + ' Only' if rounded_total else ''
+
+        # Use .update() to avoid re-triggering save()/signals recursively
+        Invoice.objects.filter(pk=self.pk).update(
+            subtotal=subtotal,
+            taxable_value=taxable_value,
+            igst_amount=igst_amount,
+            cgst_amount=cgst_amount,
+            sgst_amount=sgst_amount,
+            round_off=round_off,
+            grand_total=rounded_total,
+            amount_in_words=words,
+        )
+
+
+class InvoiceLineItem(models.Model):
+    invoice     = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='line_items')
+    description = models.CharField(max_length=300, verbose_name='Item / Description')
+    model_no    = models.CharField(max_length=100, blank=True, verbose_name='Model')
+    hsn_code    = models.CharField(max_length=30, blank=True, verbose_name='HSN Code')
+    serial_no   = models.CharField(max_length=200, blank=True, verbose_name='Serial No(s)')
+    qty         = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('1.00'))
+    unit        = models.CharField(max_length=20, default='Nos')
+    unit_price  = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    amount      = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'), editable=False)
+
+    class Meta:
+        verbose_name        = 'Line Item'
+        verbose_name_plural = 'Line Items'
+        ordering             = ['id']
+
+    def __str__(self):
+        return self.description
+
+    def save(self, *args, **kwargs):
+        self.amount = (self.qty or Decimal('0')) * (self.unit_price or Decimal('0'))
+        super().save(*args, **kwargs)
+
+
+@receiver(post_save, sender=InvoiceLineItem)
+@receiver(post_delete, sender=InvoiceLineItem)
+def _recalc_invoice_totals(sender, instance, **kwargs):
+    if instance.invoice_id:
+        instance.invoice.recalculate_totals()
