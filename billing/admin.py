@@ -1,11 +1,13 @@
 """billing/admin.py"""
 from django.contrib import admin
 from django.urls import path, reverse
+from django.template.response import TemplateResponse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from .models import Client, Invoice, InvoiceLineItem
 from .views import invoice_pdf, invoice_excel
+from .exports import build_excel_response, build_pdf_response
 
 
 @admin.register(Client)
@@ -34,6 +36,7 @@ class InvoiceAdmin(admin.ModelAdmin):
     date_hierarchy  = 'invoice_date'
     ordering        = ['-invoice_date', '-created_at']
     inlines         = [InvoiceLineItemInline]
+    change_list_template = 'admin/billing/invoice/change_list.html'
     readonly_fields = [
         'subtotal', 'taxable_value', 'igst_amount', 'cgst_amount', 'sgst_amount',
         'round_off', 'grand_total', 'amount_in_words', 'created_at', 'updated_at',
@@ -111,8 +114,63 @@ class InvoiceAdmin(admin.ModelAdmin):
         custom = [
             path('<int:pk>/pdf/', self.admin_site.admin_view(self.invoice_pdf_view), name='billing_invoice_pdf'),
             path('<int:pk>/excel/', self.admin_site.admin_view(self.invoice_excel_view), name='billing_invoice_excel'),
+            path('statement/', self.admin_site.admin_view(self.invoice_statement_view), name='billing_invoice_statement'),
+            path('statement/excel/', self.admin_site.admin_view(self.invoice_statement_excel), name='billing_invoice_statement_excel'),
+            path('statement/pdf/', self.admin_site.admin_view(self.invoice_statement_pdf), name='billing_invoice_statement_pdf'),
         ]
         return custom + super().get_urls()
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['statement_qs'] = request.GET.urlencode()
+        return super().changelist_view(request, extra_context=extra_context)
+
+    def _period_label(self, request):
+        import calendar
+        year = request.GET.get('invoice_date__year')
+        month = request.GET.get('invoice_date__month')
+        if year and month:
+            return f'{calendar.month_name[int(month)]} {year}'
+        return 'All Invoices'
+
+    def invoice_statement_view(self, request):
+        cl = self.get_changelist_instance(request)
+        qs = cl.get_queryset(request).prefetch_related('line_items').order_by('invoice_no')
+        total = sum(inv.grand_total for inv in qs)
+
+        base_params = request.GET.copy()
+        base_params.pop('status', None)
+
+        def qs_for(status=None):
+            params = base_params.copy()
+            if status:
+                params['status'] = status
+            return params.urlencode()
+
+        context = dict(
+            self.admin_site.each_context(request),
+            title='Invoice Statement',
+            invoices=qs,
+            total=total,
+            count=qs.count(),
+            period=self._period_label(request),
+            statement_qs=request.GET.urlencode(),
+            qs_all=qs_for(),
+            qs_draft=qs_for('draft'),
+            qs_approved=qs_for('approved'),
+            qs_cancelled=qs_for('cancelled'),
+            current_status=request.GET.get('status', ''),
+            opts=self.model._meta,
+        )
+        return TemplateResponse(request, 'admin/billing/invoice/statement.html', context)
+
+    def invoice_statement_excel(self, request):
+        cl = self.get_changelist_instance(request)
+        return build_excel_response(cl.get_queryset(request).order_by('invoice_no'), self._period_label(request))
+
+    def invoice_statement_pdf(self, request):
+        cl = self.get_changelist_instance(request)
+        return build_pdf_response(cl.get_queryset(request).order_by('invoice_no'), self._period_label(request))
 
     def invoice_pdf_view(self, request, pk):
         return invoice_pdf(request, pk)

@@ -1,0 +1,58 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools-items %}
+  <li class="stmt-li">
+    <a href="{% url 'admin:billing_invoice_statement' %}?{{ statement_qs }}"
+       class="button" id="stmt-view-btn">
+      <span class="stmt-icon">📄</span> View Statement
+    </a>
+  </li>
+  {{ block.super }}
+{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <style>
+    .object-tools li.stmt-li {
+      list-style: none !important;
+      margin: 0 8px 0 0 !important;
+      padding: 0 !important;
+    }
+    .object-tools li.stmt-li::before,
+    .object-tools li.stmt-li::after {
+      content: none !important;
+      display: none !important;
+    }
+
+    #stmt-view-btn,
+    #stmt-view-btn:link,
+    #stmt-view-btn:visited,
+    #stmt-view-btn:hover,
+    #stmt-view-btn:active {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 8px;
+      background: #1D4ED8 !important;
+      color: #ffffff !important;
+      text-decoration: none !important;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      line-height: 1;
+    }
+    #stmt-view-btn:hover {
+      background: #1e40af !important;
+    }
+    #stmt-view-btn .stmt-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: #ffffff;
+      border-radius: 50%;
+      font-size: 11px;
+    }
+  </style>
+{% endblock %}

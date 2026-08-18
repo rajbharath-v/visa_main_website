@@ -1,0 +1,143 @@
+{% extends "admin/base_site.html" %}
+{% load humanize %}
+
+{% block content %}
+<style>
+  .stmt-wrap { max-width: 1200px; margin: 20px auto; padding: 0 16px; }
+  .stmt-header {
+    text-align: center; border-bottom: 3px solid #1D4ED8; padding-bottom: 16px; margin-bottom: 20px;
+  }
+  .stmt-header h1 { font-size: 20px; margin: 0 0 6px; letter-spacing: 0.3px; color: #111827; }
+  .stmt-header h2 { font-size: 15px; margin: 0; font-weight: 500; color: #6b7280; }
+
+  .stmt-summary {
+    display: flex; justify-content: space-between; align-items: center;
+    background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+    padding: 14px 20px; margin-bottom: 18px;
+  }
+  .stmt-summary .count { font-size: 14px; color: #1e3a8a; }
+  .stmt-summary .total { font-size: 22px; font-weight: 700; color: #1D4ED8; }
+  .stmt-summary .total-label { font-size: 12px; color: #1e3a8a; display: block; font-weight: normal; }
+
+  .stmt-actions { margin-bottom: 14px; display: flex; gap: 8px; }
+  .stmt-actions a,
+  .stmt-actions a:link,
+  .stmt-actions a:visited,
+  .stmt-actions a:hover,
+  .stmt-actions a:active {
+    display: inline-block; padding: 8px 16px; border-radius: 6px; color: #ffffff !important;
+    font-size: 13px; font-weight: 600; text-decoration: none !important;
+  }
+  .stmt-actions a:hover { opacity: 0.9; }
+
+  .stmt-type-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .stmt-tab,
+  .stmt-tab:link,
+  .stmt-tab:visited {
+    padding: 6px 16px; border-radius: 999px; font-size: 12px; font-weight: 600;
+    text-decoration: none !important; color: #374151 !important; background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+  }
+  .stmt-tab.active,
+  .stmt-tab.active:link,
+  .stmt-tab.active:visited {
+    background: #1D4ED8; color: #fff !important; border-color: #1D4ED8;
+  }
+  .stmt-tab:hover:not(.active) { background: #e5e7eb; }
+
+  table.stmt-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff;
+    border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  table.stmt-table th {
+    background: #1D4ED8; color: #fff; text-align: left; padding: 10px 12px; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  table.stmt-table td { padding: 10px 12px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+  table.stmt-table tr:nth-child(even) td { background: #f9fafb; }
+  table.stmt-table td.amount { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  table.stmt-table td.client-name { font-weight: 600; color: #111827; }
+
+  .badge { padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+  .badge-draft { background:#fef3c7; color:#92400e; }
+  .badge-approved { background:#d1fae5; color:#065f46; }
+  .badge-cancelled { background:#fee2e2; color:#991b1b; }
+
+  .stmt-more { color: #6b7280; font-size: 11px; font-weight: 600; }
+
+  .stmt-grand-row td { font-weight: 700; border-top: 2px solid #1D4ED8; background: #eff6ff !important; }
+</style>
+
+<div class="stmt-wrap">
+  <div class="stmt-header">
+    <h1>VIRTUAL INSTRUMENTATION &amp; SOFTWARE APPLICATIONS PVT. LTD.</h1>
+    <h2>Invoice Statement &mdash; {{ period }}</h2>
+  </div>
+
+  <div class="stmt-summary">
+    <div class="count">{{ count }} invoice{{ count|pluralize }}</div>
+    <div style="text-align:right;">
+      <span class="total-label">Total this period</span>
+      <span class="total">&#8377; {{ total|floatformat:2|intcomma }}</span>
+    </div>
+  </div>
+
+  <div class="stmt-type-tabs">
+    <a href="?{{ qs_all }}" class="stmt-tab {% if not current_status %}active{% endif %}">All</a>
+    <a href="?{{ qs_draft }}" class="stmt-tab {% if current_status == 'draft' %}active{% endif %}">Draft</a>
+    <a href="?{{ qs_approved }}" class="stmt-tab {% if current_status == 'approved' %}active{% endif %}">Approved</a>
+    <a href="?{{ qs_cancelled }}" class="stmt-tab {% if current_status == 'cancelled' %}active{% endif %}">Cancelled</a>
+  </div>
+
+  <div class="stmt-actions">
+    <a href="{% url 'admin:billing_invoice_statement_excel' %}?{{ statement_qs }}" style="background:#16a34a;">&#11015; Download Excel</a>
+    <a href="{% url 'admin:billing_invoice_statement_pdf' %}?{{ statement_qs }}" style="background:#dc2626;">&#11015; Download PDF</a>
+    <a href="{% url 'admin:billing_invoice_changelist' %}" style="background:#6b7280;">&larr; Back to Invoices</a>
+  </div>
+
+  <table class="stmt-table">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Invoice No</th>
+        <th>Date</th>
+        <th>Client Name</th>
+        <th>Product</th>
+        <th style="text-align:right;">Amount</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for inv in invoices %}
+      {% with items=inv.product_summary_list %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ inv.invoice_no }}</td>
+        <td>{{ inv.invoice_date|date:"d-m-Y" }}</td>
+        <td class="client-name">{{ inv.client.name }}</td>
+        <td>
+          {{ items.0.description|default:"—" }}
+          {% if items|length > 1 %}
+            <span class="stmt-more">+{{ items|length|add:"-1" }} more</span>
+          {% endif %}
+        </td>
+        <td class="amount">&#8377; {{ inv.grand_total|floatformat:2|intcomma }}</td>
+        <td>
+          <span class="badge badge-{{ inv.status }}">{{ inv.get_status_display }}</span>
+        </td>
+      </tr>
+      {% endwith %}
+      {% empty %}
+      <tr><td colspan="7" style="text-align:center; padding:20px; color:#888;">No invoices found for this period.</td></tr>
+      {% endfor %}
+    </tbody>
+    {% if invoices %}
+    <tfoot>
+      <tr class="stmt-grand-row">
+        <td colspan="5" style="text-align:right;">Grand Total</td>
+        <td class="amount">&#8377; {{ total|floatformat:2|intcomma }}</td>
+        <td></td>
+      </tr>
+    </tfoot>
+    {% endif %}
+  </table>
+</div>
+{% endblock %}

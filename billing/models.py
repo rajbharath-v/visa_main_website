@@ -110,6 +110,18 @@ class Invoice(models.Model):
             return 'igst'
         return self.tax_type
 
+    @property
+    def tax_amount_display(self):
+        """Combined tax amount regardless of whether it's IGST or CGST+SGST — for statements."""
+        if self.resolved_tax_type() == 'igst':
+            return self.igst_amount
+        return self.cgst_amount + self.sgst_amount
+
+    @property
+    def product_summary_list(self):
+        """List of line items, cached — used by the statement page to show first product + '+N more'."""
+        return list(self.line_items.all())
+
     def save(self, *args, **kwargs):
         if not self.invoice_no:
             last = Invoice.objects.order_by('id').last()
