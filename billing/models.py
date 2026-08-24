@@ -137,19 +137,18 @@ class Invoice(models.Model):
 
     def clean(self):
         super().clean()
-        if self.pk is None and self.invoice_date:
-        # Compute the *real* invoice_no now, so Django's uniqueness
-        # check (which runs right after clean()) validates the actual
-        # value instead of the raw text the user typed.
-            self.invoice_no = self._compute_invoice_no()
+        if self.invoice_date:
+            type_changed = False
+            if self.pk:
+                old = Invoice.objects.filter(pk=self.pk).values_list('document_type', flat=True).first()
+                type_changed = old is not None and old != self.document_type
+
+            if self.pk is None or type_changed:
+                self.invoice_no = self._compute_invoice_no()
 
     def _compute_invoice_no(self):
-        """Pure computation of the final invoice_no for a new record.
-    Shared by clean() (for form/admin validation) and save() (as a
-    fallback for objects created outside a form, e.g. shell/API)."""
         if self.document_type == 'proforma':
-            year_suffix = self.invoice_date.strftime('%y')
-            prefix = f'PI-2K{year_suffix}-'
+            prefix = 'PI-'
 
             entered_no = str(self.invoice_no).strip() if self.invoice_no else ''
             manual_number = None
@@ -200,9 +199,12 @@ class Invoice(models.Model):
 
         return self.invoice_no
     def save(self, *args, **kwargs):
-        is_new = self.pk is None
+        type_changed = False
+        if self.pk:
+            old = Invoice.objects.filter(pk=self.pk).values_list('document_type', flat=True).first()
+            type_changed = old is not None and old != self.document_type
 
-        if is_new:
+        if self.pk is None or type_changed:
             self.invoice_no = self._compute_invoice_no()
 
         if not self.to_place and self.client_id:
