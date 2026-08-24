@@ -36,6 +36,10 @@ class Client(models.Model):
 
 
 class Invoice(models.Model):
+    DOCUMENT_TYPE_CHOICES = [
+        ('invoice',  'Invoice'),
+        ('proforma', 'Proforma Invoice'),
+    ]
     TAX_TYPE_CHOICES = [
         ('auto',       'Auto (based on client state)'),
         ('igst',       'IGST 18%'),
@@ -48,7 +52,8 @@ class Invoice(models.Model):
     ]
 
     # Core
-    invoice_no    = models.CharField(max_length=20, unique=True, blank=True)
+    document_type = models.CharField(max_length=10, choices=DOCUMENT_TYPE_CHOICES, default='invoice')
+    invoice_no    = models.CharField(max_length=20, blank=True, verbose_name='Invoice No.')
     invoice_date  = models.DateField(default=timezone.now)
     status        = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
 
@@ -98,8 +103,16 @@ class Invoice(models.Model):
         verbose_name        = 'Invoice'
         verbose_name_plural = 'Invoices'
         ordering             = ['-invoice_date', '-created_at']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['document_type', 'invoice_no'],
+                name='unique_invoice_no_per_document_type',
+            ),
+        ]
 
     def __str__(self):
+        if self.document_type == 'proforma':
+            return f'{self.invoice_no} — {self.client}'
         return f'INV-{self.invoice_no} — {self.client}'
 
     def resolved_tax_type(self):
@@ -122,17 +135,79 @@ class Invoice(models.Model):
         """List of line items, cached — used by the statement page to show first product + '+N more'."""
         return list(self.line_items.all())
 
-    def save(self, *args, **kwargs):
-        if not self.invoice_no:
-            last = Invoice.objects.order_by('id').last()
+    def clean(self):
+        super().clean()
+        if self.pk is None and self.invoice_date:
+        # Compute the *real* invoice_no now, so Django's uniqueness
+        # check (which runs right after clean()) validates the actual
+        # value instead of the raw text the user typed.
+            self.invoice_no = self._compute_invoice_no()
+
+    def _compute_invoice_no(self):
+        """Pure computation of the final invoice_no for a new record.
+    Shared by clean() (for form/admin validation) and save() (as a
+    fallback for objects created outside a form, e.g. shell/API)."""
+        if self.document_type == 'proforma':
+            year_suffix = self.invoice_date.strftime('%y')
+            prefix = f'PI-2K{year_suffix}-'
+
+            entered_no = str(self.invoice_no).strip() if self.invoice_no else ''
+            manual_number = None
+
+            if entered_no:
+                if entered_no.startswith(prefix):
+                    number_part = entered_no[len(prefix):]
+                    if number_part.isdigit():
+                        manual_number = int(number_part)
+                elif entered_no.isdigit():
+                    manual_number = int(entered_no)
+                else:
+                    match = re.search(r'(\d+)$', entered_no)
+                    if match:
+                        manual_number = int(match.group(1))
+
+            if manual_number is not None:
+                return f'{prefix}{manual_number:03d}'
+
+            last = Invoice.objects.filter(
+            document_type='proforma',
+            invoice_no__startswith=prefix,
+            ).exclude(pk=self.pk).order_by('id').last()
+
             next_num = 1
             if last and last.invoice_no:
                 match = re.search(r'(\d+)$', last.invoice_no)
                 if match:
                     next_num = int(match.group(1)) + 1
-            self.invoice_no = f'{next_num:03d}'
+
+            return f'{prefix}{next_num:03d}'
+
+        elif self.document_type == 'invoice':
+            if self.invoice_no:
+                return str(self.invoice_no).strip()
+
+            last = Invoice.objects.filter(
+            document_type='invoice'
+            ).exclude(pk=self.pk).order_by('id').last()
+
+            next_num = 1
+            if last and last.invoice_no:
+                match = re.search(r'(\d+)$', last.invoice_no)
+                if match:
+                    next_num = int(match.group(1)) + 1
+
+            return f'{next_num:03d}'
+
+        return self.invoice_no
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+
+        if is_new:
+            self.invoice_no = self._compute_invoice_no()
+
         if not self.to_place and self.client_id:
             self.to_place = self.client.city or self.client.state or ''
+
         super().save(*args, **kwargs)
 
     def recalculate_totals(self):

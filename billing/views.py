@@ -78,7 +78,7 @@ def invoice_pdf(request, pk):
         'GST: 33AABCV2361D1ZT</font>',
         s_company,
     )
-    title_block = Paragraph('INVOICE', s_title)
+    title_block = Paragraph('PROFORMA INVOICE' if invoice.document_type == 'proforma' else 'INVOICE', s_title)
 
     if os.path.exists(LOGO_PATH):
         logo = Image(LOGO_PATH, width=15*mm, height=15*mm)
@@ -100,10 +100,10 @@ def invoice_pdf(request, pk):
     elements.append(Spacer(1, 4*mm))
 
     # ---------------- Bill To + Invoice meta ----------------
-    bill_to_html = f'<b>To:</b><br/>{invoice.client.name}<br/>{invoice.client.address}'.replace('\n', '<br/>')
-    if invoice.client.phone:
-        bill_to_html += f'<br/>Ph: {invoice.client.phone}'
-    bill_to = Paragraph(bill_to_html, s_billto)
+    bill_to = Paragraph(
+        f'<b>To:</b><br/>{invoice.client.name}<br/>{invoice.client.address}'.replace('\n', '<br/>'),
+        s_billto,
+    )
 
     def meta_row(label, value):
         return [Paragraph(f'<b>{label}</b>', s_label), Paragraph(str(value) if value else '', s_value)]
@@ -245,7 +245,8 @@ def invoice_pdf(request, pk):
 
     doc.build(elements)
     buffer.seek(0)
-    filename = f'Invoice_{invoice.invoice_no}.pdf'
+    doc_label = 'Proforma_Invoice' if invoice.document_type == 'proforma' else 'Invoice'
+    filename = f'{doc_label}_{invoice.invoice_no}.pdf'
     response = HttpResponse(buffer, content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename="{filename}"'
     return response
@@ -294,7 +295,8 @@ def invoice_excel(request, pk):
     ws['A3'].font = Font(size=9)
 
     ws.merge_cells('A5:F5')
-    ws['A5'] = f'INVOICE — {invoice.invoice_no}'
+    doc_title = 'PROFORMA INVOICE' if invoice.document_type == 'proforma' else 'INVOICE'
+    ws['A5'] = f'{doc_title} — {invoice.invoice_no}'
     ws['A5'].font = Font(bold=True, size=13, color='1D4ED8')
     ws['A5'].alignment = center
 
@@ -313,10 +315,6 @@ def invoice_excel(request, pk):
         if line.strip():
             ws.cell(row=row, column=1, value=line.strip())
             row += 1
-    if invoice.client.phone:
-        ws.cell(row=row, column=1, value=f'Ph: {invoice.client.phone}')
-        row += 1
-
     ws.cell(row=row, column=4, value='DC No').font = bold
     ws.cell(row=row, column=5, value=invoice.dc_no)
     row += 1
@@ -416,7 +414,8 @@ def invoice_excel(request, pk):
     buffer = BytesIO()
     wb.save(buffer)
     buffer.seek(0)
-    filename = f'Invoice_{invoice.invoice_no}.xlsx'
+    doc_label = 'Proforma_Invoice' if invoice.document_type == 'proforma' else 'Invoice'
+    filename = f'{doc_label}_{invoice.invoice_no}.xlsx'
     response = HttpResponse(
         buffer,
         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

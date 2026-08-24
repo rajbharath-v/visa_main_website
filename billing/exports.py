@@ -27,7 +27,7 @@ def build_excel_response(queryset, title_period='All Invoices'):
     from openpyxl import Workbook
     from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
     from openpyxl.utils import get_column_letter
-
+    
     invoices = list(queryset.prefetch_related('line_items').order_by('invoice_no'))
     total = sum(inv.grand_total for inv in invoices)
     count = len(invoices)

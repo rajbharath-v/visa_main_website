@@ -28,10 +28,10 @@ class InvoiceLineItemInline(admin.TabularInline):
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
     list_display    = [
-        'invoice_no', 'invoice_date', 'client', 'tax_badge',
+        'invoice_no', 'document_type_badge', 'invoice_date', 'client', 'tax_badge',
         'grand_total_display', 'status_badge', 'download_links',
     ]
-    list_filter     = ['status', 'tax_type', 'client']
+    list_filter     = ['document_type', 'status', 'tax_type', 'client']
     search_fields   = ['invoice_no', 'client__name', 'po_no', 'dc_no']
     date_hierarchy  = 'invoice_date'
     ordering        = ['-invoice_date', '-created_at']
@@ -42,9 +42,12 @@ class InvoiceAdmin(admin.ModelAdmin):
         'round_off', 'grand_total', 'amount_in_words', 'created_at', 'updated_at',
     ]
 
+    class Media:
+        js = ('billing/js/proforma_prefill.js',)
+
     fieldsets = [
         ('Invoice Info', {
-            'fields': ['invoice_no', 'invoice_date', 'status', 'client'],
+            'fields': ['document_type', 'invoice_no', 'invoice_date', 'status', 'client'],
         }),
         ('References', {
             'fields': ['po_no', 'po_date', 'dc_no', 'rr_lr_rpp_no', 'rr_lr_rpp_date', 'from_place', 'to_place'],
@@ -78,6 +81,12 @@ class InvoiceAdmin(admin.ModelAdmin):
         text = resolved_label if obj.tax_type == 'auto' else label
         return mark_safe(f'<span style="background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700">{text}</span>')
     tax_badge.short_description = 'Tax'
+
+    def document_type_badge(self, obj):
+        if obj.document_type == 'proforma':
+            return mark_safe('<span style="background:#ede9fe;color:#6d28d9;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700">Proforma</span>')
+        return mark_safe('<span style="background:#e0f2fe;color:#0369a1;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700">Invoice</span>')
+    document_type_badge.short_description = 'Type'
 
     def status_badge(self, obj):
         colors = {
@@ -135,7 +144,7 @@ class InvoiceAdmin(admin.ModelAdmin):
 
     def invoice_statement_view(self, request):
         cl = self.get_changelist_instance(request)
-        qs = cl.get_queryset(request).prefetch_related('line_items').order_by('invoice_no')
+        qs = cl.get_queryset(request).filter(document_type='invoice').prefetch_related('line_items').order_by('invoice_no')
         total = sum(inv.grand_total for inv in qs)
 
         base_params = request.GET.copy()
@@ -163,14 +172,15 @@ class InvoiceAdmin(admin.ModelAdmin):
             opts=self.model._meta,
         )
         return TemplateResponse(request, 'admin/billing/invoice/statement.html', context)
-
     def invoice_statement_excel(self, request):
         cl = self.get_changelist_instance(request)
-        return build_excel_response(cl.get_queryset(request).order_by('invoice_no'), self._period_label(request))
+        qs = cl.get_queryset(request).filter(document_type='invoice').order_by('invoice_no')
+        return build_excel_response(qs, self._period_label(request))
 
     def invoice_statement_pdf(self, request):
         cl = self.get_changelist_instance(request)
-        return build_pdf_response(cl.get_queryset(request).order_by('invoice_no'), self._period_label(request))
+        qs = cl.get_queryset(request).filter(document_type='invoice').order_by('invoice_no')
+        return build_pdf_response(qs, self._period_label(request))
 
     def invoice_pdf_view(self, request, pk):
         return invoice_pdf(request, pk)
