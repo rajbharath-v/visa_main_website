@@ -100,10 +100,10 @@ def invoice_pdf(request, pk):
     elements.append(Spacer(1, 4*mm))
 
     # ---------------- Bill To + Invoice meta ----------------
-    bill_to = Paragraph(
-        f'<b>To:</b><br/>{invoice.client.name}<br/>{invoice.client.address}'.replace('\n', '<br/>'),
-        s_billto,
-    )
+    bill_to_html = f'<b>To:</b><br/>{invoice.client.name}<br/>{invoice.client.address}'.replace('\n', '<br/>')
+    if invoice.client.phone:
+        bill_to_html += f'<br/>Ph: {invoice.client.phone}'
+    bill_to = Paragraph(bill_to_html, s_billto)
 
     def meta_row(label, value):
         return [Paragraph(f'<b>{label}</b>', s_label), Paragraph(str(value) if value else '', s_value)]
@@ -315,6 +315,9 @@ def invoice_excel(request, pk):
         if line.strip():
             ws.cell(row=row, column=1, value=line.strip())
             row += 1
+    if invoice.client.phone:
+        ws.cell(row=row, column=1, value=f'Ph: {invoice.client.phone}')
+        row += 1
     ws.cell(row=row, column=4, value='DC No').font = bold
     ws.cell(row=row, column=5, value=invoice.dc_no)
     row += 1
