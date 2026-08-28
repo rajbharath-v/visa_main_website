@@ -9,3 +9,4 @@ gunicorn
 cloudinary
 reportlab
 openpyxl
+python-docx
