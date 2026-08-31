@@ -1,5 +1,6 @@
 """billing/views.py — PDF and Excel generation for invoices"""
 import os
+from decimal import Decimal
 from django.conf import settings
 from django.http import HttpResponse
 from django.contrib.admin.views.decorators import staff_member_required
@@ -14,6 +15,32 @@ CURRENCY_WORDS = {
     'USD': 'US Dollars',
     'EUR': 'Euros',
 }
+
+FRACTION_WORDS = {
+    'INR': 'Paise',
+    'USD': 'Cents',
+    'EUR': 'Cents',
+}
+
+
+def _po_amount_in_words(po):
+    """Spells out the exact grand_total, including paise/cents, since PO totals are
+    no longer rounded to a whole number. Returns just the words (e.g. 'Fifteen
+    Thousand Three Hundred and Sixty Eight Paise Only') — caller prepends the
+    currency name."""
+    total = po.grand_total or Decimal('0')
+    whole = int(total)
+    frac = int((total - whole) * 100 + Decimal('0.5'))
+    if frac >= 100:
+        whole += 1
+        frac -= 100
+
+    fraction_word = FRACTION_WORDS.get(po.currency, 'Cents')
+
+    words = _amount_to_words(whole)
+    if frac > 0:
+        words += f' and {_amount_to_words(frac)} {fraction_word}'
+    return words + ' Only'
 
 TERMS = [
     'Goods once sold will not be taken back.',
@@ -559,7 +586,7 @@ def po_pdf(request, pk):
     elements.append(top_block)
     elements.append(Spacer(1, 5*mm))
 
-    elements.append(Paragraph('<b>Dear Sir,</b>', s_normal))
+    elements.append(Paragraph('<b>Dear Sir</b>', s_normal))
     elements.append(Spacer(1, 3*mm))
     elements.append(Paragraph('<b>We take pleasure in placing our PO for the following items:</b>', s_normal))
     elements.append(Spacer(1, 3*mm))
@@ -598,7 +625,7 @@ def po_pdf(request, pk):
     elements.append(Spacer(1, 4*mm))
 
     # ---------------- Amount in words ----------------
-    words = _amount_to_words(int(po.grand_total)) + ' Only' if po.grand_total else ''
+    words = _po_amount_in_words(po) if po.grand_total else ''
     currency_word = CURRENCY_WORDS.get(po.currency, po.currency)
     elements.append(Paragraph(f'<b>{currency_word}:</b> {words}', s_normal))
     elements.append(Spacer(1, 6*mm))
@@ -757,7 +784,7 @@ def po_excel(request, pk):
     total_cell.number_format = '#,##0.00'
     row += 2
 
-    words = _amount_to_words(int(po.grand_total)) + ' Only' if po.grand_total else ''
+    words = _po_amount_in_words(po) if po.grand_total else ''
     currency_word = CURRENCY_WORDS.get(po.currency, po.currency)
     ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=6)
     ws.cell(row=row, column=1, value=f'{currency_word}: {words}').font = bold
@@ -979,7 +1006,7 @@ def po_docx(request, pk):
     document.add_paragraph()
 
     # ---------------- Amount in words ----------------
-    words = _amount_to_words(int(po.grand_total)) + ' Only' if po.grand_total else ''
+    words = _po_amount_in_words(po) if po.grand_total else ''
     currency_word = CURRENCY_WORDS.get(po.currency, po.currency)
     words_p = document.add_paragraph()
     words_r1 = words_p.add_run(f'{currency_word}: ')

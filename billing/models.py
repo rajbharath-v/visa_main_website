@@ -440,7 +440,7 @@ class PurchaseOrder(models.Model):
             tax_total = Decimal('0.00')
 
         raw_total = taxable_value + tax_total
-        rounded_total = raw_total.quantize(Decimal('1'), rounding=ROUND_HALF_UP) if self.currency == 'INR' else raw_total.quantize(Decimal('0.01'))
+        rounded_total = raw_total.quantize(Decimal('0.01'))
         round_off = rounded_total - raw_total
 
         PurchaseOrder.objects.filter(pk=self.pk).update(
